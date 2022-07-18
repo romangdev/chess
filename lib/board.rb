@@ -2,7 +2,8 @@ require 'colorize'
 require_relative 'square_pieces'
 
 class Board < SquarePieces
-  
+  attr_accessor :chess_board
+
   def initialize
     @chess_board = nil
   end
