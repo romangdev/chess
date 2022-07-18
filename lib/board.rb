@@ -2,6 +2,7 @@ require 'colorize'
 require_relative 'square_pieces'
 
 class Board < SquarePieces
+  
   def initialize
     @chess_board = nil
   end
