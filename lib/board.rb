@@ -50,12 +50,14 @@ class Board < SquarePieces
         "#{@@g8_piece}".colorize(:background => :light_black), "#{@@h8_piece}".colorize(:background => :magenta)],]
   end
 
-  def display_board 
+  def display_board
     for i in 7.downto(0)
+      print "#{i + 1} "
       @chess_board[i].each do |element|
         print element
       end
       puts "\n"
     end
+    puts "   a  b  c  d  e  f  g  h"
   end
 end
