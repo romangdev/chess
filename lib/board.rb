@@ -54,6 +54,10 @@ class Board < SquarePieces
     puts "   a  b  c  d  e  f  g  h"
   end
 
+  def pawn_test(player_choice)
+    puts "PAWN" if self.chess_board[player_choice[0]][player_choice[1]] == WHITE_PAWN
+  end
+
   private 
 
   # sub-method to display even chess board row (used in #display_board)

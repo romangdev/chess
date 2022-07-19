@@ -4,6 +4,7 @@ require "./lib/board"
 require "./lib/player_white"
 require "./lib/player_black"
 require "./lib/game"
+require "./lib/square_pieces"
 
 board = Board.new
 board.generate_board
@@ -35,6 +36,8 @@ until confirmed
     puts "Piece movement aborted. Pick another piece."
   end
 end
+
+board.pawn_test(player_choice)
 
 
 
