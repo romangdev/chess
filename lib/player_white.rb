@@ -3,7 +3,7 @@
 require_relative 'chess_pieces'
 
 class PlayerWhite
-  attr_reader :player_pieces
+  attr_reader :player_pieces, :player_color
 
   include ChessPieces
 

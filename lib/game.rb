@@ -19,10 +19,10 @@ class Game
     "h" => 7,
   }
 
-  def get_player_location
+  def get_player_location(player_color)
     flag = false
     until flag == true
-      prompt_player_location 
+      prompt_player_location(player_color) 
       player_choice = gets.chomp.downcase.split("")
       flag = verify_player_location(player_choice)
       puts "That's location isn't on the board - please try again!" if flag == false
@@ -55,11 +55,24 @@ class Game
     false
   end
 
+  def get_piece_choice_confirm
+    puts "Confirm you want to move this piece (y/n)"
+    piece_confirm = gets.chomp.downcase
+    return piece_confirm
+  end
+
+  def handle_confirm_piece_choice(piece_confirm)
+    return true if piece_confirm == "y" || piece_confirm == "yes"
+
+    puts "Piece movement aborted. Pick another piece."
+    false
+  end
+
   private 
 
-  def prompt_player_location 
+  def prompt_player_location(player_color)
     puts <<-HEREDOC 
-Choose piece to move (type column then row with no space)...
+#{player_color.upcase}: Choose piece to move (type column then row with no space)...
 Example: a1, h3, g8, etc.
     HEREDOC
   end
