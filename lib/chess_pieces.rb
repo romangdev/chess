@@ -2,7 +2,7 @@
 
 require 'colorize'
 
-module ChessPieces 
+module ChessPieces
   WHITE_PAWN = " \u2659 "
   WHITE_ROOK = " \u2655 "
   WHITE_KNIGHT = " \u2658 "
