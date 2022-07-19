@@ -19,6 +19,21 @@ describe Board do
         board.generate_board
         expect(board.chess_board[6].length).to eq(8)
       end
+
+      it "returns a white rook at array[0][0]" do 
+        board.generate_board
+        expect(board.chess_board[0][0]).to eq(" \u2655 ")
+      end
+
+      it "returns a black pawn at array[6][3]" do 
+        board.generate_board
+        expect(board.chess_board[6][3]).to eq("\e[0;30;49m ♟ \e[0m")
+      end
+
+      it "returns a white queen at array[0][3]" do 
+        board.generate_board
+        expect(board.chess_board[0][3]).to eq(" \u2655 ")
+      end
     end
   end
 end

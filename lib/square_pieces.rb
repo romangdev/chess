@@ -39,7 +39,7 @@ class SquarePieces
   @@d5_piece = "   "
   @@d6_piece = "   "
   @@d7_piece = BLACK_PAWN
-  @@d8_piece = BLACK_KING
+  @@d8_piece = BLACK_QUEEN
 
   @@e1_piece = WHITE_KING
   @@e2_piece = WHITE_PAWN
@@ -48,7 +48,7 @@ class SquarePieces
   @@e5_piece = "   "
   @@e6_piece = "   "
   @@e7_piece = BLACK_PAWN
-  @@e8_piece = BLACK_QUEEN
+  @@e8_piece = BLACK_KING
 
   @@f1_piece = WHITE_BISHOP
   @@f2_piece = WHITE_PAWN

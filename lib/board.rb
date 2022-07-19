@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'colorize'
 require_relative 'square_pieces'
 
@@ -9,52 +11,71 @@ class Board < SquarePieces
   end
 
   def generate_board
-    @chess_board = [["#{@@a1_piece}".colorize(:background => :magenta), "#{@@b1_piece}".colorize(:background => :light_black),
-      "#{@@c1_piece}".colorize(:background => :magenta), "#{@@d1_piece}".colorize(:background => :light_black),
-      "#{@@e1_piece}".colorize(:background => :magenta), "#{@@f1_piece}".colorize(:background => :light_black),
-      "#{@@g1_piece}".colorize(:background => :magenta), "#{@@h1_piece}".colorize(:background => :light_black)],
-    
-      ["#{@@a2_piece}".colorize(:background => :light_black), "#{@@b2_piece}".colorize(:background => :magenta),
-        "#{@@c2_piece}".colorize(:background => :light_black), "#{@@d2_piece}".colorize(:background => :magenta),
-        "#{@@e2_piece}".colorize(:background => :light_black), "#{@@f2_piece}".colorize(:background => :magenta),
-        "#{@@g2_piece}".colorize(:background => :light_black), "#{@@h2_piece}".colorize(:background => :magenta)],
-      
-      ["#{@@a3_piece}".colorize(:background => :magenta), "#{@@b3_piece}".colorize(:background => :light_black),
-        "#{@@c3_piece}".colorize(:background => :magenta), "#{@@d3_piece}".colorize(:background => :light_black),
-        "#{@@e3_piece}".colorize(:background => :magenta), "#{@@f3_piece}".colorize(:background => :light_black),
-        "#{@@g3_piece}".colorize(:background => :magenta), "#{@@h3_piece}".colorize(:background => :light_black)],
-        
-      ["#{@@a4_piece}".colorize(:background => :light_black), "#{@@b4_piece}".colorize(:background => :magenta),
-        "#{@@c4_piece}".colorize(:background => :light_black), "#{@@d4_piece}".colorize(:background => :magenta),
-        "#{@@e4_piece}".colorize(:background => :light_black), "#{@@f4_piece}".colorize(:background => :magenta),
-        "#{@@g4_piece}".colorize(:background => :light_black), "#{@@h4_piece}".colorize(:background => :magenta)],
-      
-      ["#{@@a5_piece}".colorize(:background => :magenta), "#{@@b5_piece}".colorize(:background => :light_black),
-        "#{@@c5_piece}".colorize(:background => :magenta), "#{@@d5_piece}".colorize(:background => :light_black),
-        "#{@@e5_piece}".colorize(:background => :magenta), "#{@@f5_piece}".colorize(:background => :light_black),
-        "#{@@g5_piece}".colorize(:background => :magenta), "#{@@h5_piece}".colorize(:background => :light_black)],
-        
-      ["#{@@a6_piece}".colorize(:background => :light_black), "#{@@b6_piece}".colorize(:background => :magenta),
-        "#{@@c6_piece}".colorize(:background => :light_black), "#{@@d6_piece}".colorize(:background => :magenta),
-        "#{@@e6_piece}".colorize(:background => :light_black), "#{@@f6_piece}".colorize(:background => :magenta),
-        "#{@@g6_piece}".colorize(:background => :light_black), "#{@@h6_piece}".colorize(:background => :magenta)],
-          
-      ["#{@@a7_piece}".colorize(:background => :magenta), "#{@@b7_piece}".colorize(:background => :light_black),
-        "#{@@c7_piece}".colorize(:background => :magenta), "#{@@d7_piece}".colorize(:background => :light_black),
-        "#{@@e7_piece}".colorize(:background => :magenta), "#{@@f7_piece}".colorize(:background => :light_black),
-        "#{@@g7_piece}".colorize(:background => :magenta), "#{@@h7_piece}".colorize(:background => :light_black)],
-            
-      ["#{@@a8_piece}".colorize(:background => :light_black), "#{@@b8_piece}".colorize(:background => :magenta),
-        "#{@@c8_piece}".colorize(:background => :light_black), "#{@@d8_piece}".colorize(:background => :magenta),
-        "#{@@e8_piece}".colorize(:background => :light_black), "#{@@f8_piece}".colorize(:background => :magenta),
-        "#{@@g8_piece}".colorize(:background => :light_black), "#{@@h8_piece}".colorize(:background => :magenta)],]
+    @chess_board = [[@@a1_piece, @@b1_piece,
+                    @@c1_piece, @@d1_piece,
+                    @@e1_piece, @@f1_piece,
+                    @@g1_piece, @@h1_piece],
+                  
+                    [@@a2_piece, @@b2_piece,
+                      @@c2_piece, @@d2_piece,
+                      @@e2_piece, @@f2_piece,
+                      @@g2_piece, @@h2_piece],
+                    
+                    [@@a3_piece, @@b3_piece,
+                      @@c3_piece, @@d3_piece,
+                      @@e3_piece, @@f3_piece,
+                      @@g3_piece, @@h3_piece],
+                      
+                    [@@a4_piece, @@b4_piece,
+                      @@c4_piece, @@d4_piece,
+                      @@e4_piece, @@f4_piece,
+                      @@g4_piece, @@h4_piece],
+                    
+                    [@@a5_piece, @@b5_piece,
+                      @@c5_piece, @@d5_piece,
+                      @@e5_piece, @@f5_piece,
+                      @@g5_piece, @@h5_piece],
+                      
+                    [@@a6_piece, @@b6_piece,
+                      @@c6_piece, @@d6_piece,
+                      @@e6_piece, @@f6_piece,
+                      @@g6_piece, @@h6_piece],
+                        
+                    [@@a7_piece, @@b7_piece,
+                      @@c7_piece, @@d7_piece,
+                      @@e7_piece, @@f7_piece,
+                      @@g7_piece, @@h7_piece],
+                          
+                    [@@a8_piece, @@b8_piece,
+                      @@c8_piece, @@d8_piece,
+                      @@e8_piece, @@f8_piece,
+                      @@g8_piece, @@h8_piece],]
   end
 
   def display_board
     for i in 7.downto(0)
       print "#{i + 1} "
-      @chess_board[i].each do |element|
-        print element
+      n = 0
+      if i.odd?
+        while n <= 7
+          if n.even?
+            print @chess_board[i][n].colorize(:background => :light_black)
+            n += 1
+          else
+            print @chess_board[i][n].colorize(:background => :magenta)
+            n += 1
+          end
+        end    
+      else
+        while n <= 7 
+          if n.even? 
+            print @chess_board[i][n].colorize(:background => :magenta)
+            n += 1
+          else
+            print @chess_board[i][n].colorize(:background => :light_black)
+            n += 1
+          end
+        end    
       end
       puts "\n"
     end
