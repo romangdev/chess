@@ -22,7 +22,7 @@ describe Board do
 
       it "returns a white rook at array[0][0]" do 
         board.generate_board
-        expect(board.chess_board[0][0]).to eq(" \u2655 ")
+        expect(board.chess_board[0][0]).to eq(" \u2656 ")
       end
 
       it "returns a black pawn at array[6][3]" do 

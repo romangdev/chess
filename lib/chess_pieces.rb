@@ -4,7 +4,7 @@ require 'colorize'
 
 module ChessPieces
   WHITE_PAWN = " \u2659 "
-  WHITE_ROOK = " \u2655 "
+  WHITE_ROOK = " \u2656 "
   WHITE_KNIGHT = " \u2658 "
   WHITE_BISHOP = " \u2657 "
   WHITE_QUEEN = " \u2655 "

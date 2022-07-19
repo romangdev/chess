@@ -20,13 +20,24 @@ class Game
   }
 
   def get_player_location
-    puts <<-HEREDOC 
-Choose piece to move (type column then row with no space)...
-Example: a1, h3, g8, etc.
-    HEREDOC
+    flag = false
+    until flag == true
+      prompt_player_location 
+      player_choice = gets.chomp.downcase.split("")
+      flag = verify_player_location(player_choice)
+      puts "That's location isn't on the board - please try again!" if flag == false
+    end
+    player_choice
+  end
 
-    player_choice = gets.chomp.split("")
-    return player_choice
+  def verify_player_location(player_choice)
+    if player_choice.length != 2 || player_choice[0] !~ /[a-h]/ ||
+      player_choice[1] !~ /[1-8]/
+
+      return false
+    else 
+      return true
+    end
   end
 
   def convert_player_location(player_choice)
@@ -35,10 +46,17 @@ Example: a1, h3, g8, etc.
     print player_choice
     return player_choice
 
-    # verify player location choice is within array AND includes their piece
+    # verify player location includes their piece
   end
 
   private 
+
+  def prompt_player_location 
+    puts <<-HEREDOC 
+Choose piece to move (type column then row with no space)...
+Example: a1, h3, g8, etc.
+    HEREDOC
+  end
 
   def convert_player_column(player_choice)
     COLUMN_MATCH.each do |key, value|
