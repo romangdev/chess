@@ -110,4 +110,67 @@ describe Game do
       end
     end
   end
+
+  describe "#verify_location_piece" do 
+    let(:player_white) { double("player_white", pieces: [" \u2659 ", " \u2656 ", " \u2658 ",
+      " \u2657 ", " \u2655 ", " \u2654 "])}
+    let(:player_black) { double("player_black", pieces: [" \u265f ", " \u265c ", " \u265e ",
+      " \u265d ", " \u265b ", " \u265a "])}
+
+    context "when location holds a player white piece" do
+      it "returns true" do 
+        arr = [["check", " \u2656 "],["check", "check"]]
+        result = game.verify_location_piece(player_white.pieces, [0, 1], arr)
+        expect(result).to be true
+      end
+
+      it "returns true" do 
+        arr = [["check", " check "],["check", "check"], ["check", "check", " \u2654 "]]
+        result = game.verify_location_piece(player_white.pieces, [2, 2], arr)
+        expect(result).to be true
+      end
+    end
+
+    context "when location does not hold a player white piece" do
+      it "returns false" do 
+        arr = [["check", "nil"],["check", "check"]]
+        result = game.verify_location_piece(player_white.pieces, [0, 1], arr)
+        expect(result).to be false
+      end
+
+      it "returns false" do 
+        arr = [["check", " check "],["check", "check"], ["check", "check", "nil"]]
+        result = game.verify_location_piece(player_white.pieces, [2, 2], arr)
+        expect(result).to be false
+      end
+    end
+
+    context "when location holds a player black piece" do
+      it "returns true" do 
+        arr = [[" \u265c ", "nil "],["check", "check"]]
+        result = game.verify_location_piece(player_black.pieces, [0, 0], arr)
+        expect(result).to be true
+      end
+
+      it "returns true" do 
+        arr = [["check", " check "],["check", "check"], [" \u265e ", "check", " nil"]]
+        result = game.verify_location_piece(player_black.pieces, [2, 0], arr)
+        expect(result).to be true
+      end
+    end
+
+    context "when location does not hold a player white piece" do
+      it "returns false" do 
+        arr = [["check", "nil"],["check", "check"]]
+        result = game.verify_location_piece(player_black.pieces, [0, 1], arr)
+        expect(result).to be false
+      end
+
+      it "returns false" do 
+        arr = [["check", " check "],["check", "check"], ["check", "check", "nil"]]
+        result = game.verify_location_piece(player_black.pieces, [2, 2], arr)
+        expect(result).to be false
+      end
+    end
+  end
 end

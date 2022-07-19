@@ -7,7 +7,7 @@ class PlayerBlack
 
   def initialize
     @player_color = "white"
-    @player_symbols = [BLACK_PAWN, BLACK_ROOK, BLACK_KNIGHT,
+    @player_pieces = [BLACK_PAWN, BLACK_ROOK, BLACK_KNIGHT,
                       BLACK_BISHOP, BLACK_QUEEN, BLACK_KING]
   end
 end

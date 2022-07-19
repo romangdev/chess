@@ -43,10 +43,15 @@ class Game
   def convert_player_location(player_choice)
     player_choice[0] = convert_player_column(player_choice)
     player_choice[1] = convert_player_row(player_choice)
-    print player_choice
-    return player_choice
+    return player_choice.reverse
+  end
 
-    # verify player location includes their piece
+  def verify_location_piece(player_pieces, chosen_location, board_array)
+    player_pieces.each do |piece|
+      return true if board_array[chosen_location[0]][chosen_location[1]] == piece
+    end
+
+    false
   end
 
   private 
