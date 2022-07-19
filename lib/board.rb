@@ -3,6 +3,8 @@
 require 'colorize'
 require_relative 'square_pieces'
 
+# generates board, displays it, and holds methods to highlight piece 
+# and location choices chosen by player
 class Board < SquarePieces
   attr_accessor :chess_board
 

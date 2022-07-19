@@ -5,6 +5,8 @@ require_relative 'player_black'
 require_relative 'player_white'
 require_relative 'board'
 
+# contains the majority of core game functions, especially those interacting
+# with the player
 class Game
   include ChessPieces
 
@@ -64,7 +66,6 @@ class Game
   def handle_confirm_piece_choice(piece_confirm)
     return true if piece_confirm == "y" || piece_confirm == "yes"
 
-    puts "Piece movement aborted. Pick another piece."
     false
   end
 

@@ -1,6 +1,8 @@
 require 'colorize'
 require_relative 'chess_pieces'
 
+# holds information about whether each square holds a chess piece,
+# and if so what piece it is
 class SquarePieces
 
   include ChessPieces

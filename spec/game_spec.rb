@@ -3,19 +3,6 @@ require './lib/game.rb'
 describe Game do 
   subject(:game) { described_class.new }
 
-  # describe "#convert_player_location" do 
-  #   context "when player enters 'a8'" do 
-  #     before do 
-  #       allow(game).to receive(:convert_player_column).and_return(0)
-  #     end
-  #     it "returns [0, 7]" do 
-  #       player_choice = "a8"
-  #       result = game.convert_player_location(player_choice)
-  #       expect(result).to eq([0, 7])
-  #     end
-  #   end
-  # end
-
   describe "#get_player_location" do 
     context "when invalid location is entered once" do 
       before do 
@@ -26,7 +13,7 @@ describe Game do
       it "receives error message once" do 
         error_msg = "That's location isn't on the board - please try again!"
         expect(game).to receive(:puts).with(error_msg).once
-        game.get_player_location
+        game.get_player_location("color")
       end
     end
 
@@ -39,7 +26,7 @@ describe Game do
       it "receives error message twice" do 
         error_msg = "That's location isn't on the board - please try again!"
         expect(game).to receive(:puts).with(error_msg).twice
-        game.get_player_location
+        game.get_player_location("color")
       end
     end
 
@@ -52,7 +39,7 @@ describe Game do
       it "does not receive an error message" do 
         error_msg = "That's location isn't on the board - please try again!"
         expect(game).not_to receive(:puts).with(error_msg)
-        game.get_player_location
+        game.get_player_location("color")
       end
     end
   end
@@ -170,6 +157,58 @@ describe Game do
         arr = [["check", " check "],["check", "check"], ["check", "check", "nil"]]
         result = game.verify_location_piece(player_black.pieces, [2, 2], arr)
         expect(result).to be false
+      end
+    end
+  end
+
+  describe "#get_piece_choice_confirm" do 
+    context "when player enters 'y'" do 
+      before do 
+        allow(game).to receive(:puts)
+        allow(game).to receive(:gets).and_return("y")
+      end
+      it "returns 'y'" do 
+        expect(game.get_piece_choice_confirm).to eq("y")
+      end
+    end
+
+    context "when player enters 'yes'" do 
+      before do 
+        allow(game).to receive(:puts)
+        allow(game).to receive(:gets).and_return("yes")
+      end
+      it "returns 'yes'" do 
+        expect(game.get_piece_choice_confirm).to eq("yes")
+      end
+    end
+
+    context "when player enters 'n'" do
+      before do 
+        allow(game).to receive(:puts)
+        allow(game).to receive(:gets).and_return("n")
+      end 
+      it "returns 'n'" do 
+        expect(game.get_piece_choice_confirm).to eq("n")
+      end
+    end
+  end
+
+  describe "#handle_confirm_piece_choice" do 
+    context "when choice is 'y'" do 
+      it "returns 'true'" do 
+        expect(game.handle_confirm_piece_choice('y')).to be true
+      end
+    end
+
+    context "when choice is 'n'" do 
+      it "returns 'false'" do 
+        expect(game.handle_confirm_piece_choice('n')).to be false
+      end
+    end
+
+    context "when choice is '4ldfn'" do 
+      it "returns 'false'" do 
+        expect(game.handle_confirm_piece_choice('4ldfn')).to be false
       end
     end
   end

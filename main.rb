@@ -32,6 +32,7 @@ until confirmed
   if confirmed == false
     player_choice = nil 
     board.display_board
+    puts "Piece movement aborted. Pick another piece."
   end
 end
 
