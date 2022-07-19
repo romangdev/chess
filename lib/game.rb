@@ -43,6 +43,7 @@ class Game
   def convert_player_location(player_choice)
     player_choice[0] = convert_player_column(player_choice)
     player_choice[1] = convert_player_row(player_choice)
+    print "#{player_choice.reverse}\n"
     return player_choice.reverse
   end
 

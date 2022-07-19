@@ -23,5 +23,7 @@ until flag
   puts "Your piece isn't located there, please try again!" if flag == false
 end
 
+board.display_board(player_choice)
+
 
 
