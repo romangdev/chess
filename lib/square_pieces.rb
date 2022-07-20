@@ -1,6 +1,11 @@
 require 'colorize'
 require_relative 'chess_pieces'
 require_relative 'pawn'
+require_relative 'rook'
+require_relative 'knight'
+require_relative 'bishop'
+require_relative 'queen'
+require_relative 'king'
 
 # generates chess pieces as objects and holds information about what piece
 # a square is holding (if any)
@@ -17,6 +22,18 @@ class SquarePieces
   w_pawn7 = Pawn.new(WHITE_PAWN)
   w_pawn8 = Pawn.new(WHITE_PAWN)
 
+  w_rook1 = Rook.new(WHITE_ROOK)
+  w_rook2 = Rook.new(WHITE_ROOK)
+
+  w_knight1 = Knight.new(WHITE_KNIGHT)
+  w_knight2 = Knight.new(WHITE_KNIGHT)
+
+  w_bishop1 = Bishop.new(WHITE_BISHOP)
+  w_bishop2 = Bishop.new(WHITE_BISHOP)
+
+  w_queen = Queen.new(WHITE_QUEEN)
+  w_king = King.new(WHITE_KING)
+
   b_pawn1 = Pawn.new(BLACK_PAWN)
   b_pawn2 = Pawn.new(BLACK_PAWN)
   b_pawn3 = Pawn.new(BLACK_PAWN)
@@ -26,83 +43,95 @@ class SquarePieces
   b_pawn7 = Pawn.new(BLACK_PAWN)
   b_pawn8 = Pawn.new(BLACK_PAWN)
 
+  b_rook1 = Rook.new(BLACK_ROOK)
+  b_rook2 = Rook.new(BLACK_ROOK)
+
+  b_knight1 = Knight.new(BLACK_KNIGHT)
+  b_knight2 = Knight.new(BLACK_KNIGHT)
+
+  b_bishop1 = Bishop.new(BLACK_BISHOP)
+  b_bishop2 = Bishop.new(BLACK_BISHOP)
+
+  b_queen = Queen.new(BLACK_QUEEN)
+  b_king = King.new(BLACK_KING)
+
   # A column
-  @@a1_piece = WHITE_ROOK
+  @@a1_piece = w_rook1
   @@a2_piece = w_pawn1
   @@a3_piece = "   "
   @@a4_piece = "   "
   @@a5_piece = "   "
   @@a6_piece = "   "
   @@a7_piece = b_pawn1
-  @@a8_piece = BLACK_ROOK
+  @@a8_piece = b_rook1
 
   # B column
-  @@b1_piece = WHITE_KNIGHT 
+  @@b1_piece = w_knight1
   @@b2_piece = w_pawn2
   @@b3_piece = "   "
   @@b4_piece = "   "
   @@b5_piece = "   "
   @@b6_piece = "   "
   @@b7_piece = b_pawn2
-  @@b8_piece = BLACK_KNIGHT
+  @@b8_piece = b_knight1
 
   # C column
-  @@c1_piece = WHITE_BISHOP
+  @@c1_piece = w_bishop1
   @@c2_piece = w_pawn3
   @@c3_piece = "   "
   @@c4_piece = "   "
   @@c5_piece = "   "
   @@c6_piece = "   "
   @@c7_piece = b_pawn3
-  @@c8_piece = BLACK_BISHOP
+  @@c8_piece = b_bishop1
 
   # D column
-  @@d1_piece = WHITE_QUEEN
+  @@d1_piece = w_queen
   @@d2_piece = w_pawn4
   @@d3_piece = "   "
   @@d4_piece = "   "
   @@d5_piece = "   "
   @@d6_piece = "   "
   @@d7_piece = b_pawn4
-  @@d8_piece = BLACK_QUEEN
+  @@d8_piece = b_queen
 
   # E column
-  @@e1_piece = WHITE_KING
+  @@e1_piece = w_king
   @@e2_piece = w_pawn5
   @@e3_piece = "   "
   @@e4_piece = "   "
   @@e5_piece = "   "
   @@e6_piece = "   "
   @@e7_piece = b_pawn5
-  @@e8_piece = BLACK_KING
+  @@e8_piece = b_king
 
   # F column
-  @@f1_piece = WHITE_BISHOP
+  @@f1_piece = w_bishop2
   @@f2_piece = w_pawn6
   @@f3_piece = "   "
   @@f4_piece = "   "
   @@f5_piece = "   "
   @@f6_piece = "   "
   @@f7_piece = b_pawn6
-  @@f8_piece = BLACK_BISHOP
+  @@f8_piece = b_bishop2
 
   # G column
-  @@g1_piece = WHITE_KNIGHT 
+  @@g1_piece = w_knight2
   @@g2_piece = w_pawn7
   @@g3_piece = "   "
   @@g4_piece = "   "
   @@g5_piece = "   "
   @@g6_piece = "   "
   @@g7_piece = b_pawn7
-  @@g8_piece = BLACK_KNIGHT
+  @@g8_piece = b_knight2
 
   # H column
-  @@h1_piece = WHITE_ROOK
+  @@h1_piece = w_rook2
   @@h2_piece = w_pawn8
   @@h3_piece = "   "
   @@h4_piece = "   "
   @@h5_piece = "   "
   @@h6_piece = "   "
   @@h7_piece = b_pawn8
-  @@h8_piece = BLACK_ROOK
+  @@h8_piece = b_rook2
 end

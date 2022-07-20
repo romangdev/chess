@@ -4,7 +4,7 @@ require_relative 'chess_pieces'
 require_relative 'player_black'
 require_relative 'player_white'
 require_relative 'board'
-require_relative 'pawn'
+# require_relative 'pawn'
 
 # contains the majority of core game functions, especially those interacting
 # with the player
@@ -51,10 +51,10 @@ class Game
 
   def verify_location_piece(player_pieces, chosen_location, board_array)
     player_pieces.each do |piece|
-      if board_array[chosen_location[0]][chosen_location[1]].is_a? Pawn
-        return true if board_array[chosen_location[0]][chosen_location[1]].piece_symbol == piece
-      else
+      if board_array[chosen_location[0]][chosen_location[1]] == "   "
         return true if board_array[chosen_location[0]][chosen_location[1]] == piece
+      else
+        return true if board_array[chosen_location[0]][chosen_location[1]].piece_symbol == piece
       end
     end
 

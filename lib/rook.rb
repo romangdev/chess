@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Pawn
+class Rook
   attr_reader :piece_symbol
 
   def initialize(piece_symbol)
