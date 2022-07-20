@@ -31,57 +31,47 @@ class Pawn
     right_diagonal = chess_board[current_location[0] + 1][current_location[1] + 1]
     left_diagonal = chess_board[current_location[0] + 1][current_location[1] - 1]
 
+    handle_diagonals(right_diagonal, left_diagonal, moves, current_location)
+  end
+
+  def handle_diagonals(right_diagonal, left_diagonal, moves, current_location)
     if self.piece_symbol == " \u2659 "
-      white_check_right_diagonal(right_diagonal, moves, current_location)
-      white_check_left_diagonal(left_diagonal, moves, current_location)
+      check = white_check_diagonal(right_diagonal)
+      moves << [current_location[0] + 1, current_location[1] + 1] if check
+
+      check = white_check_diagonal(left_diagonal)
+      moves << [current_location[0] + 1, current_location[1] - 1] if check
     else
-      black_check_right_diagonal(right_diagonal, moves, current_location)
-      black_check_left_diagonal(left_diagonal, moves, current_location)
+      check = black_check_diagonal(right_diagonal)
+      moves << [current_location[0] + 1, current_location[1] + 1] if check
+
+      check = black_check_diagonal(left_diagonal)
+      moves << [current_location[0] + 1, current_location[1] - 1] if check
     end
     moves
   end
 
-  def white_check_right_diagonal(right_diagonal, moves, current_location)
-    if right_diagonal != "   " && (right_diagonal.piece_symbol == " \u265f ".colorize(:black) ||
-      right_diagonal.piece_symbol == " \u265c ".colorize(:black) || right_diagonal.piece_symbol == " \u265e ".colorize(:black) ||
-      right_diagonal.piece_symbol == " \u265d ".colorize(:black) || right_diagonal.piece_symbol == " \u265b ".colorize(:black)||
-      right_diagonal.piece_symbol == " \u265a ".colorize(:black))
+  def white_check_diagonal(diagonal)
+    if diagonal != "   " && (diagonal.piece_symbol == " \u265f ".colorize(:black) ||
+      diagonal.piece_symbol == " \u265c ".colorize(:black) || diagonal.piece_symbol == " \u265e ".colorize(:black) ||
+      diagonal.piece_symbol == " \u265d ".colorize(:black) || diagonal.piece_symbol == " \u265b ".colorize(:black)||
+      diagonal.piece_symbol == " \u265a ".colorize(:black))
 
-      moves << [current_location[0] + 1, current_location[1] + 1]
-      moves
+      return true
     end
+
+    false
   end
 
-  def white_check_left_diagonal(left_diagonal, moves, current_location)
-    if left_diagonal != "   " && (left_diagonal.piece_symbol == " \u265f ".colorize(:black) ||
-      left_diagonal.piece_symbol == " \u265c ".colorize(:black) || left_diagonal.piece_symbol == " \u265e ".colorize(:black) ||
-      left_diagonal.piece_symbol == " \u265d ".colorize(:black) || left_diagonal.piece_symbol == " \u265b ".colorize(:black) ||
-      left_diagonal.piece_symbol == " \u265a ".colorize(:black))
+  def black_check_diagonal(diagonal)
+    if diagonal != "   " && (diagonal.piece_symbol == " \u265f " ||
+      diagonal.piece_symbol == " \u265c " || diagonal.piece_symbol == " \u265e " ||
+      diagonal.piece_symbol == " \u265d " || diagonal.piece_symbol == " \u265b "||
+      diagonal.piece_symbol == " \u265a ")
 
-      moves << [current_location[0] + 1, current_location[1] - 1]
-      moves
+      return true
     end
-  end
 
-  def black_check_right_diagonal(right_diagonal, moves, current_location)
-    if right_diagonal != "   " && (right_diagonal.piece_symbol == " \u265f " ||
-      right_diagonal.piece_symbol == " \u265c " || right_diagonal.piece_symbol == " \u265e " ||
-      right_diagonal.piece_symbol == " \u265d " || right_diagonal.piece_symbol == " \u265b "||
-      right_diagonal.piece_symbol == " \u265a ")
-
-      moves << [current_location[0] + 1, current_location[1] + 1]
-      moves
-    end
-  end
-
-  def black_check_left_diagonal(left_diagonal, moves, current_location)
-    if left_diagonal != "   " && (left_diagonal.piece_symbol == " \u265f " ||
-      left_diagonal.piece_symbol == " \u265c " || left_diagonal.piece_symbol == " \u265e " ||
-      left_diagonal.piece_symbol == " \u265d " || left_diagonal.piece_symbol == " \u265b "||
-      left_diagonal.piece_symbol == " \u265a ")
-
-      moves << [current_location[0] + 1, current_location[1] - 1]
-      moves
-    end
+    false
   end
 end
