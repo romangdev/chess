@@ -2,6 +2,7 @@
 
 require 'colorize'
 require_relative 'square_pieces'
+require_relative 'pawn'
 
 # generates board, displays it, and holds methods to highlight piece 
 # and location choices chosen by player
@@ -89,7 +90,11 @@ class Board < SquarePieces
     if player_choice[0] == i && player_choice[1] == n
       highlight_initial_location(player_choice)
     else
-      print @chess_board[i][n].colorize(:background => :light_black)
+      if @chess_board[i][n].is_a? Pawn
+        print @chess_board[i][n].piece_symbol.colorize(:background => :light_black)
+      else
+        print @chess_board[i][n].colorize(:background => :light_black)
+      end
     end
   end
 
@@ -98,13 +103,21 @@ class Board < SquarePieces
     if player_choice[0] == i && player_choice[1] == n
       highlight_initial_location(player_choice)
     else
-      print @chess_board[i][n].colorize(:background => :magenta)
+      if @chess_board[i][n].is_a? Pawn
+        print @chess_board[i][n].piece_symbol.colorize(:background => :magenta)
+      else
+        print @chess_board[i][n].colorize(:background => :magenta)
+      end
     end
   end
 
   # sub-sub-sub-method used to highlight player's location of choice
   # found in the individual odd/even colored square display methods
   def highlight_initial_location(player_choice)
-    print @chess_board[player_choice[0]][player_choice[1]].colorize(:background => :light_green)
+    if @chess_board[player_choice[0]][player_choice[1]].is_a? Pawn 
+      print @chess_board[player_choice[0]][player_choice[1]].piece_symbol.colorize(:background => :light_green)
+    else
+      print @chess_board[player_choice[0]][player_choice[1]].colorize(:background => :light_green)
+    end
   end
 end
