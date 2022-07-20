@@ -39,5 +39,8 @@ end
 
 board.pawn_test(player_choice)
 
+piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
+puts piece_to_move
+
 
 

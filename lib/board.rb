@@ -2,9 +2,6 @@
 
 require 'colorize'
 require_relative 'square_pieces'
-# require_relative 'pawn'
-# require_relative 'rook'
-# require_relative 'knight'
 
 # generates board, displays it, and holds methods to highlight piece 
 # and location choices chosen by player
