@@ -5,6 +5,7 @@ require "./lib/player_white"
 require "./lib/player_black"
 require "./lib/game"
 require "./lib/square_pieces"
+require "./lib/pieces/pawn"
 
 board = Board.new
 board.generate_board
@@ -40,7 +41,11 @@ end
 board.pawn_test(player_choice)
 
 piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
-puts piece_to_move
+if piece_to_move.is_a? Pawn 
+  piece_to_move.generate_moves(player_choice, board.chess_board)
+end
+
+
 
 
 
