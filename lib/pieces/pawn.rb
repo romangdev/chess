@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# require './lib/square_pieces'
-
 class Pawn
   attr_accessor :first_move_made
   attr_reader :piece_symbol
@@ -14,7 +12,9 @@ class Pawn
   def generate_moves(current_location, chess_board = nil) 
     moves = []
     moves = check_first_move(moves, current_location)
-    # moves = check_capturable_pieces(moves, current_location, chess_board)
+    unless chess_board.nil?
+      moves = check_capturable_pieces(moves, current_location, chess_board)
+    end
     moves << [current_location[0] + 1, current_location[1]]
     print moves
     moves
@@ -27,27 +27,61 @@ class Pawn
     moves
   end
 
-  # def check_capturable_pieces(moves, current_location, chess_board)
-  #   right_diagonal = chess_board[current_location[0] + 1][current_location[1] + 1]
-  #   left_diagonal = chess_board[current_location[0] + 1][current_location[1] - 1]
+  def check_capturable_pieces(moves, current_location, chess_board)
+    right_diagonal = chess_board[current_location[0] + 1][current_location[1] + 1]
+    left_diagonal = chess_board[current_location[0] + 1][current_location[1] - 1]
 
-  #   # if self.piece_symbol == WHITE_PAWN
-  #     if right_diagonal != "   " && (right_diagonal.piece_symbol == BLACK_PAWN ||
-  #       right_diagonal.piece_symbol == BLACK_ROOK || right_diagonal.piece_symbol == BLACK_KNIGHT ||
-  #       right_diagonal.piece_symbol == BLACK_BISHOP || right_diagonal.piece_symbol == BLACK_QUEEN ||
-  #       right_diagonal.piece_symbol == BLACK_KING)
+    if self.piece_symbol == " \u2659 "
+      white_check_right_diagonal(right_diagonal, moves, current_location)
+      white_check_left_diagonal(left_diagonal, moves, current_location)
+    else
+      black_check_right_diagonal(right_diagonal, moves, current_location)
+      black_check_left_diagonal(left_diagonal, moves, current_location)
+    end
+    moves
+  end
 
-  #       moves << [current_location[0] + 1, current_location[1] + 1]
-  #     end
-  #     if left_diagonal != "   " && (left_diagonal.piece_symbol == BLACK_PAWN ||
-  #       left_diagonal.piece_symbol == BLACK_ROOK || left_diagonal.piece_symbol == BLACK_KNIGHT ||
-  #       left_diagonal.piece_symbol == BLACK_BISHOP || left_diagonal.piece_symbol == BLACK_QUEEN ||
-  #       left_diagonal.piece_symbol == BLACK_KING)
+  def white_check_right_diagonal(right_diagonal, moves, current_location)
+    if right_diagonal != "   " && (right_diagonal.piece_symbol == " \u265f ".colorize(:black) ||
+      right_diagonal.piece_symbol == " \u265c ".colorize(:black) || right_diagonal.piece_symbol == " \u265e ".colorize(:black) ||
+      right_diagonal.piece_symbol == " \u265d ".colorize(:black) || right_diagonal.piece_symbol == " \u265b ".colorize(:black)||
+      right_diagonal.piece_symbol == " \u265a ".colorize(:black))
 
-  #       moves << [current_location[0] + 1, current_location[1] - 1]
-  #     end
-  #   # end
+      moves << [current_location[0] + 1, current_location[1] + 1]
+      moves
+    end
+  end
 
-  #   moves
-  # end
+  def white_check_left_diagonal(left_diagonal, moves, current_location)
+    if left_diagonal != "   " && (left_diagonal.piece_symbol == " \u265f ".colorize(:black) ||
+      left_diagonal.piece_symbol == " \u265c ".colorize(:black) || left_diagonal.piece_symbol == " \u265e ".colorize(:black) ||
+      left_diagonal.piece_symbol == " \u265d ".colorize(:black) || left_diagonal.piece_symbol == " \u265b ".colorize(:black) ||
+      left_diagonal.piece_symbol == " \u265a ".colorize(:black))
+
+      moves << [current_location[0] + 1, current_location[1] - 1]
+      moves
+    end
+  end
+
+  def black_check_right_diagonal(right_diagonal, moves, current_location)
+    if right_diagonal != "   " && (right_diagonal.piece_symbol == " \u265f " ||
+      right_diagonal.piece_symbol == " \u265c " || right_diagonal.piece_symbol == " \u265e " ||
+      right_diagonal.piece_symbol == " \u265d " || right_diagonal.piece_symbol == " \u265b "||
+      right_diagonal.piece_symbol == " \u265a ")
+
+      moves << [current_location[0] + 1, current_location[1] + 1]
+      moves
+    end
+  end
+
+  def black_check_left_diagonal(left_diagonal, moves, current_location)
+    if left_diagonal != "   " && (left_diagonal.piece_symbol == " \u265f " ||
+      left_diagonal.piece_symbol == " \u265c " || left_diagonal.piece_symbol == " \u265e " ||
+      left_diagonal.piece_symbol == " \u265d " || left_diagonal.piece_symbol == " \u265b "||
+      left_diagonal.piece_symbol == " \u265a ")
+
+      moves << [current_location[0] + 1, current_location[1] - 1]
+      moves
+    end
+  end
 end
