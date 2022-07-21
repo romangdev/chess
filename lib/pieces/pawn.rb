@@ -9,13 +9,13 @@ class Pawn
     @piece_symbol = piece_symbol
   end
 
-  def generate_moves(current_location, chess_board = nil) 
+  def generate_moves(current_location, chess_board) 
     moves = []
     moves = check_first_move(moves, current_location)
-    unless chess_board.nil?
-      moves = check_capturable_pieces(moves, current_location, chess_board)
+    moves = check_capturable_pieces(moves, current_location, chess_board)
+    if chess_board[current_location[0] + 1][current_location[1]] == "   "
+      moves << [current_location[0] + 1, current_location[1]]
     end
-    moves << [current_location[0] + 1, current_location[1]]
     print moves
     moves
   end
