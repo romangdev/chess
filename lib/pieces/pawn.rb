@@ -9,12 +9,18 @@ class Pawn
     @piece_symbol = piece_symbol
   end
 
-  def generate_moves(current_location, chess_board) 
+  def generate_moves(current_location, chess_board, pawn_color) 
     moves = []
-    moves = check_first_move(moves, current_location)
-    moves = check_capturable_pieces(moves, current_location, chess_board)
-    if chess_board[current_location[0] + 1][current_location[1]] == "   "
-      moves << [current_location[0] + 1, current_location[1]]
+    moves = check_first_move(moves, current_location, pawn_color)
+    moves = check_capturable_pieces(moves, current_location, chess_board, pawn_color)
+    if pawn_color == " \u2659 "
+      if chess_board[current_location[0] + 1][current_location[1]] == "   "
+        moves << [current_location[0] + 1, current_location[1]]
+      end
+    else
+      if chess_board[current_location[0] - 1][current_location[1]] == "   "
+        moves << [current_location[0] - 1, current_location[1]]
+      end
     end
     print moves
     moves
@@ -22,14 +28,24 @@ class Pawn
 
   private
 
-  def check_first_move(moves, current_location)
-    moves << [current_location[0] + 2, current_location[1]] if self.first_move_made == false 
+  def check_first_move(moves, current_location, pawn_color)
+    if pawn_color == " \u2659 "
+      moves << [current_location[0] + 2, current_location[1]] if self.first_move_made == false 
+    else 
+      moves << [current_location[0] - 2, current_location[1]] if self.first_move_made == false 
+    end
+    
     moves
   end
 
-  def check_capturable_pieces(moves, current_location, chess_board)
-    right_diagonal = chess_board[current_location[0] + 1][current_location[1] + 1]
-    left_diagonal = chess_board[current_location[0] + 1][current_location[1] - 1]
+  def check_capturable_pieces(moves, current_location, chess_board, pawn_color)
+    if pawn_color == " \u2659 "
+      right_diagonal = chess_board[current_location[0] + 1][current_location[1] + 1]
+      left_diagonal = chess_board[current_location[0] + 1][current_location[1] - 1]
+    else 
+      right_diagonal = chess_board[current_location[0] - 1][current_location[1] - 1]
+      left_diagonal = chess_board[current_location[0] - 1][current_location[1] + 1]
+    end
 
     handle_diagonals(right_diagonal, left_diagonal, moves, current_location)
   end
@@ -43,10 +59,10 @@ class Pawn
       moves << [current_location[0] + 1, current_location[1] - 1] if check
     else
       check = black_check_diagonal(right_diagonal)
-      moves << [current_location[0] + 1, current_location[1] + 1] if check
+      moves << [current_location[0] - 1, current_location[1] - 1] if check
 
       check = black_check_diagonal(left_diagonal)
-      moves << [current_location[0] + 1, current_location[1] - 1] if check
+      moves << [current_location[0] - 1, current_location[1] + 1] if check
     end
     moves
   end
