@@ -95,6 +95,15 @@ describe Pawn do
             expect(pawn.generate_moves(current_location, board, " \u2659 ")).to eq([[1, 2], [1, 0]])
           end
         end
+
+        context "when pawn make it's first move" do 
+          it "sets @first_move_made to true" do 
+            board = [['   ', '   ', '   '],['   ', '   ', '   ']]
+            current_location = [0, 0]
+            pawn.generate_moves(current_location, board, " \u2659 ")
+            expect(pawn.first_move_made).to be true
+          end
+        end
       end
     end
 

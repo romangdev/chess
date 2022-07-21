@@ -7,4 +7,7 @@ class Rook
     @first_move_made = false
     @piece_symbol = piece_symbol
   end
+
+  def generate_moves()
+  end
 end

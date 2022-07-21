@@ -52,6 +52,7 @@ class Pawn
       moves << [current_location[0] - 2, current_location[1]] if self.first_move_made == false 
     end
     
+    self.first_move_made = true
     moves
   end
 
