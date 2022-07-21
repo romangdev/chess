@@ -83,7 +83,7 @@ class SquarePieces
   @@d1_piece = w_queen
   @@d2_piece = w_pawn4
   @@d3_piece = "   "
-  @@d4_piece = "   "
+  @@d4_piece = w_rook1
   @@d5_piece = "   "
   @@d6_piece = "   "
   @@d7_piece = b_pawn4
