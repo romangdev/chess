@@ -163,7 +163,7 @@ describe Pawn do
           before do 
             pawn.first_move_made = true
           end 
-          it "returns array [[1, 2], [1, 0], [1, 1]]" do 
+          it "returns array [[0, 0], [0, 2], [0, 1]]" do 
             board = [[rook, '   ', rook], ['   ', '   ', '   ']]
             current_location = [1, 1]
             result = pawn.generate_moves(current_location, board, pawn.piece_symbol)
@@ -176,7 +176,7 @@ describe Pawn do
           before do 
             pawn.first_move_made = true
           end 
-          it "returns array [[1, 0], [1, 1]]" do 
+          it "returns array []" do 
             board = [['   ', rook, '   '], ['   ', '   ', '   ']]
             current_location = [1, 1]
             result = pawn.generate_moves(current_location, board, pawn.piece_symbol)
