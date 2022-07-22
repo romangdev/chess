@@ -15,6 +15,7 @@ class Rook
     left_horizontal_moves = []
     down_vertical_moves = []
     right_horizontal_moves = []
+    @first_move_made = true
 
     up_vertical_moves = handle_up_vertical_moves(up_vertical_moves, current_location, rook_color, chess_board)
     down_vertical_moves = handle_down_vertical_moves(down_vertical_moves, current_location, rook_color, chess_board)
@@ -54,7 +55,7 @@ class Rook
     moves
   end
 
-  # get possible moves the rook can make going a given direction
+  # get possible moves the rook can make going a given direction (cut off non-possible moves)
   def get_rook_direction_moves(chess_board, location, move_direction, color)
     count = 0
     move_direction.each do |location| 
