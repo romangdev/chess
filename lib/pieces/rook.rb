@@ -51,27 +51,44 @@ class Rook
     left_side.each do |move|
       moves << move 
     end
-
-    moves
   end
 
   # get possible moves the rook can make going a given direction (cut off non-possible moves)
   def get_rook_direction_moves(chess_board, location, move_direction, color)
     count = 0
-    move_direction.each do |location| 
-      if chess_board[location[0]][location[1]] == "   "
-        count += 1
-        next
-      elsif chess_board[location[0]][location[1]].piece_symbol == color ||
-        chess_board[location[0]][location[1]].piece_symbol == color ||
-        chess_board[location[0]][location[1]].piece_symbol == color ||
-        chess_board[location[0]][location[1]].piece_symbol == color ||
-        chess_board[location[0]][location[1]].piece_symbol == color ||
-        chess_board[location[0]][location[1]].piece_symbol == color
+    if color == " \u265f ".colorize(:black)
+      move_direction.each do |location| 
+        if chess_board[location[0]][location[1]] == "   "
+          count += 1
+          next
+        elsif chess_board[location[0]][location[1]].piece_symbol == " \u265f ".colorize(:black) ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265c ".colorize(:black) ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265e ".colorize(:black) ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265d ".colorize(:black) ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265b ".colorize(:black) ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265a ".colorize(:black)
 
-        move_direction = move_direction.slice(0, count + 1)
-      else
-        move_direction = move_direction.slice(0, count)
+          move_direction = move_direction.slice(0, count + 1)
+        else
+          move_direction = move_direction.slice(0, count)
+        end
+      end
+    else 
+      move_direction.each do |location| 
+        if chess_board[location[0]][location[1]] == "   "
+          count += 1
+          next
+        elsif chess_board[location[0]][location[1]].piece_symbol == " \u265f " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265c " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265e " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265d " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265b " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u265a "
+
+          move_direction = move_direction.slice(0, count + 1)
+        else
+          move_direction = move_direction.slice(0, count)
+        end
       end
     end
 
@@ -88,7 +105,7 @@ class Rook
     if rook_color == " \u2656 "
       up_vertical_moves = get_rook_direction_moves(chess_board, current_location, up_vertical_moves, " \u265f ".colorize(:black))
     else
-      up_vertical_moves = get_rook_direction_moves(chess_board, current_location, up_vertical_moves, " \u265f ")
+      up_vertical_moves = get_rook_direction_moves(chess_board, current_location, up_vertical_moves, " \u2656 ")
     end
 
     up_vertical_moves
@@ -104,7 +121,7 @@ class Rook
     if rook_color == " \u2656 "
       down_vertical_moves = get_rook_direction_moves(chess_board, current_location, down_vertical_moves, " \u265f ".colorize(:black))
     else
-      down_vertical_moves = get_rook_direction_moves(chess_board, current_location, down_vertical_moves, " \u265f ")
+      down_vertical_moves = get_rook_direction_moves(chess_board, current_location, down_vertical_moves, " \u2656 ")
     end
 
     down_vertical_moves
@@ -120,7 +137,7 @@ class Rook
     if rook_color == " \u2656 "
       right_horizontal_moves = get_rook_direction_moves(chess_board, current_location, right_horizontal_moves, " \u265f ".colorize(:black))
     else
-      right_horizontal_moves = get_rook_direction_moves(chess_board, current_location, right_horizontal_moves, " \u265f ")
+      right_horizontal_moves = get_rook_direction_moves(chess_board, current_location, right_horizontal_moves, " \u2656 ")
     end
 
     right_horizontal_moves
@@ -136,7 +153,7 @@ class Rook
     if rook_color == " \u2656 "
       left_horizontal_moves= get_rook_direction_moves(chess_board, current_location, left_horizontal_moves, " \u265f ".colorize(:black))
     else
-      left_horizontal_moves= get_rook_direction_moves(chess_board, current_location, left_horizontal_moves, " \u265f ")
+      left_horizontal_moves= get_rook_direction_moves(chess_board, current_location, left_horizontal_moves, " \u2656 ")
     end
 
     left_horizontal_moves
