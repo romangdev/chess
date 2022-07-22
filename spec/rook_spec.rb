@@ -53,6 +53,22 @@ describe Rook do
           expect(result.length).to eq(7)
         end
       end
+
+      context "when starting a [3, 3]" do 
+        it "returns an array of 11 moves" do 
+          board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
+                [black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece],
+                ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
+                ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
+                ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
+                ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
+                [white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece],
+                ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
+          current_location = [3, 3]
+          result = rook.generate_moves(current_location, board, " \u2656 ")
+          expect(result.length).to eq(11)
+        end
+      end
     end
   end
 end
