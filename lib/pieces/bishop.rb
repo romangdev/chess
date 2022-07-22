@@ -76,9 +76,7 @@ class Bishop
   # handle grabbing all possible up and rightwards moves depending on bishop color
   def handle_up_right_moves(up_right_moves, current_location, bishop_color, chess_board)
     for i in 1..7
-      unless current_location[0] + i > 7 || current_location[0] + i < 0 ||
-            current_location[1] + i > 7 || current_location[1] + i < 0
-
+      unless current_location[0] + i > 7 || current_location[1] + i > 7
         up_right_moves << [current_location[0] + i, current_location[1] + i]
       end
     end
@@ -94,10 +92,8 @@ class Bishop
   # handle grabbing all possible down and rightwards moves depending on bishop color
   def handle_down_right_moves(down_right_moves, current_location, bishop_color, chess_board)
     for i in 1..7
-      unless current_location[0] - i > 7 || current_location[0] - i < 0
-            current_location[0] - i > 7 || current_location[0] - i < 0
-        
-          down_right_moves << [current_location[0] - i, current_location[1] + i]
+      unless current_location[0] - i < 0 || current_location[1] + i > 7      
+        down_right_moves << [current_location[0] - i, current_location[1] + i]
       end
     end
     if bishop_color == " \u2657 "
@@ -112,10 +108,8 @@ class Bishop
   # handle grabbing all possible down and leftwards moves depending on bishop color
   def handle_down_left_moves(down_left_moves, current_location, bishop_color, chess_board)
     for i in 1..7
-      unless current_location[0] - i > 7 || current_location[0] - i < 0
-            current_location[0] - i > 7 || current_location[0] - i < 0
-        
-          down_left_moves << [current_location[0] - i, current_location[1] - i]
+      unless current_location[0] - i < 0 || current_location[1] - i < 0       
+        down_left_moves << [current_location[0] - i, current_location[1] - i]
       end
     end
     if bishop_color == " \u2657 "
@@ -130,10 +124,8 @@ class Bishop
   # handle grabbing all possible up and leftwards moves depending on bishop color
   def handle_up_left_moves(up_left_moves, current_location, bishop_color, chess_board)
     for i in 1..7
-      unless current_location[0] - i > 7 || current_location[0] - i < 0
-            current_location[0] - i > 7 || current_location[0] - i < 0
-        
-          up_left_moves << [current_location[0] + i, current_location[1] - i]
+      unless current_location[0] + i > 7 || current_location[1] - i < 0    
+        up_left_moves << [current_location[0] + i, current_location[1] - i]
       end
     end
     if bishop_color == " \u2657 "
