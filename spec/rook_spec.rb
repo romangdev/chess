@@ -37,7 +37,7 @@ describe Rook do
 
       context "when given 8x8 board with random pieces of both colors" do  
         let(:black_piece) { double("black_piece", piece_symbol: " \u265f ".colorize(:black)) }
-        let(:white_piece) { double("white_piece", piece_symbol: " \u265f ") }
+        let(:white_piece) { double("white_piece", piece_symbol: " \u2656 ") }
 
         context "when starting a [3, 3]" do 
           it "returns an array of 7 moves" do 
@@ -96,7 +96,7 @@ describe Rook do
 
       context "when given 8x8 board with random pieces of both colors" do  
         let(:black_piece) { double("black_piece", piece_symbol: " \u265f ".colorize(:black)) }
-        let(:white_piece) { double("white_piece", piece_symbol: " \u265f ") }
+        let(:white_piece) { double("white_piece", piece_symbol: " \u2656 ") }
 
         context "when starting a [3, 3]" do 
           it "returns an array of 7 moves" do 

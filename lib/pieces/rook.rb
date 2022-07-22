@@ -78,12 +78,12 @@ class Rook
         if chess_board[location[0]][location[1]] == "   "
           count += 1
           next
-        elsif chess_board[location[0]][location[1]].piece_symbol == " \u265f " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265c " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265e " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265d " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265b " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265a "
+        elsif chess_board[location[0]][location[1]].piece_symbol == " \u2659 " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u2656 " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u2658 " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u2657 " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u2655 " ||
+          chess_board[location[0]][location[1]].piece_symbol == " \u2654 "
 
           move_direction = move_direction.slice(0, count + 1)
         else
