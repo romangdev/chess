@@ -40,14 +40,14 @@ class Board < SquarePieces
   end
 
   # displays the full generated chess board with row/column references
-  def display_board(player_choice = [10, 10])
+  def display_board(player_choice = [10, 10], moves = [])
     for i in 7.downto(0)
       print "#{i + 1} "
       n = 0
       if i.odd?
-        even_row_display(i, n, player_choice)
+        even_row_display(i, n, player_choice, moves)
       else
-        odd_row_display(i, n, player_choice) 
+        odd_row_display(i, n, player_choice, moves) 
       end
       puts "\n"
     end
@@ -57,51 +57,79 @@ class Board < SquarePieces
   private 
 
   # sub-method to display even chess board row (used in #display_board)
-  def even_row_display(i, n, player_choice)
+  def even_row_display(i, n, player_choice, moves)
     while n <= 7
       if n.even?
-        show_light_black_squares(player_choice, i, n)
+        show_light_black_squares(player_choice, i, n, moves)
       else
-        show_magenta_squares(player_choice, i, n)
+        show_magenta_squares(player_choice, i, n, moves)
       end
       n += 1
     end 
   end
 
   # sub-method to display odd chess board row (used in #display_board)
-  def odd_row_display(i, n, player_choice)
+  def odd_row_display(i, n, player_choice, moves)
     while n <= 7 
       if n.even? 
-        show_magenta_squares(player_choice, i, n)
+        show_magenta_squares(player_choice, i, n, moves)
       else
-        show_light_black_squares(player_choice, i, n)
+        show_light_black_squares(player_choice, i, n, moves)
       end
       n += 1
     end  
   end
 
   # sub-sub-method to show light black squares with any highlighted square included
-  def show_light_black_squares(player_choice, i, n)
+  def show_light_black_squares(player_choice, i, n, moves)
     if player_choice[0] == i && player_choice[1] == n
       highlight_initial_location(player_choice)
     else
-      if @chess_board[i][n] == "   "
-        print @chess_board[i][n].colorize(:background => :light_black)
-      else
-        print @chess_board[i][n].piece_symbol.colorize(:background => :light_black)
+      flag = false
+      moves.each do |move|
+        if move[0] == i && move[1] == n
+          if @chess_board[move[0]][move[1]] == "   "
+            print @chess_board[move[0]][move[1]].colorize(:background => :light_yellow)
+          else
+            print @chess_board[move[0]][move[1]].piece_symbol.colorize(:background => :light_yellow)
+          end
+          flag = true
+        end
+      end
+
+      unless flag
+        if @chess_board[i][n] == "   "
+          print @chess_board[i][n].colorize(:background => :light_black)
+        else
+          print @chess_board[i][n].piece_symbol.colorize(:background => :light_black)
+        end
       end
     end
   end
 
   # sub-sub-method to show magenta squares with any highlighted square included
-  def show_magenta_squares(player_choice, i, n)
+  def show_magenta_squares(player_choice, i, n, moves)
     if player_choice[0] == i && player_choice[1] == n
       highlight_initial_location(player_choice)
     else
-      if @chess_board[i][n] == "   "
-        print @chess_board[i][n].colorize(:background => :magenta)
-      else
-        print @chess_board[i][n].piece_symbol.colorize(:background => :magenta)
+      flag = false
+      moves.each do |move|
+        if move[0] == i && move[1] == n
+          if @chess_board[move[0]][move[1]] == "   "
+            print @chess_board[move[0]][move[1]].colorize(:background => :light_yellow)
+          else
+            print @chess_board[move[0]][move[1]].piece_symbol.colorize(:background => :light_yellow)
+          end
+          flag = true
+        end
+      end
+
+      unless flag
+        if @chess_board[i][n] == "   "
+          print @chess_board[i][n].colorize(:background => :magenta)
+        else
+          print @chess_board[i][n].piece_symbol.colorize(:background => :magenta)
+        end
       end
     end
   end
@@ -109,10 +137,9 @@ class Board < SquarePieces
   # sub-sub-sub-method used to highlight player's location of choice
   # found in the individual odd/even colored square display methods
   def highlight_initial_location(player_choice)
-    if @chess_board[player_choice[0]][player_choice[1]] == "   "
-      print @chess_board[player_choice[0]][player_choice[1]].colorize(:background => :light_green)
-    else
-      print @chess_board[player_choice[0]][player_choice[1]].piece_symbol.colorize(:background => :light_green)
-    end
+    print @chess_board[player_choice[0]][player_choice[1]].piece_symbol.colorize(:background => :light_green)
+  end
+
+  def highlight_possible_moves(moves)
   end
 end

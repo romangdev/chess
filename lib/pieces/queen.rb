@@ -27,14 +27,14 @@ class Queen
     down_right_moves = handle_down_right_moves(down_right_moves, current_location, queen_color, chess_board)
     down_left_moves = handle_down_left_moves(down_left_moves, current_location, queen_color, chess_board)
 
-    print "UP-VERT: #{up_vertical_moves}\n"
-    print "DOWN-VERT: #{down_vertical_moves}\n"
-    print "RIGHT-HORZ: #{right_horizontal_moves}\n"
-    print "LEFT-HORZ: #{left_horizontal_moves}\n\n"
-    print "UP-RIGHT: #{up_right_moves}\n"
-    print "UP-LEFT: #{up_left_moves}\n"
-    print "DOWN-RIGHT: #{down_right_moves}\n"
-    print "DOWN_LEFT: #{down_left_moves}\n"
+    # print "UP-VERT: #{up_vertical_moves}\n"
+    # print "DOWN-VERT: #{down_vertical_moves}\n"
+    # print "RIGHT-HORZ: #{right_horizontal_moves}\n"
+    # print "LEFT-HORZ: #{left_horizontal_moves}\n\n"
+    # print "UP-RIGHT: #{up_right_moves}\n"
+    # print "UP-LEFT: #{up_left_moves}\n"
+    # print "DOWN-RIGHT: #{down_right_moves}\n"
+    # print "DOWN_LEFT: #{down_left_moves}\n"
 
     add_straight_moves_to_main_array(up_vertical_moves, down_vertical_moves, right_horizontal_moves, left_horizontal_moves, moves)
     add_diagonal_moves_to_main_array(up_right_moves, down_right_moves, up_left_moves, down_left_moves, moves)

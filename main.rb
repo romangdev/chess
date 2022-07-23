@@ -39,10 +39,9 @@ until confirmed
 end
 
 piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
-
-piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-
-
+possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
+puts "\n"
+board.display_board(player_choice, possible_moves)
 
 
 

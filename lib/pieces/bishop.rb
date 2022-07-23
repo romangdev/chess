@@ -19,10 +19,10 @@ class Bishop
     down_right_moves = handle_down_right_moves(down_right_moves, current_location, bishop_color, chess_board)
     down_left_moves = handle_down_left_moves(down_left_moves, current_location, bishop_color, chess_board)
 
-    print "UP-RIGHT: #{up_right_moves}\n"
-    print "UP-LEFT: #{up_left_moves}\n"
-    print "DOWN-RIGHT: #{down_right_moves}\n"
-    print "DOWN_LEFT: #{down_left_moves}\n"
+    # print "UP-RIGHT: #{up_right_moves}\n"
+    # print "UP-LEFT: #{up_left_moves}\n"
+    # print "DOWN-RIGHT: #{down_right_moves}\n"
+    # print "DOWN_LEFT: #{down_left_moves}\n"
 
     add_moves_to_main_array(up_right_moves, down_right_moves, up_left_moves, down_left_moves, moves)
 

@@ -22,10 +22,10 @@ class Rook
     right_horizontal_moves = handle_right_horizontal_moves(right_horizontal_moves, current_location, rook_color, chess_board)
     left_horizontal_moves = handle_left_horizontal_moves(left_horizontal_moves, current_location, rook_color, chess_board)
 
-    print "UP-VERT: #{up_vertical_moves}\n"
-    print "DOWN-VERT: #{down_vertical_moves}\n"
-    print "RIGHT-HORZ: #{right_horizontal_moves}\n"
-    print "LEFT-HORZ: #{left_horizontal_moves}\n\n"
+    # print "UP-VERT: #{up_vertical_moves}\n"
+    # print "DOWN-VERT: #{down_vertical_moves}\n"
+    # print "RIGHT-HORZ: #{right_horizontal_moves}\n"
+    # print "LEFT-HORZ: #{left_horizontal_moves}\n\n"
 
     add_moves_to_main_array(up_vertical_moves, down_vertical_moves, right_horizontal_moves, left_horizontal_moves, moves)
 
