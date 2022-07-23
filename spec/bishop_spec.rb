@@ -39,7 +39,7 @@ describe Bishop do
           let(:white_piece) { double("white_piece", piece_symbol: " \u2656 ") }
 
           context "when starting a [3, 3]" do 
-            xit "returns an array of 6 moves" do 
+            it "returns an array of 6 moves" do 
               board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                     [black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece],
                     ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
@@ -49,7 +49,7 @@ describe Bishop do
                     [white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece],
                     ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
               current_location = [3, 3]
-              result = bishop.generate_moves(current_location, board, " \u2656 ")
+              result = bishop.generate_moves(current_location, board, " \u2657 ")
               expect(result.length).to eq(6)
             end
           end
@@ -58,7 +58,7 @@ describe Bishop do
     end
 
     context "when bishop is black" do 
-      subject(:bishop) { described_class.new(" \u2657 ".colorize(:black)) }
+      subject(:bishop) { described_class.new(" \u265d ".colorize(:black)) }
       
       context "when given empty 8x8 board" do
         board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
@@ -75,7 +75,7 @@ describe Bishop do
             moves = [[4, 4], [5, 5], [6, 6], [7, 7], [2, 4], [1, 5], [0, 6], [4, 2], 
             [5, 1], [6, 0], [2, 2], [1, 1], [0, 0]]
             current_location = [3, 3]
-            result = bishop.generate_moves(current_location, board, " \u2657 ".colorize(:black))
+            result = bishop.generate_moves(current_location, board, " \u265d ".colorize(:black))
             expect(result).to eq(moves)
           end
         end
@@ -83,7 +83,7 @@ describe Bishop do
         context "when starting at [7, 0] with no surrounding pieces" do 
           it "returns an array of 7 possible moves" do 
             current_location = [7, 0]
-            result = bishop.generate_moves(current_location, board, " \u2657 ".colorize(:black))
+            result = bishop.generate_moves(current_location, board, " \u265d ".colorize(:black))
             expect(result.length).to eq(7)
           end
         end
@@ -103,7 +103,7 @@ describe Bishop do
                     [white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece],
                     ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
               current_location = [3, 3]
-              result = bishop.generate_moves(current_location, board, " \u2657 ".colorize(:black))
+              result = bishop.generate_moves(current_location, board, " \u265d ".colorize(:black))
               expect(result.length).to eq(6)
             end
           end
