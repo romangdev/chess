@@ -94,7 +94,7 @@ class SquarePieces
   @@e2_piece = w_pawn5
   @@e3_piece = "   "
   @@e4_piece = "   "
-  @@e5_piece = "   "
+  @@e5_piece = w_queen
   @@e6_piece = "   "
   @@e7_piece = b_pawn5
   @@e8_piece = b_king
@@ -112,7 +112,7 @@ class SquarePieces
   # G column
   @@g1_piece = w_knight2
   @@g2_piece = w_pawn7
-  @@g3_piece = "   "
+  @@g3_piece = w_queen
   @@g4_piece = "   "
   @@g5_piece = "   "
   @@g6_piece = "   "

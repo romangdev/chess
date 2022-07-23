@@ -38,18 +38,10 @@ until confirmed
   end
 end
 
-board.pawn_test(player_choice)
-
 piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
-if piece_to_move.is_a? Pawn 
-  piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-elsif piece_to_move.is_a? Rook
-  piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-elsif piece_to_move.is_a? Bishop
-  piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-elsif piece_to_move.is_a? Queen
-  piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-end
+
+piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
+
 
 
 

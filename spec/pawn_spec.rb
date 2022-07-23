@@ -94,6 +94,18 @@ describe Pawn do
             current_location = [0, 1]
             expect(pawn.generate_moves(current_location, board, " \u2659 ")).to eq([[1, 2], [1, 0]])
           end
+
+          context "when starting at [0, 1] with piece 2 squares in front on first move" do
+            let(:rook) { double("rook", piece_symbol: " \u265c ".colorize(:black))}
+            before do 
+              pawn.first_move_made = false
+            end 
+            it "returns array [[1, 1]]" do 
+              board = [['   ', ' start ', '   '], ['   ', '   ', '   '], ['   ', rook, '   ']]
+              current_location = [0, 1]
+              expect(pawn.generate_moves(current_location, board, " \u2659 ")).to eq([[1, 1]])
+            end
+          end
         end
 
         context "when pawn make it's first move" do 

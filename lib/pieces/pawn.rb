@@ -12,7 +12,7 @@ class Pawn
   # generates an array of all possible moves for a pawn piece
   def generate_moves(current_location, chess_board, pawn_color) 
     moves = []
-    moves = check_first_move(moves, current_location, pawn_color)
+    moves = check_first_move(moves, current_location, pawn_color, chess_board)
     moves = check_capturable_pieces(moves, current_location, chess_board, pawn_color)
     if pawn_color == " \u2659 "
       moves = white_one_square_move(chess_board, current_location, moves)
@@ -45,14 +45,24 @@ class Pawn
 
   # checks to see if pawn is at first move, and allows a double square move forward if so
   # movement is in different direction depending on pawn color
-  def check_first_move(moves, current_location, pawn_color)
+  def check_first_move(moves, current_location, pawn_color, chess_board)
+    
     if pawn_color == " \u2659 "
-      moves << [current_location[0] + 2, current_location[1]] if self.first_move_made == false 
+      if self.first_move_made == false && chess_board[current_location[0] + 2][current_location[1]] == "   " &&
+        chess_board[current_location[0] + 1][current_location[1]] == "   "
+
+        moves << [current_location[0] + 2, current_location[1]]
+        self.first_move_made = true
+      end
     else 
-      moves << [current_location[0] - 2, current_location[1]] if self.first_move_made == false 
+      if self.first_move_made == false && chess_board[current_location[0] - 2][current_location[1]] == "   " &&
+        chess_board[current_location[0] + 1][current_location[1]] == "   "
+
+        moves << [current_location[0] - 2, current_location[1]] 
+        self.first_move_made = true
+      end
     end
     
-    self.first_move_made = true
     moves
   end
 
