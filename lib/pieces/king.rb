@@ -7,4 +7,10 @@ class King
     @first_move_made = false
     @piece_symbol = piece_symbol
   end
+
+  def generate_moves(current_location, chess_board, king_color)
+    
+  end
+
+  private 
 end
