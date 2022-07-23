@@ -18,9 +18,6 @@ describe Queen do
       
         context "when starting at [3, 3] with no surrounding pieces" do
           it "returns an array of 27 possible moves" do 
-            moves = [[4, 3], [5, 3], [6, 3], [2, 3], [3, 4], [3, 5], [3, 6], [3, 7],
-            [3, 2], [3, 1], [3, 0], [4, 4], [5, 5], [6, 6], [4, 2], [5, 1], [6, 0],
-            [2, 4], [2, 2]]
             current_location = [3, 3]
             result = queen.generate_moves(current_location, board, " \u2655 ")
             expect(result.length).to eq(27)
@@ -88,9 +85,6 @@ describe Queen do
       
         context "when starting at [3, 3] with no surrounding pieces" do
           it "returns an array of 27 possible moves" do 
-            moves = [[4, 3], [5, 3], [6, 3], [2, 3], [3, 4], [3, 5], [3, 6], [3, 7],
-            [3, 2], [3, 1], [3, 0], [4, 4], [5, 5], [6, 6], [4, 2], [5, 1], [6, 0],
-            [2, 4], [2, 2]]
             current_location = [3, 3]
             result = queen.generate_moves(current_location, board, " \u265b ".colorize(:black))
             expect(result.length).to eq(27)

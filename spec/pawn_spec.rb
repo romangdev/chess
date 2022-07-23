@@ -108,9 +108,9 @@ describe Pawn do
           end
         end
 
-        context "when pawn make it's first move" do 
+        context "when pawn makes it's first move" do 
           it "sets @first_move_made to true" do 
-            board = [['   ', '   ', '   '],['   ', '   ', '   ']]
+            board = [['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   ']]
             current_location = [0, 0]
             pawn.generate_moves(current_location, board, " \u2659 ")
             expect(pawn.first_move_made).to be true
@@ -120,7 +120,7 @@ describe Pawn do
     end
 
     context "when pawn is black" do 
-      subject(:pawn) { described_class.new(" \u2659 ".colorize(:black)) }
+      subject(:pawn) { described_class.new(" \u265f ".colorize(:black)) }
       board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
               ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
               ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
@@ -154,7 +154,7 @@ describe Pawn do
         end
 
         context "when starting at [1, 1] and one right diagonal piece to take" do
-          let(:rook) { double("rook", piece_symbol: " \u265c ")}
+          let(:rook) { double("rook", piece_symbol: " \u2656 ")}
           before do 
             pawn.first_move_made = true
           end 
@@ -167,7 +167,7 @@ describe Pawn do
         end
 
         context "when starting at [1, 1] and one left diagonal piece to take" do
-          let(:rook) { double("rook", piece_symbol: " \u265c ")}
+          let(:rook) { double("rook", piece_symbol: " \u2656 ")}
           before do 
             pawn.first_move_made = true
           end 
@@ -180,7 +180,7 @@ describe Pawn do
         end
 
         context "when starting at [1, 1] and both diagonals have capturable pieces" do
-          let(:rook) { double("rook", piece_symbol: " \u265c ")}
+          let(:rook) { double("rook", piece_symbol: " \u2656 ")}
           before do 
             pawn.first_move_made = true
           end 
@@ -193,7 +193,7 @@ describe Pawn do
         end
 
         context "when starting at [1, 1] with a piece in front of you with no capturables" do
-          let(:rook) { double("rook", piece_symbol: " \u265c ")}
+          let(:rook) { double("rook", piece_symbol: " \u2656 ")}
           before do 
             pawn.first_move_made = true
           end 
@@ -206,7 +206,7 @@ describe Pawn do
         end
 
         context "when starting at [1, 1] with a piece in front of pawn with two capturables" do
-          let(:rook) { double("rook", piece_symbol: " \u265c ")}
+          let(:rook) { double("rook", piece_symbol: " \u2656 ")}
           before do 
             pawn.first_move_made = true
           end 
@@ -215,6 +215,27 @@ describe Pawn do
             current_location = [1, 1]
             result = pawn.generate_moves(current_location, board, pawn.piece_symbol)
             expect(result).to eq([[0, 0], [0, 2]])
+          end
+        end
+
+        context "when starting at [2, 1] with piece 2 squares in front on first move" do
+          let(:rook) { double("rook", piece_symbol: " \u2656 ")}
+          before do 
+            pawn.first_move_made = false
+          end 
+          it "returns array [[1, 1]]" do 
+            board = [['   ', rook, '   '], ['   ', '   ', '   '], ['   ', '   ', '   ']]
+            current_location = [2, 1]
+            expect(pawn.generate_moves(current_location, board, pawn.piece_symbol)).to eq([[1, 1]])
+          end
+        end
+
+        context "when pawn makes it's first move" do 
+          it "sets @first_move_made to true" do 
+            board = [['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   ']]
+            current_location = [2, 0]
+            pawn.generate_moves(current_location, board, pawn.piece_symbol)
+            expect(pawn.first_move_made).to be true
           end
         end
       end

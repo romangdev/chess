@@ -56,7 +56,7 @@ class Pawn
       end
     else 
       if self.first_move_made == false && chess_board[current_location[0] - 2][current_location[1]] == "   " &&
-        chess_board[current_location[0] + 1][current_location[1]] == "   "
+        chess_board[current_location[0] - 1][current_location[1]] == "   "
 
         moves << [current_location[0] - 2, current_location[1]] 
         self.first_move_made = true
@@ -127,10 +127,10 @@ class Pawn
 
   # checks if a diagonal piece adjacent to black pawn is a piece of opposite color
   def black_check_diagonal(diagonal)
-    if diagonal != "   " && (diagonal.piece_symbol == " \u265f " ||
-      diagonal.piece_symbol == " \u265c " || diagonal.piece_symbol == " \u265e " ||
-      diagonal.piece_symbol == " \u265d " || diagonal.piece_symbol == " \u265b "||
-      diagonal.piece_symbol == " \u265a ")
+    if diagonal != "   " && (diagonal.piece_symbol == " \u2659 " ||
+      diagonal.piece_symbol == " \u2656 " || diagonal.piece_symbol == " \u2655 " ||
+      diagonal.piece_symbol == " \u2658 " || diagonal.piece_symbol == " \u2654 "||
+      diagonal.piece_symbol == " \u2657 ")
 
       return true
     end
