@@ -10,6 +10,7 @@ require_relative 'board'
 class Game
   include ChessPieces
 
+  # used to match chess board letter columns with their respective array elements
   COLUMN_MATCH = {
     "a" => 0,
     "b" => 1,
@@ -21,6 +22,7 @@ class Game
     "h" => 7,
   }
 
+  # gets the starting location the player wants to move a piece from
   def get_player_location(player_color)
     flag = false
     until flag == true
@@ -32,6 +34,26 @@ class Game
     player_choice
   end
 
+  # gets the ending location a player wants to move their selected piece to
+  def get_end_location(player_color)
+    flag = false
+    until flag == true
+      prompt_player_ending_location(player_color) 
+      player_choice = gets.chomp.downcase.split("")
+      flag = verify_player_location(player_choice)
+      puts "That's location isn't on the board - please try again!" if flag == false
+    end
+    player_choice
+  end
+
+  # ensures the player's ending location choice is possible for the selected piece to move to
+  def verify_possible_move(possible_moves, player_end)
+    return true if possible_moves.include?(player_end)
+
+    false
+  end
+
+  # ensures any player's chosen location (start or end) is on the board
   def verify_player_location(player_choice)
     if player_choice.length != 2 || player_choice[0] !~ /[a-h]/ ||
       player_choice[1] !~ /[1-8]/
@@ -42,12 +64,15 @@ class Game
     end
   end
 
+  # converts letter, number board location notation to number, number notation for backend array 
+  # representing chess board (ex: b3 --> [1, 2]) 
   def convert_player_location(player_choice)
     player_choice[0] = convert_player_column(player_choice)
     player_choice[1] = convert_player_row(player_choice)
     return player_choice.reverse
   end
 
+  # verify what piece (or lack of piece) a location selected by player holds
   def verify_location_piece(player_pieces, chosen_location, board_array)
     player_pieces.each do |piece|
       if board_array[chosen_location[0]][chosen_location[1]].is_a? String
@@ -60,14 +85,21 @@ class Game
     false
   end
 
+  # confirm a player's chosen piece is the one they actually want
   def get_piece_choice_confirm
     puts "Confirm you want to move this piece (y/n)"
-    piece_confirm = gets.chomp.downcase
-    return piece_confirm
+    confirm_choice = gets.chomp.downcase
+    return confirm_choice
   end
 
-  def handle_confirm_piece_choice(piece_confirm)
-    return true if piece_confirm == "y" || piece_confirm == "yes"
+  def get_end_move_confirm(player_end)
+    puts "Confirm you want to move this piece to #{player_end}(y/n)"
+    confirm_choice = gets.chomp.downcase
+    return confirm_choice
+  end
+
+  def handle_confirm_choice(confirm_choice)
+    return true if confirm_choice == "y" || confirm_choice == "yes"
 
     false
   end
@@ -78,6 +110,12 @@ class Game
     puts <<-HEREDOC 
 #{player_color.upcase}: Choose piece to move (type column then row with no space)...
 Example: a1, h3, g8, etc.
+    HEREDOC
+  end
+
+  def prompt_player_ending_location(player_color)
+    puts <<-HEREDOC 
+#{player_color.upcase}: Choose location to move to (ex: Example: a1, h3, g8, etc.)
     HEREDOC
   end
 

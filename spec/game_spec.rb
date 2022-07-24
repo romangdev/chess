@@ -216,4 +216,24 @@ describe Game do
       end
     end
   end
+
+  describe "#verify_possible_move" do 
+    context "when player chooses possible move" do 
+      it "returns true" do 
+        possible_moves = [[0, 1], [3, 2], [7, 7]]
+        player_end = [3, 2]
+        result = game.verify_possible_move(possible_moves, player_end)
+        expect(result).to be true
+      end
+    end
+
+    context "when player chooses impossible move" do 
+      it "returns false" do 
+        possible_moves = [[0, 1], [3, 2], [7, 7]]
+        player_end = [5, 0]
+        result = game.verify_possible_move(possible_moves, player_end)
+        expect(result).to be false
+      end
+    end
+  end
 end
