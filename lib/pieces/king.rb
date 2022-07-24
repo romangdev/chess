@@ -15,7 +15,6 @@ class King
     moves = []
     possible_moves = []
 
-    puts current_location
     moves << [current_location[0] + 1, current_location[1]] <<
             [current_location[0] + 1, current_location[1] + 1] <<
             [current_location[0] + 1, current_location[1] - 1] <<
@@ -25,10 +24,10 @@ class King
             [current_location[0], current_location[1] + 1] <<
             [current_location[0], current_location[1] - 1] 
 
-    print moves
-
     if king_color == WHITE_KING
       moves.each do |move|
+        next if move[0].negative? || move[0] > 7 || move[1].negative? || move[1] > 7 
+
         unless chess_board[move[0]][move[1]] == "   "
           if chess_board[move[0]][move[1]].piece_symbol == WHITE_BISHOP ||
             chess_board[move[0]][move[1]].piece_symbol == WHITE_PAWN ||
@@ -40,14 +39,30 @@ class King
             possible_moves << move
           end
         end
-        possible_moves << move
+       possible_moves << move
       end
     else
-      puts "black"
+      moves.each do |move|
+        next if move[0].negative? || move[0] > 7 || move[1].negative? || move[1] > 7 
+
+        unless chess_board[move[0]][move[1]] == "   " 
+          if chess_board[move[0]][move[1]].piece_symbol == BLACK_BISHOP ||
+            chess_board[move[0]][move[1]].piece_symbol == BLACK_PAWN ||
+            chess_board[move[0]][move[1]].piece_symbol == BLACK_ROOK ||
+            chess_board[move[0]][move[1]].piece_symbol == BLACK_KNIGHT||
+            chess_board[move[0]][move[1]].piece_symbol == BLACK_QUEEN
+
+            move = "nil"
+            possible_moves << move
+          end
+        end
+        possible_moves << move
+      end
     end
 
     possible_moves.delete("nil")
 
+    print possible_moves
     possible_moves
   end
 
