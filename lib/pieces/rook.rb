@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "./lib/chess_pieces"
 
 class Rook
   attr_reader :piece_symbol

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "./lib/chess_pieces"
 
 class Pawn
   attr_accessor :first_move_made
