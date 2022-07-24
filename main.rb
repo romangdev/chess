@@ -48,22 +48,27 @@ until confirmed
   flag = false 
   until flag
     player_end = game.get_end_location(player_white.player_color)
+    player_end_hold = player_end.join("")
     player_end = game.convert_player_location(player_end)
     flag = game.verify_possible_move(possible_moves, player_end)
     puts "You can't move there! Try again..." if flag == false
   end
 
-  end_confirm = game.get_end_move_confirm(player_end)
+  end_confirm = game.get_end_move_confirm(player_end_hold)
   confirmed = game.handle_confirm_choice(end_confirm)
 
   if confirmed == false
     player_end = nil 
-    # board.display_board
+    board.display_board(player_choice, possible_moves)
     puts "Move choice aborted. Pick another move."
   end
 end
 
-# board.display_board(player_end)
+hold_start = board.chess_board[player_choice[0]][player_choice[1]]
+board.chess_board[player_choice[0]][player_choice[1]] = "   "
+board.chess_board[player_end[0]][player_end[1]] = hold_start
+
+board.display_board
 
 
 

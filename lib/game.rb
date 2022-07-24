@@ -93,7 +93,7 @@ class Game
   end
 
   def get_end_move_confirm(player_end)
-    puts "Confirm you want to move this piece to #{player_end}(y/n)"
+    puts "Confirm you want to move this piece to \"#{player_end}\" (y/n)"
     confirm_choice = gets.chomp.downcase
     return confirm_choice
   end
