@@ -10,7 +10,7 @@ require "./lib/chess_pieces"
 
 class Chess 
   include ChessPieces
-  
+
   # check for pawn promotion possibilities and execute on relevant pawns if so
   def pawn_promotion(board, pawn_color)
     for i in 0..7 
@@ -51,12 +51,16 @@ class Chess
 
   # update the array representing the chess board to reflect movement
   def update_board_movement(board, player_choice, player_end)
-    hold_start = board[player_choice[0]][player_choice[1]]
+    hold_start_location = player_choice
+    tmp_start = board[player_choice[0]][player_choice[1]]
     board[player_choice[0]][player_choice[1]] = "   "
-    board[player_end[0]][player_end[1]] = hold_start
+    board[player_end[0]][player_end[1]] = tmp_start
+
+    hold_start_location
   end
 
-  private 
+  def undo_board_movement 
+  end
 
   def handle_promotion_by_color(board, pawn_color, i)
     if pawn_color == WHITE_PAWN
@@ -67,9 +71,25 @@ class Chess
       board[7][i] = b_promoted_queen
     end
   end
+
+  private 
 end
 
 include ChessPieces
+
+WHITE_PIECES = [WHITE_PAWN,
+  WHITE_ROOK,
+  WHITE_KNIGHT,
+  WHITE_BISHOP,
+  WHITE_QUEEN,
+  WHITE_KING]
+
+BLACK_PIECES = [BLACK_PAWN,
+  BLACK_ROOK,
+  BLACK_KNIGHT,
+  BLACK_BISHOP,
+  BLACK_QUEEN,
+  BLACK_KING]
 
 board = Board.new
 board.generate_board
@@ -111,24 +131,61 @@ while true
   puts "\n"
   board.display_board(player_choice, possible_moves)
 
-  confirmed = false
-  until confirmed
-    flag = false 
-    # get and verify the location plalyer wants to move to
-    until flag
-      player_end = game.get_end_location(player_white.player_color)
-      player_end_hold = player_end.join("")
-      player_end = game.convert_player_location(player_end)
-      flag = game.verify_possible_move(possible_moves, player_end)
-      puts "You can't move there! Try again..." if flag == false
-    end
+  self_check = true
+  while self_check
+    confirmed = false
+    until confirmed
+      flag = false 
+      # get and verify the location plalyer wants to move to
+      until flag
+        player_end = game.get_end_location(player_white.player_color)
+        player_end_hold = player_end.join("")
+        player_end = game.convert_player_location(player_end)
+        flag = game.verify_possible_move(possible_moves, player_end)
+        puts "You can't move there! Try again..." if flag == false
+      end
 
-    end_confirm = game.get_end_move_confirm(player_end_hold)
-    confirmed = game.handle_confirm_choice(end_confirm)
-    chess.repick_move?(confirmed, player_end, board, player_choice, possible_moves)
+      end_confirm = game.get_end_move_confirm(player_end_hold)
+      confirmed = game.handle_confirm_choice(end_confirm)
+      chess.repick_move?(confirmed, player_end, board, player_choice, possible_moves)
+
+      self_check = false
+
+      hold_start_location = chess.update_board_movement(board.chess_board, player_choice, player_end)
+
+      #CHECK CODE
+      for i in 0..7 
+        for n in 0..7 
+          unless board.chess_board[i][n] == "   "
+
+            # Generate all possible moves for every black piece
+            if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
+              piece = board.chess_board[i][n]
+              check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+              # If white king in array of black knight, pawn or king....
+              if piece.piece_symbol == BLACK_PAWN || piece.piece_symbol == BLACK_KNIGHT ||
+                piece.piece_symbol == BLACK_KING
+
+                # Prompt self checked king error
+                check_moves.each do |move|
+                  unless board.chess_board[move[0]][move[1]] == "   "
+                    if board.chess_board[move[0]][move[1]].piece_symbol == WHITE_KING
+                      self_check = true
+                      puts "You can't put your own king in check. Try another move!"
+                      break
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
   end
 
-  chess.update_board_movement(board.chess_board, player_choice, player_end)
+  # chess.update_board_movement(board.chess_board, player_choice, player_end)
   chess.pawn_promotion(board.chess_board, WHITE_PAWN)
   board.display_board
 

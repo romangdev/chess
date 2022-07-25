@@ -2,6 +2,7 @@
 require "./lib/chess_pieces"
 
 class King
+  attr_accessor :checked
   attr_reader :piece_symbol
 
   include ChessPieces
@@ -9,6 +10,7 @@ class King
   def initialize(piece_symbol)
     @first_move_made = false
     @piece_symbol = piece_symbol
+    @checked = false
   end
 
   def generate_moves(current_location, chess_board, king_color)

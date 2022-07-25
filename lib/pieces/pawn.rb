@@ -117,12 +117,14 @@ class Pawn
 
   # checks if a diagonal piece adjacent to white pawn is a piece of opposite color
   def white_check_diagonal(diagonal)
-    if diagonal != "   " && (diagonal.piece_symbol == BLACK_PAWN ||
-      diagonal.piece_symbol == BLACK_ROOK || diagonal.piece_symbol == BLACK_KNIGHT ||
-      diagonal.piece_symbol == BLACK_BISHOP || diagonal.piece_symbol == BLACK_QUEEN ||
-      diagonal.piece_symbol == BLACK_KING)
+    unless diagonal == nil 
+      if diagonal != "   " && (diagonal.piece_symbol == BLACK_PAWN ||
+        diagonal.piece_symbol == BLACK_ROOK || diagonal.piece_symbol == BLACK_KNIGHT ||
+        diagonal.piece_symbol == BLACK_BISHOP || diagonal.piece_symbol == BLACK_QUEEN ||
+        diagonal.piece_symbol == BLACK_KING)
 
-      return true
+        return true
+      end
     end
 
     false
@@ -130,12 +132,14 @@ class Pawn
 
   # checks if a diagonal piece adjacent to black pawn is a piece of opposite color
   def black_check_diagonal(diagonal)
-    if diagonal != "   " && (diagonal.piece_symbol == WHITE_PAWN ||
-      diagonal.piece_symbol == WHITE_ROOK || diagonal.piece_symbol == WHITE_QUEEN ||
-      diagonal.piece_symbol == WHITE_KNIGHT || diagonal.piece_symbol == WHITE_KING ||
-      diagonal.piece_symbol == WHITE_BISHOP)
+    unless diagonal == nil 
+      if diagonal != "   " && (diagonal.piece_symbol == WHITE_PAWN ||
+        diagonal.piece_symbol == WHITE_ROOK || diagonal.piece_symbol == WHITE_QUEEN ||
+        diagonal.piece_symbol == WHITE_KNIGHT || diagonal.piece_symbol == WHITE_KING ||
+        diagonal.piece_symbol == WHITE_BISHOP)
 
-      return true
+        return true
+      end
     end
 
     false

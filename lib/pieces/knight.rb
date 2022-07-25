@@ -57,8 +57,6 @@ class Knight
 
     possible_moves.delete('nil')
 
-
-    print possible_moves
     possible_moves
   end
 end

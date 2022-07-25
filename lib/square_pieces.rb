@@ -57,7 +57,7 @@ class SquarePieces
   @@a5_piece = "   "
   @@a6_piece = "   "
   @@a7_piece = b_pawn1
-  @@a8_piece = w_pawn1
+  @@a8_piece = b_rook1
 
   # B column
   @@b1_piece = w_knight1
@@ -74,7 +74,7 @@ class SquarePieces
   @@c2_piece = w_pawn3
   @@c3_piece = "   "
   @@c4_piece = "   "
-  @@c5_piece = "   "
+  @@c5_piece = w_king
   @@c6_piece = "   "
   @@c7_piece = b_pawn3
   @@c8_piece = b_bishop1
