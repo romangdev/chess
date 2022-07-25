@@ -57,7 +57,7 @@ class SquarePieces
   @@a5_piece = "   "
   @@a6_piece = "   "
   @@a7_piece = b_pawn1
-  @@a8_piece = b_rook1
+  @@a8_piece = w_pawn1
 
   # B column
   @@b1_piece = w_knight1
