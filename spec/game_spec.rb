@@ -200,19 +200,19 @@ describe Game do
   describe "#handle_confirm_piece_choice" do 
     context "when choice is 'y'" do 
       it "returns 'true'" do 
-        expect(game.handle_confirm_piece_choice('y')).to be true
+        expect(game.handle_confirm_choice('y')).to be true
       end
     end
 
     context "when choice is 'n'" do 
       it "returns 'false'" do 
-        expect(game.handle_confirm_piece_choice('n')).to be false
+        expect(game.handle_confirm_choice('n')).to be false
       end
     end
 
     context "when choice is '4ldfn'" do 
       it "returns 'false'" do 
-        expect(game.handle_confirm_piece_choice('4ldfn')).to be false
+        expect(game.handle_confirm_choice('4ldfn')).to be false
       end
     end
   end

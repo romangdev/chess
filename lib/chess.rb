@@ -8,6 +8,61 @@ require "./lib/square_pieces"
 require "./lib/pieces/pawn"
 require "./lib/chess_pieces" 
 
+class Chess 
+  def pawn_promotion(board, pawn_color)
+    for i in 0..7 
+      unless board[7][i] == "   "
+        handle_promotion_by_color(board, pawn_color, i) if board[7][i].piece_symbol == pawn_color
+      end
+    end
+  end
+
+  def repick_piece?(confirmed, player_choice, board)
+    if confirmed == false
+      player_choice = nil 
+      board.display_board
+      puts "Piece movement aborted. Pick another piece."
+    end
+  end
+
+  def no_piece_moves?(possible_moves, board)
+    if possible_moves.empty?
+      board.display_board
+      puts "Piece has no available moves! Please try again."
+    else 
+      return true 
+    end
+
+    false
+  end
+
+  def repick_move?(confirmed, player_end, board, player_choice, possible_moves)
+    if confirmed == false
+      player_end = nil 
+      board.display_board(player_choice, possible_moves)
+      puts "Move choice aborted. Pick another move."
+    end
+  end
+
+  def update_board_movement(board, player_choice, player_end)
+    hold_start = board[player_choice[0]][player_choice[1]]
+    board[player_choice[0]][player_choice[1]] = "   "
+    board[player_end[0]][player_end[1]] = hold_start
+  end
+
+  private 
+
+  def handle_promotion_by_color(board, pawn_color, i)
+    if pawn_color == WHITE_PAWN
+      w_promoted_queen = Queen.new(WHITE_QUEEN)
+      board[7][i] = w_promoted_queen
+    else
+      b_promoted_queen = Queen.new(BLACK_QUEEN)
+      board[7][i] = b_promoted_queen
+    end
+  end
+end
+
 include ChessPieces
 
 board = Board.new
@@ -18,6 +73,7 @@ player_white = PlayerWhite.new
 player_black = PlayerBlack.new
 
 game = Game.new
+chess = Chess.new
 
 while true 
   # player white turn
@@ -39,11 +95,7 @@ while true
       piece_confirm = game.get_piece_choice_confirm
       confirmed = game.handle_confirm_choice(piece_confirm)
 
-      if confirmed == false
-        player_choice = nil 
-        board.display_board
-        puts "Piece movement aborted. Pick another piece."
-      end
+      chess.repick_piece?(confirmed, player_choice, board)
     end
 
     # generate all possible moves a piece can make
@@ -51,12 +103,7 @@ while true
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
     
     # if no possible moves, puts error 
-    if possible_moves.empty?
-      board.display_board
-      puts "Piece has no available moves! Please try again."
-    else 
-      available_moves = true 
-    end
+    available_moves = chess.no_piece_moves?(possible_moves, board)
   end
   puts "\n"
   board.display_board(player_choice, possible_moves)
@@ -77,42 +124,15 @@ while true
     end_confirm = game.get_end_move_confirm(player_end_hold)
     confirmed = game.handle_confirm_choice(end_confirm)
 
-    if confirmed == false
-      player_end = nil 
-      board.display_board(player_choice, possible_moves)
-      puts "Move choice aborted. Pick another move."
-    end
+    # prompts player to repick their move if they don't confirm their choice
+    chess.repick_move?(confirmed, player_end, board, player_choice, possible_moves)
   end
 
   # update the array representing the chess board to reflect movement
-  hold_start = board.chess_board[player_choice[0]][player_choice[1]]
-  board.chess_board[player_choice[0]][player_choice[1]] = "   "
-  board.chess_board[player_end[0]][player_end[1]] = hold_start
+  chess.update_board_movement(board.chess_board, player_choice, player_end)
 
-  # def pawn_promotion(chess_board)
-  #   for i in 0..7 
-  #     unless chess_board[7][i] == "   "
-  #       if board.chess_board[7][i].piece_symbol == WHITE_PAWN
-  #         w_promoted_queen = Queen.new(WHITE_QUEEN)
-  #         board.chess_board[7][i] = w_promoted_queen
-  #       else 
-  #         next
-  #       end
-  #     end
-  #   end
-  # end
-
-  # promote pawn
-  for i in 0..7 
-    unless chess_board[7][i] == "   "
-      if board.chess_board[7][i].piece_symbol == WHITE_PAWN
-        w_promoted_queen = Queen.new(WHITE_QUEEN)
-        board.chess_board[7][i] = w_promoted_queen
-      else 
-        next
-      end
-    end
-  end
+  # check for and promote pawns
+  chess.pawn_promotion(board.chess_board, WHITE_PAWN)
 
   board.display_board
 
