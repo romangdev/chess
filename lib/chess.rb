@@ -9,6 +9,9 @@ require "./lib/pieces/pawn"
 require "./lib/chess_pieces" 
 
 class Chess 
+  include ChessPieces
+  
+  # check for pawn promotion possibilities and execute on relevant pawns if so
   def pawn_promotion(board, pawn_color)
     for i in 0..7 
       unless board[7][i] == "   "
@@ -25,10 +28,11 @@ class Chess
     end
   end
 
+  # if piece chosen by player has no possible moves, output message to pick another piece
   def no_piece_moves?(possible_moves, board)
     if possible_moves.empty?
       board.display_board
-      puts "Piece has no available moves! Please try again."
+      puts "Piece has no available moves! Please pick another piece."
     else 
       return true 
     end
@@ -36,6 +40,7 @@ class Chess
     false
   end
 
+  # prompts player to repick their move if they don't confirm their choice
   def repick_move?(confirmed, player_end, board, player_choice, possible_moves)
     if confirmed == false
       player_end = nil 
@@ -44,6 +49,7 @@ class Chess
     end
   end
 
+  # update the array representing the chess board to reflect movement
   def update_board_movement(board, player_choice, player_end)
     hold_start = board[player_choice[0]][player_choice[1]]
     board[player_choice[0]][player_choice[1]] = "   "
@@ -82,7 +88,6 @@ while true
     confirmed = false
     until confirmed
       flag = false 
-      # get player location and verify piece is there
       until flag
         player_choice = game.get_player_location(player_white.player_color)
         player_choice = game.convert_player_location(player_choice)
@@ -90,7 +95,6 @@ while true
         puts "Your piece isn't located there, please try again!" if flag == false
       end
 
-      # display highlighted piece board and confirm player wants to move this piece
       board.display_board(player_choice)
       piece_confirm = game.get_piece_choice_confirm
       confirmed = game.handle_confirm_choice(piece_confirm)
@@ -98,13 +102,12 @@ while true
       chess.repick_piece?(confirmed, player_choice, board)
     end
 
-    # generate all possible moves a piece can make
+
     piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-    
-    # if no possible moves, puts error 
     available_moves = chess.no_piece_moves?(possible_moves, board)
   end
+
   puts "\n"
   board.display_board(player_choice, possible_moves)
 
@@ -120,20 +123,13 @@ while true
       puts "You can't move there! Try again..." if flag == false
     end
 
-    # confirm player wants to move to their choice
     end_confirm = game.get_end_move_confirm(player_end_hold)
     confirmed = game.handle_confirm_choice(end_confirm)
-
-    # prompts player to repick their move if they don't confirm their choice
     chess.repick_move?(confirmed, player_end, board, player_choice, possible_moves)
   end
 
-  # update the array representing the chess board to reflect movement
   chess.update_board_movement(board.chess_board, player_choice, player_end)
-
-  # check for and promote pawns
   chess.pawn_promotion(board.chess_board, WHITE_PAWN)
-
   board.display_board
 
   # BLACK TURN CODE COMMENTED OUT TEMPORARILY SO DUPLICATION OF CODE NOT NEEDED TO TEST
