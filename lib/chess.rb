@@ -59,7 +59,9 @@ class Chess
     hold_start_location
   end
 
-  def undo_board_movement 
+  def undo_board_movement(board, start_location, player_end)
+    board[start_location[0]][start_location[1]] = board[player_end[0]][player_end[1]]
+    board[player_end[0]][player_end[1]] = "   "
   end
 
   def handle_promotion_by_color(board, pawn_color, i)
@@ -172,6 +174,7 @@ while true
                   unless board.chess_board[move[0]][move[1]] == "   "
                     if board.chess_board[move[0]][move[1]].piece_symbol == WHITE_KING
                       self_check = true
+                      chess.undo_board_movement(board.chess_board, hold_start_location, player_end)
                       puts "You can't put your own king in check. Try another move!"
                       break
                     end
