@@ -139,7 +139,4 @@ class Board < SquarePieces
   def highlight_initial_location(player_choice)
     print @chess_board[player_choice[0]][player_choice[1]].piece_symbol.colorize(:background => :light_green)
   end
-
-  def highlight_possible_moves(moves)
-  end
 end

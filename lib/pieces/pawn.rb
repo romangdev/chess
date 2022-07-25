@@ -22,7 +22,6 @@ class Pawn
     else
       moves = black_one_square_move(chess_board, current_location, moves)
     end
-    # print moves
     moves
   end
 

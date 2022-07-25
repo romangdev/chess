@@ -154,12 +154,10 @@ while true
       self_check = false
 
       hold_start_location = chess.update_board_movement(board.chess_board, player_choice, player_end)
-
       #CHECK CODE
       for i in 0..7 
         for n in 0..7 
           unless board.chess_board[i][n] == "   "
-
             # Generate all possible moves for every black piece
             if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
               piece = board.chess_board[i][n]
@@ -185,6 +183,7 @@ while true
           end
         end
       end
+      puts "\n"
     end
   end
 
