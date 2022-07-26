@@ -137,22 +137,8 @@ class Bishop
     up_left_moves
   end
 
-    # add all moves from each direction into main moves array
-    def add_moves_to_main_array(up_right, down_right, down_left, up_left, moves)
-      up_right.each do |move|
-        moves << move 
-      end
-  
-      down_right.each do |move|
-        moves << move 
-      end
-  
-      down_left.each do |move|
-        moves << move 
-      end
-  
-      up_left.each do |move|
-        moves << move 
-      end
-    end
+  # add all moves from each direction into main moves array
+  def add_moves_to_main_array(up_right, down_right, down_left, up_left, moves)
+    moves << up_right << down_right << down_left << up_left 
+  end
 end

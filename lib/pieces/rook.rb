@@ -37,21 +37,7 @@ class Rook
 
   # add all moves from each direction into main moves array
   def add_moves_to_main_array(up_vert, down_vert, right_side, left_side, moves)
-    up_vert.each do |move|
-      moves << move 
-    end
-
-    down_vert.each do |move|
-      moves << move 
-    end
-
-    right_side.each do |move|
-      moves << move 
-    end
-
-    left_side.each do |move|
-      moves << move 
-    end
+    moves << up_vert << down_vert << right_side << left_side
   end
 
   # get possible moves the rook can make going a given direction (cut off non-possible moves)

@@ -18,8 +18,8 @@ describe Rook do
         
         context "when starting at [3, 3] with no surrounding pieces" do 
           it "returns the defined \"moves\" array of 14 possible moves" do 
-            moves = [[4, 3], [5, 3], [6, 3], [7, 3], [2, 3], [1, 3], [0, 3], 
-            [3, 4], [3, 5], [3, 6], [3, 7], [3, 2], [3, 1], [3, 0]]
+            moves = [[[4, 3], [5, 3], [6, 3], [7, 3]], [[2, 3], [1, 3], [0, 3]], 
+            [[3, 4], [3, 5], [3, 6], [3, 7]], [[3, 2], [3, 1], [3, 0]]]
             current_location = [3, 3]
             result = rook.generate_moves(current_location, board, " \u2656 ")
             expect(result).to eq(moves)

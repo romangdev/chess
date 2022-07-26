@@ -56,7 +56,7 @@ class Queen
   end
 
    # get possible moves the rook can make going a given direction (cut off non-possible moves)
-   def get_queen_direction_moves(chess_board, location, move_direction, color)
+  def get_queen_direction_moves(chess_board, location, move_direction, color)
     count = 0
     if color == " \u265b ".colorize(:black)
       move_direction.each do |location| 

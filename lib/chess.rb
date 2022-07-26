@@ -129,7 +129,7 @@ while true
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
     
     # OR BISHOP OR ROOK CHANGE GENERATION CODE AS WELL
-    if piece_to_move.is_a? Queen 
+    if piece_to_move.is_a?(Queen) || piece_to_move.is_a?(Rook) || piece_to_move.is_a?(Bishop)
       tmp_possible_moves = possible_moves
 
       # save array of individual move direction arrays
@@ -204,7 +204,7 @@ while true
                 piece.piece_symbol == BLACK_QUEEN
 
                 check_moves.each do |move_dir|
-                  print "#{move_dir}\n"
+                  # print "#{move_dir}\n"
                   count = 0
                   #check to see if it includes white queen AND no pieces from start up to white queen
                   move_dir.each do |location|
