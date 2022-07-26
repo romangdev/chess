@@ -4,6 +4,22 @@ require "./lib/chess_pieces"
 class Knight
   attr_reader :piece_symbol
 
+  include ChessPieces
+
+  WHITE_PIECES = [WHITE_PAWN,
+    WHITE_ROOK,
+    WHITE_KNIGHT,
+    WHITE_BISHOP,
+    WHITE_QUEEN,
+    WHITE_KING]
+
+  BLACK_PIECES = [BLACK_PAWN,
+      BLACK_ROOK,
+      BLACK_KNIGHT,
+      BLACK_BISHOP,
+      BLACK_QUEEN,
+      BLACK_KING]
+
   def initialize(piece_symbol)
     @piece_symbol = piece_symbol
   end
@@ -23,33 +39,17 @@ class Knight
 
     moves.delete('nil')
 
-    if knight_color == " \u2658 "
+    if knight_color ==  WHITE_KNIGHT
       moves.each do |move|
         unless chess_board[move[0]][move[1]] == "   "
-          if chess_board[move[0]][move[1]].piece_symbol == " \u2659 " ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u2656 " ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u2658 " ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u2657 " ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u2655 " ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u2654 "
-
-            move = "nil"
-          end
+          move = "nil" if WHITE_PIECES.include? chess_board[move[0]][move[1]].piece_symbol 
         end
         possible_moves << move
       end
     else
       moves.each do |move|
         unless chess_board[move[0]][move[1]] == "   "
-          if chess_board[move[0]][move[1]].piece_symbol == " \u265f ".colorize(:black) ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u265c ".colorize(:black) ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u265e ".colorize(:black) ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u265d ".colorize(:black) ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u265b ".colorize(:black) ||
-            chess_board[move[0]][move[1]].piece_symbol == " \u265a ".colorize(:black)
-
-            move = "nil"
-          end
+          move = "nil" if BLACK_PIECES.include? chess_board[move[0]][move[1]].piece_symbol
         end
         possible_moves << move
       end
