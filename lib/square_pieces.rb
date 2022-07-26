@@ -64,7 +64,7 @@ class SquarePieces
   @@b2_piece = w_pawn2
   @@b3_piece = w_queen
   @@b4_piece = "   "
-  @@b5_piece = "   "
+  @@b5_piece = w_bishop1
   @@b6_piece = "   "
   @@b7_piece = b_pawn2
   @@b8_piece = b_knight1
@@ -84,7 +84,7 @@ class SquarePieces
   @@d2_piece = w_pawn4
   @@d3_piece = "   "
   @@d4_piece = "   "
-  @@d5_piece = "   "
+  @@d5_piece = w_queen
   @@d6_piece = "   "
   @@d7_piece = b_pawn4
   @@d8_piece = b_queen

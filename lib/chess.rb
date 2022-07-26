@@ -113,6 +113,38 @@ class Chess
     false
   end
 
+  # if player checks opposite player's king with a rook, bishop, or queen, update other player's king
+  # object @checked to true
+  def rbq_checking_king?(check_moves, board, king_color)
+    check_moves.each do |move_dir|
+      count = 0
+      move_dir.each do |location|
+        count += 1 if board.chess_board[location[0]][location[1]] == "   "
+        unless board.chess_board[location[0]][location[1]] == "   "
+          if board.chess_board[location[0]][location[1]].piece_symbol == BLACK_KING &&
+            (count + 1) == move_dir.length
+
+            board.chess_board[location[0]][location[1]].checked = true
+            print "CHECKED: #{ board.chess_board[location[0]][location[1]].checked}\n"
+          end
+        end
+      end
+    end
+  end
+
+  # if player checks opposite player's king with a pawn or knight, update other player's king
+  # object @checked to true
+  def pk_checking_king?(check_moves, board, king_color)
+    check_moves.each do |move|
+      unless board.chess_board[move[0]][move[1]] == "   "
+        if board.chess_board[move[0]][move[1]].piece_symbol == king_color
+          board.chess_board[move[0]][move[1]].checked = true 
+          print "CHECKED: #{ board.chess_board[move[0]][move[1]].checked}\n"
+        end
+      end
+    end
+  end
+
   # queen, rook, and bishop moves are calculated by individual direction arrays, rather than one 
   # array of all moves together. This method combines all individual locations into one array rather
   # than an array of arrays if the piece is one of the aforementioned pieces
@@ -250,14 +282,11 @@ while true
 
           if piece.piece_symbol == WHITE_PAWN || piece.piece_symbol == WHITE_KNIGHT
 
-            check_moves.each do |move|
-              unless board.chess_board[move[0]][move[1]] == "   "
-                if board.chess_board[move[0]][move[1]].piece_symbol == BLACK_KING
-                  board.chess_board[move[0]][move[1]].checked = true 
-                  print "CHECKED: #{ board.chess_board[move[0]][move[1]].checked}\n"
-                end
-              end
-            end
+            break if chess.pk_checking_king?(check_moves, board, BLACK_KING)
+          elsif piece.piece_symbol == WHITE_ROOK || piece.piece_symbol == WHITE_BISHOP ||
+            piece.piece_symbol == WHITE_QUEEN
+
+            break if chess.rbq_checking_king?(check_moves, board, BLACK_KING)
           end
         end
       end
