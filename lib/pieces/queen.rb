@@ -4,6 +4,22 @@ require "./lib/chess_pieces"
 class Queen
   attr_reader :piece_symbol
 
+  include ChessPieces
+
+  WHITE_PIECES = [WHITE_PAWN,
+                  WHITE_ROOK,
+                  WHITE_KNIGHT,
+                  WHITE_BISHOP,
+                  WHITE_QUEEN,
+                  WHITE_KING]
+
+  BLACK_PIECES = [BLACK_PAWN,
+                  BLACK_ROOK,
+                  BLACK_KNIGHT,
+                  BLACK_BISHOP,
+                  BLACK_QUEEN,
+                  BLACK_KING]
+
   def initialize(piece_symbol)
     @piece_symbol = piece_symbol
   end
@@ -58,18 +74,12 @@ class Queen
    # get possible moves the rook can make going a given direction (cut off non-possible moves)
   def get_queen_direction_moves(chess_board, location, move_direction, color)
     count = 0
-    if color == " \u265b ".colorize(:black)
+    if color == BLACK_QUEEN
       move_direction.each do |location| 
         if chess_board[location[0]][location[1]] == "   "
           count += 1
           next
-        elsif chess_board[location[0]][location[1]].piece_symbol == " \u265f ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265c ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265e ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265d ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265b ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265a ".colorize(:black)
-
+        elsif BLACK_PIECES.include? chess_board[location[0]][location[1]].piece_symbol
           move_direction = move_direction.slice(0, count + 1)
         else
           move_direction = move_direction.slice(0, count)
@@ -80,13 +90,7 @@ class Queen
         if chess_board[location[0]][location[1]] == "   "
           count += 1
           next
-        elsif chess_board[location[0]][location[1]].piece_symbol == " \u2659 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2656 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2658 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2657 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2655 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2654 "
-
+        elsif WHITE_PIECES.include? chess_board[location[0]][location[1]].piece_symbol 
           move_direction = move_direction.slice(0, count + 1)
         else
           move_direction = move_direction.slice(0, count)
@@ -104,10 +108,10 @@ class Queen
         up_vertical_moves << [current_location[0] + i, current_location[1]]
       end
     end
-    if queen_color == " \u2655 "
-      up_vertical_moves = get_queen_direction_moves(chess_board, current_location, up_vertical_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      up_vertical_moves = get_queen_direction_moves(chess_board, current_location, up_vertical_moves, BLACK_QUEEN)
     else
-      up_vertical_moves = get_queen_direction_moves(chess_board, current_location, up_vertical_moves, " \u2655 ")
+      up_vertical_moves = get_queen_direction_moves(chess_board, current_location, up_vertical_moves, WHITE_QUEEN)
     end
 
     up_vertical_moves
@@ -120,10 +124,10 @@ class Queen
         down_vertical_moves << [current_location[0] - i, current_location[1]]
       end
     end
-    if queen_color == " \u2655 "
-      down_vertical_moves = get_queen_direction_moves(chess_board, current_location, down_vertical_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      down_vertical_moves = get_queen_direction_moves(chess_board, current_location, down_vertical_moves, BLACK_QUEEN)
     else
-      down_vertical_moves = get_queen_direction_moves(chess_board, current_location, down_vertical_moves, " \u2655 ")
+      down_vertical_moves = get_queen_direction_moves(chess_board, current_location, down_vertical_moves, WHITE_QUEEN)
     end
 
     down_vertical_moves
@@ -136,10 +140,10 @@ class Queen
         right_horizontal_moves << [current_location[0], current_location[1] + i]
       end
     end
-    if queen_color == " \u2655 "
-      right_horizontal_moves = get_queen_direction_moves(chess_board, current_location, right_horizontal_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      right_horizontal_moves = get_queen_direction_moves(chess_board, current_location, right_horizontal_moves, BLACK_QUEEN)
     else
-      right_horizontal_moves = get_queen_direction_moves(chess_board, current_location, right_horizontal_moves, " \u2655 ")
+      right_horizontal_moves = get_queen_direction_moves(chess_board, current_location, right_horizontal_moves, WHITE_QUEEN)
     end
 
     right_horizontal_moves
@@ -152,10 +156,10 @@ class Queen
         left_horizontal_moves << [current_location[0], current_location[1] - i]
       end
     end
-    if queen_color == " \u2655 "
-      left_horizontal_moves= get_queen_direction_moves(chess_board, current_location, left_horizontal_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      left_horizontal_moves= get_queen_direction_moves(chess_board, current_location, left_horizontal_moves, BLACK_QUEEN)
     else
-      left_horizontal_moves= get_queen_direction_moves(chess_board, current_location, left_horizontal_moves, " \u2655 ")
+      left_horizontal_moves= get_queen_direction_moves(chess_board, current_location, left_horizontal_moves, WHITE_QUEEN)
     end
 
     left_horizontal_moves
@@ -164,18 +168,12 @@ class Queen
    # get possible moves a bishop can make going a given direction (cut off non-possible moves)
    def get_bishop_direction_moves(chess_board, location, move_direction, color)
     count = 0
-    if color == " \u265b ".colorize(:black)
+    if color == BLACK_QUEEN
       move_direction.each do |location| 
         if chess_board[location[0]][location[1]] == "   "
           count += 1
           next
-        elsif chess_board[location[0]][location[1]].piece_symbol == " \u265f ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265c ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265e ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265d ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265b ".colorize(:black) ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u265a ".colorize(:black)
-
+        elsif BLACK_PIECES.include? chess_board[location[0]][location[1]].piece_symbol
           move_direction = move_direction.slice(0, count + 1)
         else
           move_direction = move_direction.slice(0, count)
@@ -186,13 +184,7 @@ class Queen
         if chess_board[location[0]][location[1]] == "   "
           count += 1
           next
-        elsif chess_board[location[0]][location[1]].piece_symbol == " \u2659 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2656 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2658 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2657 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2655 " ||
-          chess_board[location[0]][location[1]].piece_symbol == " \u2654 "
-
+        elsif WHITE_PIECES.include? chess_board[location[0]][location[1]].piece_symbol
           move_direction = move_direction.slice(0, count + 1)
         else
           move_direction = move_direction.slice(0, count)
@@ -210,10 +202,10 @@ class Queen
         up_right_moves << [current_location[0] + i, current_location[1] + i]
       end
     end
-    if queen_color == " \u2655 "
-      up_right_moves = get_queen_direction_moves(chess_board, current_location, up_right_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      up_right_moves = get_queen_direction_moves(chess_board, current_location, up_right_moves, BLACK_QUEEN)
     else
-      up_right_moves = get_queen_direction_moves(chess_board, current_location, up_right_moves, " \u2655 ")
+      up_right_moves = get_queen_direction_moves(chess_board, current_location, up_right_moves, WHITE_QUEEN)
     end
 
     up_right_moves
@@ -226,10 +218,10 @@ class Queen
         down_right_moves << [current_location[0] - i, current_location[1] + i]
       end
     end
-    if queen_color == " \u2655 "
-      down_right_moves = get_queen_direction_moves(chess_board, current_location, down_right_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      down_right_moves = get_queen_direction_moves(chess_board, current_location, down_right_moves, BLACK_QUEEN)
     else
-      down_right_moves = get_queen_direction_moves(chess_board, current_location, down_right_moves, " \u2655 ")
+      down_right_moves = get_queen_direction_moves(chess_board, current_location, down_right_moves, WHITE_QUEEN)
     end
 
     down_right_moves
@@ -242,10 +234,10 @@ class Queen
         down_left_moves << [current_location[0] - i, current_location[1] - i]
       end
     end
-    if queen_color == " \u2655 "
-      down_left_moves = get_queen_direction_moves(chess_board, current_location, down_left_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      down_left_moves = get_queen_direction_moves(chess_board, current_location, down_left_moves, BLACK_QUEEN)
     else
-      down_left_moves = get_queen_direction_moves(chess_board, current_location, down_left_moves, " \u2655 ")
+      down_left_moves = get_queen_direction_moves(chess_board, current_location, down_left_moves, WHITE_QUEEN)
     end
 
     down_left_moves
@@ -258,10 +250,10 @@ class Queen
         up_left_moves << [current_location[0] + i, current_location[1] - i]
       end
     end
-    if queen_color == " \u2655 "
-      up_left_moves = get_queen_direction_moves(chess_board, current_location, up_left_moves, " \u265b ".colorize(:black))
+    if queen_color == WHITE_QUEEN
+      up_left_moves = get_queen_direction_moves(chess_board, current_location, up_left_moves, BLACK_QUEEN)
     else
-      up_left_moves = get_queen_direction_moves(chess_board, current_location, up_left_moves, " \u2655 ")
+      up_left_moves = get_queen_direction_moves(chess_board, current_location, up_left_moves, WHITE_QUEEN)
     end
 
     up_left_moves

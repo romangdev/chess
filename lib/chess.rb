@@ -247,7 +247,7 @@ while true
 
       hold_start_location = chess.update_board_movement(board.chess_board, player_choice, player_end)
 
-      #KING CHECK CODE
+      # Check and handle if player move puts their own king in check
       for i in 0..7 
         for n in 0..7 
           unless board.chess_board[i][n] == "   "
@@ -272,7 +272,7 @@ while true
     end
   end
 
-  # if black king sudddenly in white player's movement.
+  # Check and handle if player move puts opposite player's king in check
   for i in 0..7 
     for n in 0..7
       unless board.chess_board[i][n] == "   "
@@ -293,7 +293,6 @@ while true
     end
   end
 
-  # chess.update_board_movement(board.chess_board, player_choice, player_end)
   chess.pawn_promotion(board.chess_board, WHITE_PAWN)
   board.display_board
 
