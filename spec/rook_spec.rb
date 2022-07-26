@@ -27,10 +27,12 @@ describe Rook do
         end
 
         context "when starting at [7, 0] with no surrounding pieces" do 
-          it "returns an array of 14 possible moves" do 
+          it "returns the defined moves array" do 
             current_location = [7, 0]
             result = rook.generate_moves(current_location, board, " \u2656 ")
-            expect(result.length).to eq(14)
+            moves = [[], [[6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]], 
+            [[7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7]], []]
+            expect(result).to eq(moves)
           end
         end
       end
@@ -40,7 +42,7 @@ describe Rook do
         let(:white_piece) { double("white_piece", piece_symbol: " \u2656 ") }
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 7 moves" do 
+          it "returns the defined moves array" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', white_piece, '   ', '   ', '   ', '   '],
@@ -51,12 +53,13 @@ describe Rook do
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
             result = rook.generate_moves(current_location, board, " \u2656 ")
-            expect(result.length).to eq(7)
+            moves = [[[4, 3], [5, 3], [6, 3], [7, 3]], [], [[3, 4], [3, 5]], [[3, 2]]]
+            expect(result).to eq(moves)
           end
         end
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 11 moves" do 
+          it "returns the defined moves array" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   [black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
@@ -66,8 +69,10 @@ describe Rook do
                   [white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
+            moves = [[[4, 3], [5, 3]], [[2, 3], [1, 3]], [[3, 4], [3, 5], [3, 6], 
+            [3, 7]], [[3, 2], [3, 1], [3, 0]]]
             result = rook.generate_moves(current_location, board, " \u2656 ")
-            expect(result.length).to eq(11)
+            expect(result).to eq(moves)
           end
         end
       end
@@ -86,10 +91,12 @@ describe Rook do
                 ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
 
         context "when starting at [7, 0] with no surrounding pieces" do 
-          it "returns an array of 14 possible moves" do 
+          it "returns the defined moves array" do 
             current_location = [7, 0]
+            moves = [[], [[6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]], [[7, 1], 
+            [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7]], []]
             result = rook.generate_moves(current_location, board, " \u265c ".colorize(:black))
-            expect(result.length).to eq(14)
+            expect(result).to eq(moves)
           end
         end
       end
@@ -99,7 +106,7 @@ describe Rook do
         let(:white_piece) { double("white_piece", piece_symbol: " \u2656 ") }
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 7 moves" do 
+          it "returns the defined moves array" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', white_piece, '   ', '   ', '   ', '   '],
@@ -109,13 +116,14 @@ describe Rook do
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
+            moves = [[[4, 3], [5, 3], [6, 3], [7, 3]], [[2, 3]], [[3, 4], [3, 5], [3, 6]], []]
             result = rook.generate_moves(current_location, board, " \u265c ".colorize(:black))
-            expect(result.length).to eq(8)
+            expect(result).to eq(moves)
           end
         end
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 11 moves" do 
+          it "returns the defined moves array" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   [black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
@@ -125,8 +133,10 @@ describe Rook do
                   [white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece, white_piece],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
+            moves = [[[4, 3], [5, 3], [6, 3]], [[2, 3]], [[3, 4], [3, 5], [3, 6], [3, 7]], 
+            [[3, 2], [3, 1], [3, 0]]]
             result = rook.generate_moves(current_location, board, " \u265c ".colorize(:black))
-            expect(result.length).to eq(11)
+            expect(result).to eq(moves)
           end
         end
       end
