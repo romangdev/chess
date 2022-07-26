@@ -110,8 +110,8 @@ describe Pawn do
 
         context "when pawn makes it's first move" do 
           it "sets @first_move_made to true" do 
-            board = [['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   ']]
-            current_location = [0, 0]
+            board = [['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   ']]
+            current_location = [1, 0]
             pawn.generate_moves(current_location, board, " \u2659 ")
             expect(pawn.first_move_made).to be true
           end
@@ -232,8 +232,9 @@ describe Pawn do
 
         context "when pawn makes it's first move" do 
           it "sets @first_move_made to true" do 
-            board = [['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   ']]
-            current_location = [2, 0]
+            board = [['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   '],
+            ['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   '], ['   ', '   ', '   ']]
+            current_location = [6, 0]
             pawn.generate_moves(current_location, board, pawn.piece_symbol)
             expect(pawn.first_move_made).to be true
           end
