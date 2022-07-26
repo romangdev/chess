@@ -20,6 +20,7 @@ class Chess
     end
   end
 
+  # prompt player to repick their piece to move
   def repick_piece?(confirmed, player_choice, board)
     if confirmed == false
       player_choice = nil 
@@ -59,11 +60,13 @@ class Chess
     hold_start_location
   end
 
+  # undo any moves made in the case of player putting self in check
   def undo_board_movement(board, start_location, player_end)
     board[start_location[0]][start_location[1]] = board[player_end[0]][player_end[1]]
     board[player_end[0]][player_end[1]] = "   "
   end
-
+  
+  # promote pawn to queen with it's appropriate color
   def handle_promotion_by_color(board, pawn_color, i)
     if pawn_color == WHITE_PAWN
       w_promoted_queen = Queen.new(WHITE_QUEEN)
@@ -74,24 +77,78 @@ class Chess
     end
   end
 
-  private 
+  # prompt player to redo their move if it puts their king in check of opposing player's pawn, knight, or king
+  def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end)
+    check_moves.each do |move|
+      unless board.chess_board[move[0]][move[1]] == "   "
+        if board.chess_board[move[0]][move[1]].piece_symbol == king_color
+          self_check = true
+          self.undo_board_movement(board.chess_board, hold_start_location, player_end)
+          puts "You can't put your own king in check. Try another move!"
+          return true
+        end
+      end
+    end
+    false
+  end
+
+  # prompt player to redo their move if it puts their king in check of opposing player's rook, bishop, or queen
+  def rbq_error_if_check(check_moves, board, king_color, hold_start_location, player_end)
+    check_moves.each do |move_dir|
+      count = 0
+      move_dir.each do |location|
+        count += 1 if board.chess_board[location[0]][location[1]] == "   "
+        unless board.chess_board[location[0]][location[1]] == "   "
+          if board.chess_board[location[0]][location[1]].piece_symbol == king_color &&
+            (count + 1) == move_dir.length
+
+            self_check = true
+            self.undo_board_movement(board.chess_board, hold_start_location, player_end)
+            puts "You can't put your own king in check. Try another move!"
+            return true
+          end
+        end
+      end
+    end
+    false
+  end
+
+  # queen, rook, and bishop moves are calculated by individual direction arrays, rather than one 
+  # array of all moves together. This method combines all individual locations into one array rather
+  # than an array of arrays if the piece is one of the aforementioned pieces
+  def handle_qrb_move_arrays(piece_to_move, possible_moves)
+    if piece_to_move.is_a?(Queen) || piece_to_move.is_a?(Rook) || piece_to_move.is_a?(Bishop)
+      tmp_possible_moves = possible_moves
+
+      possible_moves = []
+      
+      tmp_possible_moves.each do |move_direction|
+        unless move_direction.empty?
+          move_direction.each do |location|
+            possible_moves << location
+          end
+        end
+      end
+    end
+    possible_moves
+  end
 end
 
 include ChessPieces
 
 WHITE_PIECES = [WHITE_PAWN,
-  WHITE_ROOK,
-  WHITE_KNIGHT,
-  WHITE_BISHOP,
-  WHITE_QUEEN,
-  WHITE_KING]
+                WHITE_ROOK,
+                WHITE_KNIGHT,
+                WHITE_BISHOP,
+                WHITE_QUEEN,
+                WHITE_KING]
 
 BLACK_PIECES = [BLACK_PAWN,
-  BLACK_ROOK,
-  BLACK_KNIGHT,
-  BLACK_BISHOP,
-  BLACK_QUEEN,
-  BLACK_KING]
+                BLACK_ROOK,
+                BLACK_KNIGHT,
+                BLACK_BISHOP,
+                BLACK_QUEEN,
+                BLACK_KING]
 
 board = Board.new
 board.generate_board
@@ -127,26 +184,9 @@ while true
 
     piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-    
-    # OR BISHOP OR ROOK CHANGE GENERATION CODE AS WELL
-    if piece_to_move.is_a?(Queen) || piece_to_move.is_a?(Rook) || piece_to_move.is_a?(Bishop)
-      tmp_possible_moves = possible_moves
 
-      # save array of individual move direction arrays
-      move_dir_arr = possible_moves
-
-      possible_moves = []
-      
-      # put all possible move locations into one array
-      tmp_possible_moves.each do |move_direction|
-        unless move_direction.empty?
-          move_direction.each do |location|
-            possible_moves << location
-          end
-        end
-      end
-    end
     
+    possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
     available_moves = chess.no_piece_moves?(possible_moves, board)
   end
 
@@ -187,41 +227,13 @@ while true
               if piece.piece_symbol == BLACK_PAWN || piece.piece_symbol == BLACK_KNIGHT ||
                 piece.piece_symbol == BLACK_KING
 
-                # Prompt self checked king error and ensure loop to get move choice resets
-                check_moves.each do |move|
-                  unless board.chess_board[move[0]][move[1]] == "   "
-                    if board.chess_board[move[0]][move[1]].piece_symbol == WHITE_KING
-                      self_check = true
-                      chess.undo_board_movement(board.chess_board, hold_start_location, player_end)
-                      puts "You can't put your own king in check. Try another move!"
-                      break
-                    end
-                  end
-                end
+                break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end)
               
               # If white king in array of black rook, queen or bishop....
               elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP ||
                 piece.piece_symbol == BLACK_QUEEN
 
-                check_moves.each do |move_dir|
-                  # print "#{move_dir}\n"
-                  count = 0
-                  #check to see if it includes white queen AND no pieces from start up to white queen
-                  move_dir.each do |location|
-                    count += 1 if board.chess_board[location[0]][location[1]] == "   "
-
-                    unless board.chess_board[location[0]][location[1]] == "   "
-                      if board.chess_board[location[0]][location[1]].piece_symbol == WHITE_KING &&
-                        (count + 1) == move_dir.length
-
-                        self_check = true
-                        chess.undo_board_movement(board.chess_board, hold_start_location, player_end)
-                        puts "You can't put your own king in check. Try another move!"
-                        break
-                      end
-                    end
-                  end
-                end
+                break if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end)
               end
             end
           end
