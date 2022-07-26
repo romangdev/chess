@@ -128,6 +128,7 @@ while true
     piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
     
+    # OR BISHOP OR ROOK CHANGE GENERATION CODE AS WELL
     if piece_to_move.is_a? Queen 
       tmp_possible_moves = possible_moves
 
@@ -204,9 +205,21 @@ while true
 
                 check_moves.each do |move_dir|
                   print "#{move_dir}\n"
+                  count = 0
                   #check to see if it includes white queen AND no pieces from start up to white queen
                   move_dir.each do |location|
+                    count += 1 if board.chess_board[location[0]][location[1]] == "   "
 
+                    unless board.chess_board[location[0]][location[1]] == "   "
+                      if board.chess_board[location[0]][location[1]].piece_symbol == WHITE_KING &&
+                        (count + 1) == move_dir.length
+
+                        self_check = true
+                        chess.undo_board_movement(board.chess_board, hold_start_location, player_end)
+                        puts "You can't put your own king in check. Try another move!"
+                        break
+                      end
+                    end
                   end
                 end
               end

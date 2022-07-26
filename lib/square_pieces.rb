@@ -93,7 +93,7 @@ class SquarePieces
   @@e1_piece = w_king
   @@e2_piece = w_pawn5
   @@e3_piece = "   "
-  @@e4_piece = "   "
+  @@e4_piece = w_pawn1
   @@e5_piece = "   "
   @@e6_piece = "   "
   @@e7_piece = b_pawn5
