@@ -95,7 +95,7 @@ class SquarePieces
   @@e3_piece = "   "
   @@e4_piece = "   "
   @@e5_piece = "   "
-  @@e6_piece = "   "
+  @@e6_piece = w_pawn1
   @@e7_piece = b_pawn5
   @@e8_piece = b_king
 
@@ -104,7 +104,7 @@ class SquarePieces
   @@f2_piece = w_pawn6
   @@f3_piece = "   "
   @@f4_piece = "   "
-  @@f5_piece = "   "
+  @@f5_piece = b_rook1
   @@f6_piece = b_bishop1
   @@f7_piece = b_pawn6
   @@f8_piece = b_bishop2

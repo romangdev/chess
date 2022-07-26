@@ -214,22 +214,19 @@ while true
       self_check = false
 
       hold_start_location = chess.update_board_movement(board.chess_board, player_choice, player_end)
-      #CHECK CODE
+
+      #KING CHECK CODE
       for i in 0..7 
         for n in 0..7 
           unless board.chess_board[i][n] == "   "
-            # Generate all possible moves for every black piece
             if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
               piece = board.chess_board[i][n]
               check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
 
-              # If white king in array of black knight, pawn or king....
               if piece.piece_symbol == BLACK_PAWN || piece.piece_symbol == BLACK_KNIGHT ||
                 piece.piece_symbol == BLACK_KING
 
                 break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end)
-              
-              # If white king in array of black rook, queen or bishop....
               elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP ||
                 piece.piece_symbol == BLACK_QUEEN
 
@@ -240,6 +237,30 @@ while true
         end
       end
       puts "\n"
+    end
+  end
+
+  for i in 0..7 
+    for n in 0..7
+      unless board.chess_board[i][n] == "   "
+        if WHITE_PIECES.include?(board.chess_board[i][n].piece_symbol)
+          piece = board.chess_board[i][n]
+          check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+          if piece.piece_symbol == WHITE_PAWN || piece.piece_symbol == WHITE_KNIGHT ||
+            piece.piece_symbol == WHITE_KING
+
+            check_moves.each do |move|
+              unless board.chess_board[move[0]][move[1]] == "   "
+                if board.chess_board[move[0]][move[1]].piece_symbol == BLACK_KING
+                  board.chess_board[move[0]][move[1]].checked = true 
+                  print "CHECKED: #{ board.chess_board[move[0]][move[1]].checked}\n"
+                end
+              end
+            end
+          end
+        end
+      end
     end
   end
 
