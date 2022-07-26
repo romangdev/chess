@@ -50,14 +50,14 @@ class Pawn
   def check_first_move(moves, current_location, pawn_color, chess_board)
     
     if pawn_color == WHITE_PAWN
-      if self.first_move_made == false && chess_board[current_location[0] + 2][current_location[1]] == "   " &&
+      if current_location[0] == 1 && chess_board[current_location[0] + 2][current_location[1]] == "   " &&
         chess_board[current_location[0] + 1][current_location[1]] == "   "
 
         moves << [current_location[0] + 2, current_location[1]]
         self.first_move_made = true
       end
     else 
-      if self.first_move_made == false && chess_board[current_location[0] - 2][current_location[1]] == "   " &&
+      if current_location[0] == 6 && chess_board[current_location[0] - 2][current_location[1]] == "   " &&
         chess_board[current_location[0] - 1][current_location[1]] == "   "
 
         moves << [current_location[0] - 2, current_location[1]] 

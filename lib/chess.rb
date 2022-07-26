@@ -240,6 +240,7 @@ while true
     end
   end
 
+  # if black king sudddenly in white player's movement.
   for i in 0..7 
     for n in 0..7
       unless board.chess_board[i][n] == "   "
@@ -247,8 +248,7 @@ while true
           piece = board.chess_board[i][n]
           check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
 
-          if piece.piece_symbol == WHITE_PAWN || piece.piece_symbol == WHITE_KNIGHT ||
-            piece.piece_symbol == WHITE_KING
+          if piece.piece_symbol == WHITE_PAWN || piece.piece_symbol == WHITE_KNIGHT
 
             check_moves.each do |move|
               unless board.chess_board[move[0]][move[1]] == "   "
