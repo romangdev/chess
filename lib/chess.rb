@@ -127,6 +127,25 @@ while true
 
     piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
+    
+    if piece_to_move.is_a? Queen 
+      tmp_possible_moves = possible_moves
+
+      # save array of individual move direction arrays
+      move_dir_arr = possible_moves
+
+      possible_moves = []
+      
+      # put all possible move locations into one array
+      tmp_possible_moves.each do |move_direction|
+        unless move_direction.empty?
+          move_direction.each do |location|
+            possible_moves << location
+          end
+        end
+      end
+    end
+    
     available_moves = chess.no_piece_moves?(possible_moves, board)
   end
 
@@ -167,7 +186,7 @@ while true
               if piece.piece_symbol == BLACK_PAWN || piece.piece_symbol == BLACK_KNIGHT ||
                 piece.piece_symbol == BLACK_KING
 
-                # Prompt self checked king error
+                # Prompt self checked king error and ensure loop to get move choice resets
                 check_moves.each do |move|
                   unless board.chess_board[move[0]][move[1]] == "   "
                     if board.chess_board[move[0]][move[1]].piece_symbol == WHITE_KING
@@ -176,6 +195,18 @@ while true
                       puts "You can't put your own king in check. Try another move!"
                       break
                     end
+                  end
+                end
+              
+              # If white king in array of black rook, queen or bishop....
+              elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP ||
+                piece.piece_symbol == BLACK_QUEEN
+
+                check_moves.each do |move_dir|
+                  print "#{move_dir}\n"
+                  #check to see if it includes white queen AND no pieces from start up to white queen
+                  move_dir.each do |location|
+
                   end
                 end
               end

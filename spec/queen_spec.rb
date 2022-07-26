@@ -17,18 +17,18 @@ describe Queen do
                 ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
       
         context "when starting at [3, 3] with no surrounding pieces" do
-          it "returns an array of 27 possible moves" do 
+          it "returns an array of 8 possible move directions" do 
             current_location = [3, 3]
             result = queen.generate_moves(current_location, board, " \u2655 ")
-            expect(result.length).to eq(27)
+            expect(result.length).to eq(8)
           end
         end  
         
         context "when starting at [7, 0] with no surrounding pieces" do 
-          it "returns an array of 21 possible moves" do 
+          it "returns an array of 8 possible move directions" do 
             current_location = [7, 0]
             result = queen.generate_moves(current_location, board, " \u2655 ")
-            expect(result.length).to eq(21)
+            expect(result.length).to eq(8)
           end
         end
       end
@@ -38,7 +38,7 @@ describe Queen do
         let(:white_piece) { double("white_piece", piece_symbol: " \u2656 ") }
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 20 moves" do 
+          it "returns an array of 8 move directions" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', white_piece, '   ', '   ', '   ', '   '],
@@ -49,12 +49,12 @@ describe Queen do
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
             result =  queen.generate_moves(current_location, board, " \u2655 ")
-            expect(result.length).to eq(20)
+            expect(result.length).to eq(8)
           end
         end
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 19 moves" do 
+          it "returns an array of 8 move directions" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   [black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
@@ -65,7 +65,7 @@ describe Queen do
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
             result = queen.generate_moves(current_location, board, " \u2655 ")
-            expect(result.length).to eq(19)
+            expect(result.length).to eq(8)
           end
         end
       end
@@ -84,18 +84,18 @@ describe Queen do
                 ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
       
         context "when starting at [3, 3] with no surrounding pieces" do
-          it "returns an array of 27 possible moves" do 
+          it "returns an array of 8 possible move directions" do 
             current_location = [3, 3]
             result = queen.generate_moves(current_location, board, " \u265b ".colorize(:black))
-            expect(result.length).to eq(27)
+            expect(result.length).to eq(8)
           end
         end  
         
         context "when starting at [7, 0] with no surrounding pieces" do 
-          it "returns an array of 21 possible moves" do 
+          it "returns an array of 8 possible move directions" do 
             current_location = [7, 0]
             result = queen.generate_moves(current_location, board, " \u265b ".colorize(:black))
-            expect(result.length).to eq(21)
+            expect(result.length).to eq(8)
           end
         end
       end
@@ -105,7 +105,7 @@ describe Queen do
         let(:white_piece) { double("white_piece", piece_symbol: " \u2656 ") }
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 21 moves" do 
+          it "returns an array of 8 move directions" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   ['   ', '   ', '   ', white_piece, '   ', '   ', '   ', '   '],
@@ -116,12 +116,12 @@ describe Queen do
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
             result =  queen.generate_moves(current_location, board, " \u265b ".colorize(:black))
-            expect(result.length).to eq(21)
+            expect(result.length).to eq(8)
           end
         end
 
         context "when starting a [3, 3]" do 
-          it "returns an array of 19 moves" do 
+          it "returns an array of 8 move directions" do 
             board = [['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
                   [black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece, black_piece],
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   '],
@@ -132,7 +132,7 @@ describe Queen do
                   ['   ', '   ', '   ', '   ', '   ', '   ', '   ', '   ']] 
             current_location = [3, 3]
             result = queen.generate_moves(current_location, board, " \u265b ".colorize(:black))
-            expect(result.length).to eq(19)
+            expect(result.length).to eq(8)
           end
         end
       end
