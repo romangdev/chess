@@ -62,15 +62,19 @@ class Chess
     hold_start_location = player_choice
     tmp_start = board[player_choice[0]][player_choice[1]]
     board[player_choice[0]][player_choice[1]] = "   "
+    move_end = board[player_end[0]][player_end[1]]
     board[player_end[0]][player_end[1]] = tmp_start
-
-    hold_start_location
+    
+    #grab and save end piece and starting location piece, to use in 'undo board movement'
+    arr = []
+    arr << hold_start_location << move_end
+    arr
   end
 
   # undo any moves made in the case of player putting self in check
-  def undo_board_movement(board, start_location, player_end)
+  def undo_board_movement(board, start_location, player_end, end_piece)
     board[start_location[0]][start_location[1]] = board[player_end[0]][player_end[1]]
-    board[player_end[0]][player_end[1]] = "   "
+    board[player_end[0]][player_end[1]] = end_piece
   end
   
   # promote pawn to queen with it's appropriate color
@@ -85,13 +89,13 @@ class Chess
   end
 
   # prompt player to redo their move if it puts their king in check of opposing player's pawn, knight, or king
-  def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end)
+  def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end, end_piece)
     check_moves.each do |move|
       unless board.chess_board[move[0]][move[1]] == "   "
         if board.chess_board[move[0]][move[1]].piece_symbol == king_color
           self_check = true
-          self.undo_board_movement(board.chess_board, hold_start_location, player_end)
-          puts "You can't put your own king in check. Try another move!"
+          self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece)
+          puts "Your king is in check after that move. Try another move!"
           return true
         end
       end
@@ -100,7 +104,7 @@ class Chess
   end
 
   # prompt player to redo their move if it puts their king in check of opposing player's rook, bishop, or queen
-  def rbq_error_if_check(check_moves, board, king_color, hold_start_location, player_end)
+  def rbq_error_if_check(check_moves, board, king_color, hold_start_location, player_end, end_piece)
     check_moves.each do |move_dir|
       count = 0
       move_dir.each do |location|
@@ -110,8 +114,8 @@ class Chess
             (count + 1) == move_dir.length
 
             self_check = true
-            self.undo_board_movement(board.chess_board, hold_start_location, player_end)
-            puts "You can't put your own king in check. Try another move!"
+            self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece)
+            puts "Your king is in check after that move. Try another move!"
             return true
           end
         end
@@ -253,8 +257,10 @@ while true
       chess.repick_move?(confirmed, player_end, board, player_choice, possible_moves)
 
       self_check = false
-
-      hold_start_location = chess.update_board_movement(board.chess_board, player_choice, player_end)
+      saved_end_piece = 'nil'
+      hold = chess.update_board_movement(board.chess_board, player_choice, player_end)
+      hold_start_location = hold[0]
+      saved_end_piece = hold[1]
 
       # Check and handle if player move puts their own king in check
       for i in 0..7 
@@ -267,11 +273,11 @@ while true
               if piece.piece_symbol == BLACK_PAWN || piece.piece_symbol == BLACK_KNIGHT ||
                 piece.piece_symbol == BLACK_KING
 
-                break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end)
+                break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece)
               elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP ||
                 piece.piece_symbol == BLACK_QUEEN
 
-                break if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end)
+                break if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece)
               end
             end
           end
