@@ -58,12 +58,26 @@ class Chess
   end
 
   # update the array representing the chess board to reflect movement
-  def update_board_movement(board, player_choice, player_end)
+  def update_board_movement(board, player_choice, player_end, l_castle, r_castle)
     hold_start_location = player_choice
     tmp_start = board[player_choice[0]][player_choice[1]]
     board[player_choice[0]][player_choice[1]] = "   "
     move_end = board[player_end[0]][player_end[1]]
     board[player_end[0]][player_end[1]] = tmp_start
+
+    # CASTLE DISPLAY
+    # if castle right is available and player chooses correct castle location
+    if r_castle && player_end == [0, 6]
+      hold_rook = board[0][7]
+      board[0][7] = "   "
+      board[0][5] = hold_rook
+    elsif l_castle && player_end == [0, 2]
+      puts "correct"
+      # if castle left is available and player chooses correct castle location
+      hold_rook = board[0][0]
+      board[0][0] = "   "
+      board[0][3] = hold_rook
+    end
     
     #grab and save end piece and starting location piece, to use in 'undo board movement'
     arr = []
@@ -202,7 +216,7 @@ player_black = PlayerBlack.new
 
 game = Game.new
 # change 3, 2 back to 0, 4
-chess = Chess.new(board.chess_board[3][7], board.chess_board[7][4])
+chess = Chess.new(board.chess_board[0][4], board.chess_board[7][4])
 
 while true 
   # player white turn
@@ -230,6 +244,29 @@ while true
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
 
     possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
+
+    # CASTLE FUNCTIONING
+    l_castle = false
+    r_castle = false
+    if (piece_to_move.is_a? King) && (piece_to_move.first_move_made == false)
+      piece_to_move.first_move_made = true
+      right_w_rook_check = board.chess_board[0][7]
+      left_w_rook_check = board.chess_board[0][0]
+
+      if right_w_rook_check.is_a?(Rook) && board.chess_board[0][5] == "   " && board.chess_board[0][6] == "   "
+        possible_moves << [0, 6]
+        r_castle = true
+        puts "can castle"
+      end
+      if left_w_rook_check.is_a?(Rook) && board.chess_board[0][3] == "   " && board.chess_board[0][2] == "   " &&
+        board.chess_board[0][1] == "   "
+
+        possible_moves << [0, 2]
+        l_castle = true
+        puts "can castle"
+      end
+    end
+
     available_moves = chess.no_piece_moves?(possible_moves, board)
   end
 
@@ -256,7 +293,7 @@ while true
 
       self_check = false
       saved_end_piece = 'nil'
-      hold = chess.update_board_movement(board.chess_board, player_choice, player_end)
+      hold = chess.update_board_movement(board.chess_board, player_choice, player_end, l_castle, r_castle)
       hold_start_location = hold[0]
       saved_end_piece = hold[1]
 

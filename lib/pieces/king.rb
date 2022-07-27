@@ -2,7 +2,7 @@
 require "./lib/chess_pieces"
 
 class King
-  attr_accessor :checked
+  attr_accessor :checked, :first_move_made
   attr_reader :piece_symbol
 
   include ChessPieces
