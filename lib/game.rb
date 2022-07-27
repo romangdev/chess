@@ -73,11 +73,8 @@ class Game
   end
 
   # verify what piece (or lack of piece) a location selected by player holds
-  def verify_location_piece(player_pieces, chosen_location, board_array, king)
+  def verify_location_piece(player_pieces, chosen_location, board_array)
     player_pieces.each do |piece|
-      # if king.checked == true && board_array[chosen_location[0]][chosen_location[1]] != king
-      #   puts "Your king is in check... you must move your king!"
-      #   return false
       if board_array[chosen_location[0]][chosen_location[1]].is_a? String
         return true if board_array[chosen_location[0]][chosen_location[1]] == piece
       else
