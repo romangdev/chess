@@ -30,6 +30,7 @@ class SquarePieces
   w_bishop2 = Bishop.new(WHITE_BISHOP)
   w_queen = Queen.new(WHITE_QUEEN)
   w_king = King.new(WHITE_KING)
+  w_king.checked = true
 
   # create objects for all black pieces on board
   b_pawn1 = Pawn.new(BLACK_PAWN)
@@ -90,7 +91,7 @@ class SquarePieces
   @@d8_piece = b_queen
 
   # E column
-  @@e1_piece = w_king
+  @@e1_piece = "   "
   @@e2_piece = w_pawn5
   @@e3_piece = "   "
   @@e4_piece = "   "

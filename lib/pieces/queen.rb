@@ -157,7 +157,7 @@ class Queen
   end
 
    # get possible moves a bishop can make going a given direction (cut off non-possible moves)
-   def get_bishop_direction_moves(chess_board, location, move_direction, color)
+  def get_bishop_direction_moves(chess_board, location, move_direction, color)
     count = 0
     if color == BLACK_QUEEN
       move_direction.each do |location| 

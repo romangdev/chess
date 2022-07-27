@@ -11,6 +11,13 @@ require "./lib/chess_pieces"
 class Chess 
   include ChessPieces
 
+  attr_accessor :w_king, :b_king
+
+  def initialize(w_king_location, b_king_location)
+    @w_king = w_king_location
+    @b_king = b_king_location
+  end
+
   # check for pawn promotion possibilities and execute on relevant pawns if so
   def pawn_promotion(board, pawn_color)
     for i in 0..7 
@@ -190,7 +197,8 @@ player_white = PlayerWhite.new
 player_black = PlayerBlack.new
 
 game = Game.new
-chess = Chess.new
+# change 3, 2 back to 0, 4
+chess = Chess.new(board.chess_board[3][2], board.chess_board[7][4])
 
 while true 
   # player white turn
@@ -202,8 +210,8 @@ while true
       until flag
         player_choice = game.get_player_location(player_white.player_color)
         player_choice = game.convert_player_location(player_choice)
-        flag = game.verify_location_piece(player_white.player_pieces, player_choice, board.chess_board)
-        puts "Your piece isn't located there, please try again!" if flag == false
+        flag = game.verify_location_piece(player_white.player_pieces, player_choice, board.chess_board, chess.w_king)
+        puts "Your piece isn't located there, please try again!" if flag == false && chess.w_king.checked != true
       end
 
       board.display_board(player_choice)
@@ -216,6 +224,7 @@ while true
 
     piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
+    chess.w_king.checked = false
 
     
     possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
