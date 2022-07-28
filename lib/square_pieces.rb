@@ -31,7 +31,7 @@ class SquarePieces
   w_queen = Queen.new(WHITE_QUEEN)
   w_king = King.new(WHITE_KING)
 
-  # w_king.checked = true
+  w_king.checked = true
 
   # create objects for all black pieces on board
   b_pawn1 = Pawn.new(BLACK_PAWN)
