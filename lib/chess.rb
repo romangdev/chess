@@ -231,7 +231,6 @@ while true
       unless board.chess_board[i][n] == "   "
         if board.chess_board[i][n].piece_symbol == WHITE_KING
           w_king_loc << i << n
-          print w_king_loc
         end
       end
     end
@@ -250,13 +249,11 @@ while true
           if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
             if check_moves.include? w_king_loc
               king_checker_loc << i << n
-              print king_checker_loc
             end
           elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
             check_moves.each do |move_direction|
               if move_direction.include? w_king_loc
                 king_checker_loc << i << n
-                print king_checker_loc
               end
             end
           end
@@ -265,7 +262,9 @@ while true
     end
   end
 
-  # CHECK ALL WHITE PIECES TO SEE IF ANY CONTAIN THE BLACK PIECE CHECKING THE KING
+  # CHECK ALL WHITE PIECES (EXCEPT KING) TO SEE IF ANY CONTAIN THE BLACK PIECE CHECKING THE KING
+  checked_king_moves = nil
+  king_saver = false
   for i in 0..7 
     for n in 0..7 
       unless board.chess_board[i][n] == "   "
@@ -273,16 +272,18 @@ while true
           piece = board.chess_board[i][n]
           check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
 
-          if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
+          checked_king_moves = check_moves if piece.is_a? King
+
+          if piece.is_a?(Pawn) ||  piece.is_a?(Knight)
             if check_moves.include? king_checker_loc
-              king_saver = piece
-              puts king_saver
+              puts "SAVER: #{i}, #{n}"
+              king_saver = true
             end
           elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
             check_moves.each do |move_direction|
               if move_direction.include? king_checker_loc
-                king_saver = piece
-                puts king_saver
+                puts "SAVER: #{i}, #{n}"
+                king_saver = true
               end
             end
           end
@@ -290,6 +291,59 @@ while true
       end
     end
   end
+
+  white_king_check = board.chess_board[w_king_loc[0]][w_king_loc[1]]
+  # generate all black moves
+  # starting from 1, for each move white can make, if that move puts it in another piece's array moves
+  # then add the counter number to possible checkmate array. Only increment when going to next king move. 
+  # for numbers 1 up to and including king_moves.length, if they possible checkmate array includes all those
+  # numbers, then king can't get out of check (CHECKMATE)
+  counter = 0
+  possible_checkmate_array = []
+  # also, if no king saver && king moves array is empty && checked, game over
+  if (white_king_check.checked == true) && (king_saver == false)
+    if checked_king_moves.empty?
+      puts "GAME OVER"
+    else 
+      checked_king_moves.each do |king_move|
+        counter += 1
+        for i in 0..7 
+          for n in 0..7 
+            unless board.chess_board[i][n] == "   "
+              if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
+                piece = board.chess_board[i][n]
+                check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+      
+                if piece.is_a?(Pawn)
+                  pawn_diagonals = []
+                  pawn_diagonals <<  [i - 1, n + 1]  unless board.chess_board[i - 1][n + 1] == nil
+                  pawn_diagonals <<  [i - 1, n - 1]  unless board.chess_board[i - 1][n - 1] == nil
+                  if pawn_diagonals.include? king_move
+                    possible_checkmate_array << counter
+                  end
+                elsif piece.is_a?(King) || piece.is_a?(Knight)
+                  if check_moves.include? king_move
+                    possible_checkmate_array << counter
+                  end
+                elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
+                  check_moves.each do |move_direction|
+                    if move_direction.include? king_move
+                      possible_checkmate_array << counter
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  print checked_king_moves
+  puts "\n"
+  print possible_checkmate_array
+
+
   ###
 
 
@@ -326,13 +380,13 @@ while true
       right_w_rook_check = board.chess_board[0][7]
       left_w_rook_check = board.chess_board[0][0]
 
-      if right_w_rook_check.is_a?(Rook) && board.chess_board[0][5] == "   " && board.chess_board[0][6] == "   "
-        possible_moves << [0, 6]
+      if right_w_rook_check.is_a?(Rook) && board.chess_board[0][5] == "   " && board.chess_board[0][6] == "   " &&
+        possible_moves << [0, 6] && board.chess_board[0][4] == piece_to_move
         w_r_castle = true
         puts "can castle"
       end
       if left_w_rook_check.is_a?(Rook) && board.chess_board[0][3] == "   " && board.chess_board[0][2] == "   " &&
-        board.chess_board[0][1] == "   "
+        board.chess_board[0][1] == "   " && board.chess_board[0][4] == piece_to_move
 
         possible_moves << [0, 2]
         w_l_castle = true

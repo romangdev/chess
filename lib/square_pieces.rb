@@ -31,7 +31,7 @@ class SquarePieces
   w_queen = Queen.new(WHITE_QUEEN)
   w_king = King.new(WHITE_KING)
 
-  # w_king.checked = true
+  w_king.checked = true
 
   # create objects for all black pieces on board
   b_pawn1 = Pawn.new(BLACK_PAWN)
@@ -72,7 +72,7 @@ class SquarePieces
   @@b8_piece = b_knight1
 
   # C column
-  @@c1_piece = b_queen
+  @@c1_piece = "   "
   @@c2_piece = w_pawn3
   @@c3_piece = "   "
   @@c4_piece = "   "
@@ -115,8 +115,8 @@ class SquarePieces
   @@g1_piece = "   "
   @@g2_piece = w_pawn7
   @@g3_piece = "   "
-  @@g4_piece = b_queen
-  @@g5_piece = "   "
+  @@g4_piece = "   "
+  @@g5_piece = b_queen
   @@g6_piece = "   "
   @@g7_piece = b_pawn7
   @@g8_piece = b_knight2
@@ -124,9 +124,9 @@ class SquarePieces
   # H column
   @@h1_piece = w_rook2
   @@h2_piece = w_pawn8
-  @@h3_piece = w_pawn8
-  @@h4_piece = w_king
-  @@h5_piece = "   "
+  @@h3_piece = "   "
+  @@h4_piece = "   "
+  @@h5_piece = w_king
   @@h6_piece = "   "
   @@h7_piece = b_pawn8
   @@h8_piece = b_rook2
