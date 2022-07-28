@@ -216,7 +216,7 @@ player_black = PlayerBlack.new
 
 game = Game.new
 # change 3, 2 back to 0, 4
-chess = Chess.new(board.chess_board[0][4], board.chess_board[7][4])
+chess = Chess.new(board.chess_board[3][7], board.chess_board[7][4])
 
 while true 
 
@@ -239,6 +239,7 @@ while true
 
 
   # FIND THE BLACK PIECE CHECKING THE KING
+  king_checker_loc = []
   for i in 0..7 
     for n in 0..7 
       unless board.chess_board[i][n] == "   "
@@ -248,14 +249,14 @@ while true
 
           if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
             if check_moves.include? w_king_loc
-              king_checker = piece
-              print king_checker
+              king_checker_loc << i << n
+              print king_checker_loc
             end
           elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
             check_moves.each do |move_direction|
               if move_direction.include? w_king_loc
-                king_checker = piece
-                print king_checker
+                king_checker_loc << i << n
+                print king_checker_loc
               end
             end
           end
@@ -264,12 +265,27 @@ while true
     end
   end
 
-
   # CHECK ALL WHITE PIECES TO SEE IF ANY CONTAIN THE BLACK PIECE CHECKING THE KING
   for i in 0..7 
     for n in 0..7 
       unless board.chess_board[i][n] == "   "
         if WHITE_PIECES.include?(board.chess_board[i][n].piece_symbol)
+          piece = board.chess_board[i][n]
+          check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+          if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
+            if check_moves.include? king_checker_loc
+              king_saver = piece
+              puts king_saver
+            end
+          elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
+            check_moves.each do |move_direction|
+              if move_direction.include? king_checker_loc
+                king_saver = piece
+                puts king_saver
+              end
+            end
+          end
         end
       end
     end
