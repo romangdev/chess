@@ -58,7 +58,7 @@ class Chess
   end
 
   # update the array representing the chess board to reflect movement
-  def update_board_movement(board, player_choice, player_end, w_l_castle, w_r_castle)
+  def update_board_movement(board, player_choice, player_end, w_l_castle = false, w_r_castle = false)
     hold_start_location = player_choice
     tmp_start = board[player_choice[0]][player_choice[1]]
     board[player_choice[0]][player_choice[1]] = "   "
@@ -305,27 +305,47 @@ while true
     if checked_king_moves.empty?
       puts "GAME OVER"
     else 
+      w_l_castle = false
+      w_r_castle= true 
       checked_king_moves.each do |king_move|
-        counter += 1
+        saved_end_piece = 'nil'
+        hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle)
+        hold_start_location = hold[0]
+        saved_end_piece = hold[1]
+  
         for i in 0..7 
           for n in 0..7 
             unless board.chess_board[i][n] == "   "
               if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
                 piece = board.chess_board[i][n]
                 check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
-      
-                if piece.is_a?(Pawn)
+
+                if piece.piece_symbol == BLACK_PAWN
                   pawn_diagonals = []
-                  pawn_diagonals <<  [i - 1, n + 1]  unless board.chess_board[i - 1][n + 1] == nil
-                  pawn_diagonals <<  [i - 1, n - 1]  unless board.chess_board[i - 1][n - 1] == nil
-                  possible_checkmate_array << counter if pawn_diagonals.include? king_move
+                  pawn_diagonals <<  [i - 1, n + 1]  unless ((i - 1).negative? || n + 1 > 7)
+                  pawn_diagonals <<  [i - 1, n - 1]  unless ((i - 1).negative? || (n - 1).negative?)
+      
+                  pawn_diagonals.each do |diagonal|
+                    unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
+                      if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
+                        # self_check = true
+                        chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
+                        puts "Your king is in check after that move. Try another move!"
+                        counter += 1
+                        break
+                      end
+                    end
+                  end
 
-                elsif piece.is_a?(King) || piece.is_a?(Knight)
-                  possible_checkmate_array << counter if check_moves.include? king_move
-
-                elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
-                  check_moves.each do |move_direction|
-                    possible_checkmate_array << counter if move_direction.include? king_move
+                elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
+                  if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece)
+                    counter += 1
+                    break
+                  end
+                elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
+                  if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece)
+                    counter += 1
+                    break
                   end
                 end
               end
@@ -334,7 +354,11 @@ while true
         end
       end
     end
+    puts "CHECKMATE" if counter = checked_king_moves.length
   end
+
+  puts counter
+
   print checked_king_moves
   puts "\n"
   print possible_checkmate_array
