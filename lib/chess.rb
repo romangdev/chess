@@ -157,7 +157,7 @@ class Chess
     end
   end
 
-  # if player checks opposite player's king with a pawn or knight, update other player's king
+  # if player checks opposite player's king with a knight, update other player's king
   # object @checked to true
   def pk_checking_king?(check_moves, board, king_color)
     check_moves.each do |move|
@@ -318,18 +318,14 @@ while true
                   pawn_diagonals = []
                   pawn_diagonals <<  [i - 1, n + 1]  unless board.chess_board[i - 1][n + 1] == nil
                   pawn_diagonals <<  [i - 1, n - 1]  unless board.chess_board[i - 1][n - 1] == nil
-                  if pawn_diagonals.include? king_move
-                    possible_checkmate_array << counter
-                  end
+                  possible_checkmate_array << counter if pawn_diagonals.include? king_move
+
                 elsif piece.is_a?(King) || piece.is_a?(Knight)
-                  if check_moves.include? king_move
-                    possible_checkmate_array << counter
-                  end
+                  possible_checkmate_array << counter if check_moves.include? king_move
+
                 elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
                   check_moves.each do |move_direction|
-                    if move_direction.include? king_move
-                      possible_checkmate_array << counter
-                    end
+                    possible_checkmate_array << counter if move_direction.include? king_move
                   end
                 end
               end
@@ -433,13 +429,25 @@ while true
               piece = board.chess_board[i][n]
               check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
 
-              if piece.piece_symbol == BLACK_PAWN || piece.piece_symbol == BLACK_KNIGHT ||
-                piece.piece_symbol == BLACK_KING
+              if piece.piece_symbol == BLACK_PAWN
+                pawn_diagonals = []
+                pawn_diagonals <<  [i - 1, n + 1]  unless ((i - 1).negative? || n + 1 > 7)
+                pawn_diagonals <<  [i - 1, n - 1]  unless ((i - 1).negative? || (n - 1).negative?)
+    
+                pawn_diagonals.each do |diagonal|
+                  unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
+                    if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
+                      self_check = true
+                      chess.undo_board_movement(board.chess_board, hold_start_location, player_end, saved_end_piece)
+                      puts "Your king is in check after that move. Try another move!"
+                      break
+                    end
+                  end
+                end
 
+              elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
                 break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece)
-              elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP ||
-                piece.piece_symbol == BLACK_QUEEN
-
+              elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
                 break if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece)
               end
             end
@@ -458,7 +466,21 @@ while true
           piece = board.chess_board[i][n]
           check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
 
-          if piece.piece_symbol == WHITE_PAWN || piece.piece_symbol == WHITE_KNIGHT
+          if piece.piece_symbol == WHITE_PAWN
+            pawn_diagonals = []
+            pawn_diagonals <<  [i + 1, n + 1]  unless (i + 1 > 7 || n + 1 > 7)
+            pawn_diagonals <<  [i + 1, n - 1]  unless (i + 1 > 7 || (n - 1).negative?)
+
+            pawn_diagonals.each do |diagonal|
+              unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
+                if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == BLACK_KING
+                  board.chess_board[diagonal[0]][diagonal[1]].checked = true
+                  print "CHECKED: #{ board.chess_board[diagonal[0]][diagonal[1]].checked}\n"
+                  break
+                end
+              end
+            end
+          elsif piece.piece_symbol == WHITE_KNIGHT
 
             break if chess.pk_checking_king?(check_moves, board, BLACK_KING)
           elsif piece.piece_symbol == WHITE_ROOK || piece.piece_symbol == WHITE_BISHOP ||
@@ -472,7 +494,7 @@ while true
   end
 
   chess.pawn_promotion(board.chess_board, WHITE_PAWN)
-  chess.w_king.checked = false
+  # chess.w_king.checked = false
   board.display_board
 
   # BLACK TURN CODE COMMENTED OUT TEMPORARILY SO DUPLICATION OF CODE NOT NEEDED TO TEST

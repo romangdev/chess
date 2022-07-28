@@ -31,7 +31,7 @@ class SquarePieces
   w_queen = Queen.new(WHITE_QUEEN)
   w_king = King.new(WHITE_KING)
 
-  w_king.checked = true
+  # w_king.checked = true
 
   # create objects for all black pieces on board
   b_pawn1 = Pawn.new(BLACK_PAWN)
@@ -95,9 +95,9 @@ class SquarePieces
   @@e1_piece = "   "
   @@e2_piece = w_pawn5
   @@e3_piece = "   "
-  @@e4_piece = b_rook1
+  @@e4_piece = "   "
   @@e5_piece = "   "
-  @@e6_piece = "   "
+  @@e6_piece = w_pawn1
   @@e7_piece = b_pawn5
   @@e8_piece = b_king
 
@@ -106,7 +106,7 @@ class SquarePieces
   @@f2_piece = w_pawn6
   @@f3_piece = "   "
   @@f4_piece = "   "
-  @@f5_piece = b_rook1
+  @@f5_piece = "   "
   @@f6_piece = "   "
   @@f7_piece = b_pawn6
   @@f8_piece = b_bishop2
@@ -115,8 +115,8 @@ class SquarePieces
   @@g1_piece = "   "
   @@g2_piece = w_pawn7
   @@g3_piece = "   "
-  @@g4_piece = "   "
-  @@g5_piece = b_queen
+  @@g4_piece = b_queen
+  @@g5_piece = b_rook1
   @@g6_piece = "   "
   @@g7_piece = b_pawn7
   @@g8_piece = b_knight2
@@ -125,8 +125,8 @@ class SquarePieces
   @@h1_piece = w_rook2
   @@h2_piece = w_pawn8
   @@h3_piece = "   "
-  @@h4_piece = "   "
-  @@h5_piece = w_king
+  @@h4_piece = w_king
+  @@h5_piece = "   "
   @@h6_piece = "   "
   @@h7_piece = b_pawn8
   @@h8_piece = b_rook2
