@@ -72,7 +72,7 @@ class SquarePieces
   @@b8_piece = b_knight1
 
   # C column
-  @@c1_piece = "   "
+  @@c1_piece = b_queen
   @@c2_piece = w_pawn3
   @@c3_piece = "   "
   @@c4_piece = "   "
