@@ -354,7 +354,7 @@ while true
         end
       end
     end
-    puts "CHECKMATE" if counter = checked_king_moves.length
+    puts "CHECKMATE" if counter == checked_king_moves.length
   end
 
   puts counter

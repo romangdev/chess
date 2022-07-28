@@ -106,7 +106,7 @@ class SquarePieces
   @@f2_piece = w_pawn6
   @@f3_piece = "   "
   @@f4_piece = "   "
-  @@f5_piece = "   "
+  @@f5_piece = w_queen
   @@f6_piece = "   "
   @@f7_piece = b_pawn6
   @@f8_piece = b_bishop2
