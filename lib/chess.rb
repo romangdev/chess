@@ -58,7 +58,7 @@ class Chess
   end
 
   # update the array representing the chess board to reflect movement
-  def update_board_movement(board, player_choice, player_end, w_l_castle = false, w_r_castle = false)
+  def update_board_movement(board, player_choice, player_end, w_l_castle = false, w_r_castle = false, b_l_castle = false, b_r_castle = false)
     hold_start_location = player_choice
     tmp_start = board[player_choice[0]][player_choice[1]]
     board[player_choice[0]][player_choice[1]] = "   "
@@ -66,17 +66,28 @@ class Chess
     board[player_end[0]][player_end[1]] = tmp_start
 
     # CASTLE DISPLAY
-    # if castle right is available and player chooses correct castle location
+    # if white castle right is available and player chooses correct castle location
     if w_r_castle && player_end == [0, 6]
       hold_rook = board[0][7]
       board[0][7] = "   "
       board[0][5] = hold_rook
     elsif w_l_castle && player_end == [0, 2]
-      puts "correct"
-      # if castle left is available and player chooses correct castle location
+      # if white castle left is available and player chooses correct castle location
       hold_rook = board[0][0]
       board[0][0] = "   "
       board[0][3] = hold_rook
+    end
+
+    # if black castle right is available and player chooses correct castle location
+    if b_r_castle && player_end == [7, 6]
+      hold_rook = board[7][7]
+      board[7][7] = "   "
+      board[7][5] = hold_rook
+    # if black castle left is available and player chooses correct castle location
+    elsif b_l_castle && player_end == [7, 2]
+      hold_rook = board[7][0]
+      board[7][0] = "   "
+      board[7][3] = hold_rook
     end
     
     #grab and save end piece and starting location piece, to use in 'undo board movement'
@@ -288,8 +299,8 @@ class Chess
   end
 
   # handles unintentional king movement that sometimes occurs after check for checkmate
-  def fix_king_movement(king_present, board, king_color, w_king_loc)
-    if (king_present) == true && board.chess_board[w_king_loc[0]][w_king_loc[0]] == "   "
+  def fix_king_movement(king_present, board, king_color, king_loc)
+    if (king_present) == true && board.chess_board[king_loc[0]][king_loc[0]] == "   "
       for i in 0..7 
         for n in 0..7
           unless board.chess_board[i][n] == "   "
@@ -301,8 +312,73 @@ class Chess
         end
       end
   
-      board.chess_board[w_king_loc[0]][w_king_loc[1]] = save_piece
+      board.chess_board[king_loc[0]][king_loc[1]] = save_piece
     end
+  end
+
+  def white_castle(w_l_castle, w_r_castle, piece_to_move, possible_moves, board)
+    if (piece_to_move.is_a? King) && (piece_to_move.first_move_made == false)
+      castle_possibilities = []
+      piece_to_move.first_move_made = true
+      right_w_rook_check = board.chess_board[0][7]
+      left_w_rook_check = board.chess_board[0][0]
+
+      if right_w_rook_check.is_a?(Rook) && board.chess_board[0][5] == "   " && board.chess_board[0][6] == "   " &&
+        board.chess_board[0][4] == piece_to_move
+
+        possible_moves << [0, 6]
+        w_r_castle = true
+        castle_possibilities << w_r_castle
+        puts "can castle"
+      else 
+        castle_possibilities << false
+      end
+      if left_w_rook_check.is_a?(Rook) && board.chess_board[0][3] == "   " && board.chess_board[0][2] == "   " &&
+        board.chess_board[0][1] == "   " && board.chess_board[0][4] == piece_to_move
+
+        possible_moves << [0, 2]
+        w_l_castle = true
+        castle_possibilities << w_l_castle
+        puts "can castle"
+      else 
+        castle_possibilities << false
+      end
+    end
+
+    castle_possibilities
+  end
+
+  def black_castle(b_l_castle, b_r_castle, piece_to_move, possible_moves, board)
+    if (piece_to_move.is_a? King) && (piece_to_move.first_move_made == false)
+      castle_possibilities = []
+      piece_to_move.first_move_made = true
+      right_b_rook_check = board.chess_board[7][7]
+      left_b_rook_check = board.chess_board[7][0]
+
+      if right_b_rook_check.is_a?(Rook) && board.chess_board[7][5] == "   " && board.chess_board[7][6] == "   " &&
+        board.chess_board[7][4] == piece_to_move
+
+        possible_moves << [7, 6]
+        b_r_castle = true
+        castle_possibilities << b_r_castle
+        puts "can castle"
+      else 
+        castle_possibilities << false
+      end
+
+      if left_b_rook_check.is_a?(Rook) && board.chess_board[7][3] == "   " && board.chess_board[7][2] == "   " &&
+        board.chess_board[7][1] == "   " && board.chess_board[7][4] == piece_to_move
+
+        possible_moves << [7, 2]
+        b_l_castle = true
+        castle_possibilities << b_l_castle
+        puts "can castle"
+      else 
+        castle_possibilities << false
+      end
+    end
+
+    castle_possibilities
   end
 end
 
@@ -331,17 +407,14 @@ player_black = PlayerBlack.new
 
 game = Game.new
 # change 3, 2 back to 0, 4
-chess = Chess.new(board.chess_board[4][7], board.chess_board[7][4])
+chess = Chess.new(board.chess_board[0][4], board.chess_board[7][4])
 
 while true 
 
   # player white turn
 
   # handling checkmate
-  # FIND THE SQUARE HOLDING THE WHITE KING
   w_king_loc = chess.find_king_location(board, "white")
-
-  # FIND THE BLACK PIECE CHECKING THE KING
   king_checker_loc = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc)
 
   # CHECK ALL WHITE PIECES (EXCEPT KING) TO SEE IF ANY CONTAIN THE BLACK PIECE CHECKING THE KING
@@ -374,28 +447,22 @@ while true
     end
   end
 
-  # king_saver = chess.check_for_king_saver(board, WHITE_PIECES, checked_king_moves, king_checker_loc, king_saver)
+
 
   white_king_check = board.chess_board[w_king_loc[0]][w_king_loc[1]]
-  # generate all black moves
-  # starting from 1, for each move white can make, if that move puts it in another piece's array moves
-  # then add the counter number to possible checkmate array. Only increment when going to next king move. 
-  # for numbers 1 up to and including king_moves.length, if they possible checkmate array includes all those
-  # numbers, then king can't get out of check (CHECKMATE)
   counter = 0
 
-  # also, if no king saver && king moves array is empty && checked, game over
   if (white_king_check.checked == true) && (king_saver == false)
     checking_for_mate = true
     if checked_king_moves.empty?
       puts "GAME OVER"
     else 
       w_l_castle = false
-      w_r_castle= true 
+      w_r_castle= false 
       checked_king_moves.each do |king_move|
 
           saved_end_piece = 'nil'
-          hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle)
+          hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
           hold_start_location = hold[0]
           saved_end_piece = hold[1]
     
@@ -432,8 +499,6 @@ while true
                       counter += 1
                       break
                     end
-                  else 
-                    # chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
                   end
                 end
               end
@@ -449,6 +514,8 @@ while true
   king_present = chess.disappearing_king_checkmate(board, WHITE_KING)
 
   chess.fix_king_movement(king_present, board, WHITE_KING, w_king_loc)
+
+
 
   puts counter
   print checked_king_moves
@@ -479,27 +546,11 @@ while true
 
     possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
 
-    # CASTLE FUNCTIONING
-    w_l_castle = false
-    w_r_castle = false
-    if (piece_to_move.is_a? King) && (piece_to_move.first_move_made == false)
-      piece_to_move.first_move_made = true
-      right_w_rook_check = board.chess_board[0][7]
-      left_w_rook_check = board.chess_board[0][0]
+    # CASTLING
 
-      if right_w_rook_check.is_a?(Rook) && board.chess_board[0][5] == "   " && board.chess_board[0][6] == "   " &&
-        possible_moves << [0, 6] && board.chess_board[0][4] == piece_to_move
-        w_r_castle = true
-        puts "can castle"
-      end
-      if left_w_rook_check.is_a?(Rook) && board.chess_board[0][3] == "   " && board.chess_board[0][2] == "   " &&
-        board.chess_board[0][1] == "   " && board.chess_board[0][4] == piece_to_move
-
-        possible_moves << [0, 2]
-        w_l_castle = true
-        puts "can castle"
-      end
-    end
+    castle_possibilities = chess.white_castle(w_l_castle, w_r_castle, piece_to_move, possible_moves, board)
+    w_r_castle = castle_possibilities[0]
+    w_l_castle = castle_possibilities[1]
     ###
 
     available_moves = chess.no_piece_moves?(possible_moves, board)
@@ -528,7 +579,7 @@ while true
 
       self_check = false
       saved_end_piece = 'nil'
-      hold = chess.update_board_movement(board.chess_board, player_choice, player_end, w_l_castle, w_r_castle)
+      hold = chess.update_board_movement(board.chess_board, player_choice, player_end, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
       hold_start_location = hold[0]
       saved_end_piece = hold[1]
 
@@ -557,9 +608,9 @@ while true
                 end
 
               elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
-                break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece)
+                break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate)
               elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
-                break if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece)
+                break if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate)
               end
             end
           end
