@@ -102,8 +102,8 @@ class SquarePieces
   @@e8_piece = b_king
 
   # F column
-  @@f1_piece = w_bishop2
-  @@f2_piece = w_pawn6
+  @@f1_piece = "   "
+  @@f2_piece = "   "
   @@f3_piece = "   "
   @@f4_piece = "   "
   @@f5_piece = "   "
@@ -112,18 +112,18 @@ class SquarePieces
   @@f8_piece = b_bishop2
 
   # G column
-  @@g1_piece = w_knight2
-  @@g2_piece = w_pawn7
+  @@g1_piece = "   "
+  @@g2_piece = "   "
   @@g3_piece = "   "
   @@g4_piece = "   "
-  @@g5_piece = "   "
+  @@g5_piece = b_rook1
   @@g6_piece = "   "
   @@g7_piece = b_pawn7
   @@g8_piece = b_knight2
 
   # H column
   @@h1_piece = w_rook2
-  @@h2_piece = w_pawn8
+  @@h2_piece = "   "
   @@h3_piece = "   "
   @@h4_piece = "   "
   @@h5_piece = "   "
