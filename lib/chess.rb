@@ -216,7 +216,7 @@ player_black = PlayerBlack.new
 
 game = Game.new
 # change 3, 2 back to 0, 4
-chess = Chess.new(board.chess_board[3][7], board.chess_board[7][4])
+chess = Chess.new(board.chess_board[4][7], board.chess_board[7][4])
 
 while true 
 
@@ -299,7 +299,7 @@ while true
   # for numbers 1 up to and including king_moves.length, if they possible checkmate array includes all those
   # numbers, then king can't get out of check (CHECKMATE)
   counter = 0
-  possible_checkmate_array = []
+
   # also, if no king saver && king moves array is empty && checked, game over
   if (white_king_check.checked == true) && (king_saver == false)
     if checked_king_moves.empty?
@@ -308,64 +308,97 @@ while true
       w_l_castle = false
       w_r_castle= true 
       checked_king_moves.each do |king_move|
-        saved_end_piece = 'nil'
-        hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle)
-        hold_start_location = hold[0]
-        saved_end_piece = hold[1]
-  
-        for i in 0..7 
-          for n in 0..7 
-            unless board.chess_board[i][n] == "   "
-              if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
-                piece = board.chess_board[i][n]
-                check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
 
-                if piece.piece_symbol == BLACK_PAWN
-                  pawn_diagonals = []
-                  pawn_diagonals <<  [i - 1, n + 1]  unless ((i - 1).negative? || n + 1 > 7)
-                  pawn_diagonals <<  [i - 1, n - 1]  unless ((i - 1).negative? || (n - 1).negative?)
-      
-                  pawn_diagonals.each do |diagonal|
-                    unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
-                      if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
-                        # self_check = true
-                        chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
-                        puts "Your king is in check after that move. Try another move!"
-                        counter += 1
-                        break
+          saved_end_piece = 'nil'
+          hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle)
+          hold_start_location = hold[0]
+          saved_end_piece = hold[1]
+    
+          for i in 0..7 
+            for n in 0..7 
+              unless board.chess_board[i][n] == "   "
+                if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
+                  piece = board.chess_board[i][n]
+                  check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+                  if piece.piece_symbol == BLACK_PAWN
+                    pawn_diagonals = []
+                    pawn_diagonals <<  [i - 1, n + 1]  unless ((i - 1).negative? || n + 1 > 7)
+                    pawn_diagonals <<  [i - 1, n - 1]  unless ((i - 1).negative? || (n - 1).negative?)
+        
+                    pawn_diagonals.each do |diagonal|
+                      unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
+                        if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
+                          # self_check = true
+                          chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
+                          puts "Your king is in check after that move. Try another move!"
+                          counter += 1
+                          break
+                        end
                       end
                     end
-                  end
 
-                elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
-                  if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece)
-                    counter += 1
-                    break
-                  end
-                elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
-                  if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece)
-                    counter += 1
-                    break
+                  elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
+                    if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece)
+                      counter += 1
+                      break
+                    end
+                  elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
+                    if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece)
+                      counter += 1
+                      break
+                    end
+                  else 
+                    # chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
                   end
                 end
               end
             end
           end
-        end
+
       end
     end
     puts "CHECKMATE" if counter == checked_king_moves.length
   end
 
-  puts counter
 
+  # handle disappearing king bug that indicates checkmate each time it happens
+  w_king_present = false
+  board.chess_board.each do |row|
+    row.each do |square|
+      unless square == "   "
+        w_king_present = true if square.piece_symbol == WHITE_KING
+      end
+    end
+  end
+  puts "CHECKMATE" if w_king_present == false
+
+
+  # handle any accidental king movement
+  if (w_king_present) == true && board.chess_board[w_king_loc[0]][w_king_loc[0]] == "   "
+    puts "switched"
+    for i in 0..7 
+      for n in 0..7
+        unless board.chess_board[i][n] == "   "
+          # puts board.chess_board[i][n]
+          if board.chess_board[i][n].piece_symbol == WHITE_KING
+            puts "king"
+            save_piece = board.chess_board[i][n]
+            board.chess_board[i][n] = "   "
+          end
+        end
+      end
+    end
+
+    board.chess_board[w_king_loc[0]][w_king_loc[1]] = save_piece
+  end
+
+  board.display_board
+
+
+  puts counter
   print checked_king_moves
   puts "\n"
-  print possible_checkmate_array
-
-
-  ###
-
 
   available_moves = false
   until available_moves
@@ -523,57 +556,4 @@ while true
 
   # BLACK TURN CODE COMMENTED OUT TEMPORARILY SO DUPLICATION OF CODE NOT NEEDED TO TEST
 
-  # player black turn
-  # confirmed = false
-  # until confirmed
-  #   flag = false 
-  #   until flag
-  #     player_choice = game.get_player_location(player_black.player_color)
-  #     player_choice = game.convert_player_location(player_choice)
-  #     flag = game.verify_location_piece(player_black.player_pieces, player_choice, board.chess_board)
-  #     puts "Your piece isn't located there, please try again!" if flag == false
-  #   end
-
-  #   board.display_board(player_choice)
-  #   piece_confirm = game.get_piece_choice_confirm
-  #   confirmed = game.handle_confirm_choice(piece_confirm)
-
-  #   if confirmed == false
-  #     player_choice = nil 
-  #     board.display_board
-  #     puts "Piece movement aborted. Pick another piece."
-  #   end
-  # end
-
-  # piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
-  # possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-  # puts "\n"
-  # board.display_board(player_choice, possible_moves)
-
-  # confirmed = false
-  # until confirmed
-  #   flag = false 
-  #   until flag
-  #     player_end = game.get_end_location(player_black.player_color)
-  #     player_end_hold = player_end.join("")
-  #     player_end = game.convert_player_location(player_end)
-  #     flag = game.verify_possible_move(possible_moves, player_end)
-  #     puts "You can't move there! Try again..." if flag == false
-  #   end
-
-  #   end_confirm = game.get_end_move_confirm(player_end_hold)
-  #   confirmed = game.handle_confirm_choice(end_confirm)
-
-  #   if confirmed == false
-  #     player_end = nil 
-  #     board.display_board(player_choice, possible_moves)
-  #     puts "Move choice aborted. Pick another move."
-  #   end
-  # end
-
-  # hold_start = board.chess_board[player_choice[0]][player_choice[1]]
-  # board.chess_board[player_choice[0]][player_choice[1]] = "   "
-  # board.chess_board[player_end[0]][player_end[1]] = hold_start
-
-  # board.display_board
 end
