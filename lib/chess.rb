@@ -103,13 +103,13 @@ class Chess
   end
 
   # prompt player to redo their move if it puts their king in check of opposing player's pawn, knight, or king
-  def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end, end_piece)
+  def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end, end_piece, mate)
     check_moves.each do |move|
       unless board.chess_board[move[0]][move[1]] == "   "
         if board.chess_board[move[0]][move[1]].piece_symbol == king_color
           self_check = true
           self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece)
-          puts "Your king is in check after that move. Try another move!"
+          puts "Your king is in check after that move. Try another move!" if mate == false
           return true
         end
       end
@@ -118,7 +118,7 @@ class Chess
   end
 
   # prompt player to redo their move if it puts their king in check of opposing player's rook, bishop, or queen
-  def rbq_error_if_check(check_moves, board, king_color, hold_start_location, player_end, end_piece)
+  def rbq_error_if_check(check_moves, board, king_color, hold_start_location, player_end, end_piece, mate)
     check_moves.each do |move_dir|
       count = 0
       move_dir.each do |location|
@@ -129,7 +129,7 @@ class Chess
 
             self_check = true
             self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece)
-            puts "Your king is in check after that move. Try another move!"
+            puts "Your king is in check after that move. Try another move!" if mate == false
             return true
           end
         end
@@ -189,6 +189,29 @@ class Chess
     end
     possible_moves
   end
+
+  # Find the square that holds the king with the specified color
+  def find_king_location(board, color)
+    for i in 0..7 
+      for n in 0..7 
+        unless board.chess_board[i][n] == "   "
+          if color == "white"
+            if board.chess_board[i][n].piece_symbol == WHITE_KING
+              w_king_loc = []
+              w_king_loc << i << n
+              return w_king_loc
+            end
+          else
+            if board.chess_board[i][n].piece_symbol == BLACK_KING
+              b_king_loc = []
+              b_king_loc << i << n
+              return b_king_loc
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
 include ChessPieces
@@ -225,16 +248,8 @@ while true
   # handling checkmate
 
   # FIND THE SQUARE HOLDING THE WHITE KING
-  w_king_loc = []
-  for i in 0..7 
-    for n in 0..7 
-      unless board.chess_board[i][n] == "   "
-        if board.chess_board[i][n].piece_symbol == WHITE_KING
-          w_king_loc << i << n
-        end
-      end
-    end
-  end
+  w_king_loc = chess.find_king_location(board, "white")
+  print w_king_loc
 
 
   # FIND THE BLACK PIECE CHECKING THE KING
@@ -302,6 +317,7 @@ while true
 
   # also, if no king saver && king moves array is empty && checked, game over
   if (white_king_check.checked == true) && (king_saver == false)
+    checking_for_mate = true
     if checked_king_moves.empty?
       puts "GAME OVER"
     else 
@@ -331,7 +347,6 @@ while true
                         if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
                           # self_check = true
                           chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
-                          puts "Your king is in check after that move. Try another move!"
                           counter += 1
                           break
                         end
@@ -339,12 +354,12 @@ while true
                     end
 
                   elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
-                    if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece)
+                    if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece, checking_for_mate)
                       counter += 1
                       break
                     end
                   elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
-                    if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece)
+                    if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece, checking_for_mate)
                       counter += 1
                       break
                     end
@@ -360,6 +375,8 @@ while true
     end
     puts "CHECKMATE" if counter == checked_king_moves.length
   end
+
+  checking_for_mate = false
 
 
   # handle disappearing king bug that indicates checkmate each time it happens
@@ -392,9 +409,6 @@ while true
 
     board.chess_board[w_king_loc[0]][w_king_loc[1]] = save_piece
   end
-
-  board.display_board
-
 
   puts counter
   print checked_king_moves
