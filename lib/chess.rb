@@ -59,6 +59,8 @@ class Chess
 
   # update the array representing the chess board to reflect movement
   def update_board_movement(board, player_choice, player_end, w_l_castle = false, w_r_castle = false, b_l_castle = false, b_r_castle = false)
+    rook_start = nil
+    rook_end = nil
     hold_start_location = player_choice
     tmp_start = board[player_choice[0]][player_choice[1]]
     board[player_choice[0]][player_choice[1]] = "   "
@@ -71,11 +73,15 @@ class Chess
       hold_rook = board[0][7]
       board[0][7] = "   "
       board[0][5] = hold_rook
+      rook_start = [0, 7]
+      rook_end = [0, 5]
     elsif w_l_castle && player_end == [0, 2]
       # if white castle left is available and player chooses correct castle location
       hold_rook = board[0][0]
       board[0][0] = "   "
       board[0][3] = hold_rook
+      rook_start = [0, 0]
+      rook_end = [0, 3]
     end
 
     # if black castle right is available and player chooses correct castle location
@@ -83,23 +89,34 @@ class Chess
       hold_rook = board[7][7]
       board[7][7] = "   "
       board[7][5] = hold_rook
+      rook_start = [7, 7]
+      rook_end = [7, 5]
     # if black castle left is available and player chooses correct castle location
     elsif b_l_castle && player_end == [7, 2]
       hold_rook = board[7][0]
       board[7][0] = "   "
       board[7][3] = hold_rook
+      rook_start = [7, 0]
+      rook_end = [7, 3]
     end
     
     #grab and save end piece and starting location piece, to use in 'undo board movement'
     arr = []
-    arr << hold_start_location << move_end
+    arr << hold_start_location << move_end << rook_start << rook_end
+    print rook_start
+    print rook_end
     arr
   end
 
   # undo any moves made in the case of player putting self in check
-  def undo_board_movement(board, start_location, player_end, end_piece)
+  def undo_board_movement(board, start_location, player_end, end_piece, rook_start, rook_end)
     board[start_location[0]][start_location[1]] = board[player_end[0]][player_end[1]]
     board[player_end[0]][player_end[1]] = end_piece
+
+    unless rook_start.nil? && rook_end.nil?
+      board[rook_start[0]][rook_start[1]] = board[rook_end[0]][rook_end[1]]
+      board[rook_end[0]][rook_end[1]] = "   "
+    end
   end
   
   # promote pawn to queen with it's appropriate color
@@ -114,12 +131,12 @@ class Chess
   end
 
   # prompt player to redo their move if it puts their king in check of opposing player's pawn, knight, or king
-  def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end, end_piece, mate)
+  def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end, end_piece, mate, rook_start, rook_end)
     check_moves.each do |move|
       unless board.chess_board[move[0]][move[1]] == "   "
         if board.chess_board[move[0]][move[1]].piece_symbol == king_color
           self_check = true
-          self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece)
+          self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece, rook_start, rook_end)
           puts "Your king is in check after that move. Try another move!" if mate == false
           return true
         end
@@ -129,7 +146,7 @@ class Chess
   end
 
   # prompt player to redo their move if it puts their king in check of opposing player's rook, bishop, or queen
-  def rbq_error_if_check(check_moves, board, king_color, hold_start_location, player_end, end_piece, mate)
+  def rbq_error_if_check(check_moves, board, king_color, hold_start_location, player_end, end_piece, mate, rook_start, rook_end)
     check_moves.each do |move_dir|
       count = 0
       move_dir.each do |location|
@@ -139,7 +156,7 @@ class Chess
             (count + 1) == move_dir.length
 
             self_check = true
-            self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece)
+            self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece, rook_start, rook_end)
             puts "Your king is in check after that move. Try another move!" if mate == false
             return true
           end
@@ -409,5 +426,3 @@ class Chess
     hold_answers
   end
 end
-
-

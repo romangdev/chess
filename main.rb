@@ -70,6 +70,8 @@ while true
         hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
         hold_start_location = hold[0]
         saved_end_piece = hold[1]
+        rook_start = hold[2]
+        rook_end = hold[3]
   
         for i in 0..7 
           for n in 0..7 
@@ -86,7 +88,7 @@ while true
                   pawn_diagonals.each do |diagonal|
                     unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
                       if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
-                        chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
+                        chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece, rook_start, rook_end)
                         counter += 1
                         break
                       end
@@ -94,12 +96,12 @@ while true
                   end
 
                 elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
-                  if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece, checking_for_mate)
+                  if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece, checking_for_mate, rook_start, rook_end)
                     counter += 1
                     break
                   end
                 elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
-                  if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece, checking_for_mate)
+                  if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece, checking_for_mate, rook_start, rook_end)
                     counter += 1
                     break
                   end
@@ -195,6 +197,8 @@ while true
       hold = chess.update_board_movement(board.chess_board, player_choice, player_end, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
       hold_start_location = hold[0]
       saved_end_piece = hold[1]
+      rook_start = hold[2]
+      rook_end = hold[3]
 
       # CHECK AND HANDLE IF PLAYER PUTS THEIR OWN KING IN CHECK
       for i in 0..7 
@@ -213,7 +217,7 @@ while true
                   unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
                     if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
                       self_check = true
-                      chess.undo_board_movement(board.chess_board, hold_start_location, player_end, saved_end_piece)
+                      chess.undo_board_movement(board.chess_board, hold_start_location, player_end, saved_end_piece, rook_start, rook_end)
                       puts "Your king is in check after that move. Try another move!"
                       break
                     end
@@ -221,12 +225,12 @@ while true
                 end
 
               elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
-                if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate, rook_start, rook_end)
                   self_check = true 
                   break
                 end
               elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
-                if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate, rook_start, rook_end)
                   self_check = true 
                   break
                 end
@@ -318,6 +322,8 @@ while true
         hold = chess.update_board_movement(board.chess_board, b_king_loc, king_move, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
         hold_start_location = hold[0]
         saved_end_piece = hold[1]
+        rook_start = hold[2]
+        rook_end = hold[3]
   
         for i in 0..7 
           for n in 0..7 
@@ -334,7 +340,7 @@ while true
                   pawn_diagonals.each do |diagonal|
                     unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
                       if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == BLACK_KING
-                        chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
+                        chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece, rook_start, rook_end)
                         counter += 1
                         break
                       end
@@ -342,12 +348,12 @@ while true
                   end
 
                 elsif  piece.piece_symbol == WHITE_KNIGHT || piece.piece_symbol == WHITE_KING
-                  if chess.pkk_error_if_check(BLACK_KING, check_moves, board, hold_start_location, king_move, saved_end_piece, checking_for_mate)
+                  if chess.pkk_error_if_check(BLACK_KING, check_moves, board, hold_start_location, king_move, saved_end_piece, checking_for_mate, rook_start, rook_end)
                     counter += 1
                     break
                   end
                 elsif piece.piece_symbol == WHITE_ROOK || piece.piece_symbol == WHITE_BISHOP || piece.piece_symbol == WHITE_QUEEN
-                  if chess.rbq_error_if_check(check_moves, board, BLACK_KING, hold_start_location, king_move, saved_end_piece, checking_for_mate)
+                  if chess.rbq_error_if_check(check_moves, board, BLACK_KING, hold_start_location, king_move, saved_end_piece, checking_for_mate, rook_start, rook_end)
                     counter += 1
                     break
                   end
@@ -442,6 +448,8 @@ while true
       hold = chess.update_board_movement(board.chess_board, player_choice, player_end, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
       hold_start_location = hold[0]
       saved_end_piece = hold[1]
+      rook_start = hold[2]
+      rook_end = hold[3]
 
       # CHECK AND HANDLE IF PLAYER PUTS THEIR OWN KING IN CHECK
       for i in 0..7 
@@ -460,7 +468,7 @@ while true
                   unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
                     if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == BLACK_KING
                       self_check = true
-                      chess.undo_board_movement(board.chess_board, hold_start_location, player_end, saved_end_piece)
+                      chess.undo_board_movement(board.chess_board, hold_start_location, player_end, saved_end_piece, rook_start, rook_end)
                       puts "Your king is in check after that move. Try another move!"
                       break
                     end
@@ -468,12 +476,12 @@ while true
                 end
 
               elsif  piece.piece_symbol == WHITE_KNIGHT || piece.piece_symbol == WHITE_KING
-                if chess.pkk_error_if_check(BLACK_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.pkk_error_if_check(BLACK_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate, rook_start, rook_end)
                   self_check = true
                   break
                 end
               elsif piece.piece_symbol == WHITE_ROOK || piece.piece_symbol == WHITE_BISHOP || piece.piece_symbol == WHITE_QUEEN
-                if chess.rbq_error_if_check(check_moves, board, BLACK_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.rbq_error_if_check(check_moves, board, BLACK_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate, rook_start, rook_end)
                   self_check = true 
                   break
                 end
