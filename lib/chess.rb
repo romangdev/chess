@@ -380,7 +380,61 @@ class Chess
 
     castle_possibilities
   end
+
+  def check_for_king_saver(board, pieces_color, king_checker_loc)
+    king_saver = false
+    check = false
+    hold_answers = []
+
+    for i in 0..7 
+      for n in 0..7 
+        unless board.chess_board[i][n] == "   "
+          if pieces_color.include?(board.chess_board[i][n].piece_symbol)
+            piece = board.chess_board[i][n]
+            check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+            if piece.is_a? King
+              checked_king_moves = check_moves 
+              hold_answers << checked_king_moves
+            end
+          end
+        end
+      end
+    end
+
+    for i in 0..7 
+      for n in 0..7 
+        unless board.chess_board[i][n] == "   "
+          if pieces_color.include?(board.chess_board[i][n].piece_symbol)
+            piece = board.chess_board[i][n]
+            check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+  
+            if piece.is_a?(Pawn) ||  piece.is_a?(Knight)
+              if check_moves.include? king_checker_loc
+                puts "SAVER: #{i}, #{n}"
+                king_saver = true
+                check = true
+                hold_answers << king_saver
+              end
+            elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
+              check_moves.each do |move_direction|
+                if move_direction.include? king_checker_loc
+                  puts "SAVER: #{i}, #{n}"
+                  king_saver = true
+                  check = true
+                  hold_answers << king_saver
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+    hold_answers << king_saver if check == false
+    hold_answers
+  end
 end
+
 
 include ChessPieces
 
@@ -417,37 +471,9 @@ while true
   w_king_loc = chess.find_king_location(board, "white")
   king_checker_loc = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc)
 
-  # CHECK ALL WHITE PIECES (EXCEPT KING) TO SEE IF ANY CONTAIN THE BLACK PIECE CHECKING THE KING
-  checked_king_moves = nil
-  king_saver = false
-  for i in 0..7 
-    for n in 0..7 
-      unless board.chess_board[i][n] == "   "
-        if WHITE_PIECES.include?(board.chess_board[i][n].piece_symbol)
-          piece = board.chess_board[i][n]
-          check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
-
-          checked_king_moves = check_moves if piece.is_a? King
-
-          if piece.is_a?(Pawn) ||  piece.is_a?(Knight)
-            if check_moves.include? king_checker_loc
-              puts "SAVER: #{i}, #{n}"
-              king_saver = true
-            end
-          elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
-            check_moves.each do |move_direction|
-              if move_direction.include? king_checker_loc
-                puts "SAVER: #{i}, #{n}"
-                king_saver = true
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-
-
+  hold_answers = chess.check_for_king_saver(board, WHITE_PIECES, king_checker_loc)
+  checked_king_moves = hold_answers[0]
+  king_saver = hold_answers[1]
 
   white_king_check = board.chess_board[w_king_loc[0]][w_king_loc[1]]
   counter = 0
@@ -459,6 +485,8 @@ while true
     else 
       w_l_castle = false
       w_r_castle= false 
+      b_l_castle = false
+      b_r_castle = false
       checked_king_moves.each do |king_move|
 
           saved_end_piece = 'nil'
@@ -540,18 +568,15 @@ while true
       chess.repick_piece?(confirmed, player_choice, board)
     end
 
-
     piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
     possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-
     possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
 
-    # CASTLING
-
     castle_possibilities = chess.white_castle(w_l_castle, w_r_castle, piece_to_move, possible_moves, board)
-    w_r_castle = castle_possibilities[0]
-    w_l_castle = castle_possibilities[1]
-    ###
+    unless castle_possibilities.nil?
+      w_r_castle = castle_possibilities[0]
+      w_l_castle = castle_possibilities[1]
+    end
 
     available_moves = chess.no_piece_moves?(possible_moves, board)
   end
@@ -576,6 +601,10 @@ while true
       end_confirm = game.get_end_move_confirm(player_end_hold)
       confirmed = game.handle_confirm_choice(end_confirm)
       chess.repick_move?(confirmed, player_end, board, player_choice, possible_moves)
+
+      #should be w for black player
+      b_l_castle = false
+      b_r_castle = false
 
       self_check = false
       saved_end_piece = 'nil'
