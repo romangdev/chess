@@ -241,6 +241,50 @@ class Chess
       end
     end
   end
+
+  # def check_for_king_saver(board, pieces_color, checked_king_moves, king_checker_loc, king_saver)
+  #   for i in 0..7 
+  #     for n in 0..7 
+  #       unless board.chess_board[i][n] == "   "
+  #         if pieces_color.include?(board.chess_board[i][n].piece_symbol)
+  #           piece = board.chess_board[i][n]
+  #           check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+  
+  #           checked_king_moves = check_moves if piece.is_a? King
+  
+  #           if piece.is_a?(Pawn) ||  piece.is_a?(Knight)
+  #             if check_moves.include? king_checker_loc
+  #               puts "SAVER: #{i}, #{n}"
+  #               king_saver = true
+  #               return king_saver
+  #             end
+  #           elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
+  #             check_moves.each do |move_direction|
+  #               if move_direction.include? king_checker_loc
+  #                 puts "SAVER: #{i}, #{n}"
+  #                 king_saver = true
+  #                 return king_saver
+  #               end
+  #             end
+  #           end
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
+
+  # handle disappearing king indicating checkmate has occured
+  def disappearing_king_checkmate(board)
+    king_present = false
+    board.chess_board.each do |row|
+      row.each do |square|
+        unless square == "   "
+         king_present = true if square.piece_symbol == WHITE_KING
+        end
+      end
+    end
+    puts "CHECKMATE" if king_present == false
+  end
 end
 
 include ChessPieces
@@ -310,6 +354,8 @@ while true
       end
     end
   end
+
+  # king_saver = chess.check_for_king_saver(board, WHITE_PIECES, checked_king_moves, king_checker_loc, king_saver)
 
   white_king_check = board.chess_board[w_king_loc[0]][w_king_loc[1]]
   # generate all black moves
@@ -382,17 +428,10 @@ while true
 
   checking_for_mate = false
 
+  #CHECKMATE GAME END NEEDED
+  chess.disappearing_king_checkmate(board)
 
-  # handle disappearing king bug that indicates checkmate each time it happens
-  w_king_present = false
-  board.chess_board.each do |row|
-    row.each do |square|
-      unless square == "   "
-        w_king_present = true if square.piece_symbol == WHITE_KING
-      end
-    end
-  end
-  puts "CHECKMATE" if w_king_present == false
+
 
 
   # handle any accidental king movement
