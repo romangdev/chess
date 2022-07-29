@@ -253,39 +253,9 @@ class Chess
     end
   end
 
-  # def check_for_king_saver(board, pieces_color, checked_king_moves, king_checker_loc, king_saver)
-  #   for i in 0..7 
-  #     for n in 0..7 
-  #       unless board.chess_board[i][n] == "   "
-  #         if pieces_color.include?(board.chess_board[i][n].piece_symbol)
-  #           piece = board.chess_board[i][n]
-  #           check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
-  
-  #           checked_king_moves = check_moves if piece.is_a? King
-  
-  #           if piece.is_a?(Pawn) ||  piece.is_a?(Knight)
-  #             if check_moves.include? king_checker_loc
-  #               puts "SAVER: #{i}, #{n}"
-  #               king_saver = true
-  #               return king_saver
-  #             end
-  #           elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
-  #             check_moves.each do |move_direction|
-  #               if move_direction.include? king_checker_loc
-  #                 puts "SAVER: #{i}, #{n}"
-  #                 king_saver = true
-  #                 return king_saver
-  #               end
-  #             end
-  #           end
-  #         end
-  #       end
-  #     end
-  #   end
-  # end
-
   # handle disappearing king indicating a checkmate has occured
   def disappearing_king_checkmate(board, king_color)
+    checkmate = false
     king_present = false
     board.chess_board.each do |row|
       row.each do |square|
@@ -294,7 +264,9 @@ class Chess
         end
       end
     end
-    puts "CHECKMATE" if king_present == false
+    if king_present == false
+      puts "CHECKMATE"
+    end
     king_present
   end
 
@@ -316,6 +288,7 @@ class Chess
     end
   end
 
+  # perform logic for player white castling
   def white_castle(w_l_castle, w_r_castle, piece_to_move, possible_moves, board)
     if (piece_to_move.is_a? King) && (piece_to_move.first_move_made == false)
       castle_possibilities = []
@@ -348,6 +321,7 @@ class Chess
     castle_possibilities
   end
 
+  # perform logic for player black castling
   def black_castle(b_l_castle, b_r_castle, piece_to_move, possible_moves, board)
     if (piece_to_move.is_a? King) && (piece_to_move.first_move_made == false)
       castle_possibilities = []
@@ -381,6 +355,7 @@ class Chess
     castle_possibilities
   end
 
+  # check if any piece can take a piece that's checking the king
   def check_for_king_saver(board, pieces_color, king_checker_loc)
     king_saver = false
     check = false
@@ -464,10 +439,9 @@ game = Game.new
 chess = Chess.new(board.chess_board[0][4], board.chess_board[7][4])
 
 while true 
+  # Player White Turn
 
-  # player white turn
-
-  # handling checkmate
+  # TEST FOR KING IN CHECK, AND FOR CHECK SAVER
   w_king_loc = chess.find_king_location(board, "white")
   king_checker_loc = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc)
 
@@ -478,10 +452,15 @@ while true
   white_king_check = board.chess_board[w_king_loc[0]][w_king_loc[1]]
   counter = 0
 
+  ### END OF TEST OF CHECK AND CHECK SAVER
+
+
+  # TEST FOR CHECKMATE
   if (white_king_check.checked == true) && (king_saver == false)
     checking_for_mate = true
     if checked_king_moves.empty?
-      puts "GAME OVER"
+      puts "CHECKMATE"
+      return 1
     else 
       w_l_castle = false
       w_r_castle= false 
@@ -489,66 +468,67 @@ while true
       b_r_castle = false
       checked_king_moves.each do |king_move|
 
-          saved_end_piece = 'nil'
-          hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
-          hold_start_location = hold[0]
-          saved_end_piece = hold[1]
-    
-          for i in 0..7 
-            for n in 0..7 
-              unless board.chess_board[i][n] == "   "
-                if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
-                  piece = board.chess_board[i][n]
-                  check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+        saved_end_piece = 'nil'
+        hold = chess.update_board_movement(board.chess_board, w_king_loc, king_move, w_l_castle, w_r_castle, b_l_castle, b_r_castle)
+        hold_start_location = hold[0]
+        saved_end_piece = hold[1]
+  
+        for i in 0..7 
+          for n in 0..7 
+            unless board.chess_board[i][n] == "   "
+              if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
+                piece = board.chess_board[i][n]
+                check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
 
-                  if piece.piece_symbol == BLACK_PAWN
-                    pawn_diagonals = []
-                    pawn_diagonals <<  [i - 1, n + 1]  unless ((i - 1).negative? || n + 1 > 7)
-                    pawn_diagonals <<  [i - 1, n - 1]  unless ((i - 1).negative? || (n - 1).negative?)
-        
-                    pawn_diagonals.each do |diagonal|
-                      unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
-                        if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
-                          # self_check = true
-                          chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
-                          counter += 1
-                          break
-                        end
+                if piece.piece_symbol == BLACK_PAWN
+                  pawn_diagonals = []
+                  pawn_diagonals <<  [i - 1, n + 1]  unless ((i - 1).negative? || n + 1 > 7)
+                  pawn_diagonals <<  [i - 1, n - 1]  unless ((i - 1).negative? || (n - 1).negative?)
+      
+                  pawn_diagonals.each do |diagonal|
+                    unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
+                      if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
+                        # self_check = true
+                        chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
+                        counter += 1
+                        break
                       end
                     end
+                  end
 
-                  elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
-                    if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece, checking_for_mate)
-                      counter += 1
-                      break
-                    end
-                  elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
-                    if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece, checking_for_mate)
-                      counter += 1
-                      break
-                    end
+                elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
+                  if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, king_move, saved_end_piece, checking_for_mate)
+                    counter += 1
+                    break
+                  end
+                elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
+                  if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, king_move, saved_end_piece, checking_for_mate)
+                    counter += 1
+                    break
                   end
                 end
               end
             end
           end
-
+        end
       end
     end
-    puts "CHECKMATE" if counter == checked_king_moves.length
+    if counter == checked_king_moves.length
+      puts "CHECKMATE" 
+      return 1
+    end
   end
 
   checking_for_mate = false
   king_present = chess.disappearing_king_checkmate(board, WHITE_KING)
+  return 1 if king_present == false 
+
+  #### END OF TEST FOR CHECKMATE
 
   chess.fix_king_movement(king_present, board, WHITE_KING, w_king_loc)
+  
 
-
-
-  puts counter
-  print checked_king_moves
-  puts "\n"
-
+  # GRAB PLAYER PIECE CHOICE AND GENERATE AVAILABLE MOVES WITH THAT PIECE
   available_moves = false
   until available_moves
     confirmed = false
@@ -584,12 +564,16 @@ while true
   puts "\n"
   board.display_board(player_choice, possible_moves)
 
+  ### END OF PIECE CHOICE/MOVE GENERATION
+
+
   self_check = true
   while self_check
     confirmed = false
     until confirmed
       flag = false 
-      # get and verify the location player wants to move to
+
+      # GET AND VERIFY THE LOCATION PLAYER WANTS TO MOVE TO
       until flag
         player_end = game.get_end_location(player_white.player_color)
         player_end_hold = player_end.join("")
@@ -602,6 +586,9 @@ while true
       confirmed = game.handle_confirm_choice(end_confirm)
       chess.repick_move?(confirmed, player_end, board, player_choice, possible_moves)
 
+      ### END OF MOVEMENT VERIFICATION
+
+
       #should be w for black player
       b_l_castle = false
       b_r_castle = false
@@ -612,7 +599,7 @@ while true
       hold_start_location = hold[0]
       saved_end_piece = hold[1]
 
-      # Check and handle if player move puts their own king in check
+      # CHECK AND HANDLE IF PLAYER PUTS THEIR OWN KING IN CHECK
       for i in 0..7 
         for n in 0..7 
           unless board.chess_board[i][n] == "   "
@@ -649,7 +636,10 @@ while true
     end
   end
 
-  # Check and handle if player move puts opposite player's king in check
+  ### END OF HANDLING A SELF CHECK MOVE
+
+
+  # CHECK AND HANDLE IF PLAYER PUTS OPPOSITE PLAYER'S KING IN CHECK
   for i in 0..7 
     for n in 0..7
       unless board.chess_board[i][n] == "   "
@@ -684,8 +674,10 @@ while true
     end
   end
 
+  ### END OF OPPOSITE PLAYER KING CHECK
+
   chess.pawn_promotion(board.chess_board, WHITE_PAWN)
-  # chess.w_king.checked = false
+  chess.w_king.checked = false
   board.display_board
 
   # BLACK TURN CODE COMMENTED OUT TEMPORARILY SO DUPLICATION OF CODE NOT NEEDED TO TEST
