@@ -527,48 +527,47 @@ while true
 
   chess.fix_king_movement(king_present, board, WHITE_KING, w_king_loc)
   
-
-  # GRAB PLAYER PIECE CHOICE AND GENERATE AVAILABLE MOVES WITH THAT PIECE
-  available_moves = false
-  until available_moves
-    confirmed = false
-    until confirmed
-      flag = false 
-      until flag
-        player_choice = game.get_player_location(player_white.player_color)
-        player_choice = game.convert_player_location(player_choice)
-        flag = game.verify_location_piece(player_white.player_pieces, player_choice, board.chess_board)
-        puts "Your piece isn't located there, please try again!" if flag == false && chess.w_king.checked != true
-      end
-
-      board.display_board(player_choice)
-      piece_confirm = game.get_piece_choice_confirm
-      confirmed = game.handle_confirm_choice(piece_confirm)
-
-      chess.repick_piece?(confirmed, player_choice, board)
-    end
-
-    piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
-    possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-    possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
-
-    castle_possibilities = chess.white_castle(w_l_castle, w_r_castle, piece_to_move, possible_moves, board)
-    unless castle_possibilities.nil?
-      w_r_castle = castle_possibilities[0]
-      w_l_castle = castle_possibilities[1]
-    end
-
-    available_moves = chess.no_piece_moves?(possible_moves, board)
-  end
-
-  puts "\n"
-  board.display_board(player_choice, possible_moves)
-
-  ### END OF PIECE CHOICE/MOVE GENERATION
-
-
   self_check = true
   while self_check
+    # GRAB PLAYER PIECE CHOICE AND GENERATE AVAILABLE MOVES WITH THAT PIECE
+    available_moves = false
+    until available_moves
+      confirmed = false
+      until confirmed
+        flag = false 
+        until flag
+          player_choice = game.get_player_location(player_white.player_color)
+          player_choice = game.convert_player_location(player_choice)
+          flag = game.verify_location_piece(player_white.player_pieces, player_choice, board.chess_board)
+          puts "Your piece isn't located there, please try again!" if flag == false && chess.w_king.checked != true
+        end
+
+        board.display_board(player_choice)
+        piece_confirm = game.get_piece_choice_confirm
+        confirmed = game.handle_confirm_choice(piece_confirm)
+
+        chess.repick_piece?(confirmed, player_choice, board)
+      end
+
+      piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
+      possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
+      possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
+
+      castle_possibilities = chess.white_castle(w_l_castle, w_r_castle, piece_to_move, possible_moves, board)
+      unless castle_possibilities.nil?
+        w_r_castle = castle_possibilities[0]
+        w_l_castle = castle_possibilities[1]
+      end
+
+      available_moves = chess.no_piece_moves?(possible_moves, board)
+    end
+
+    puts "\n"
+    board.display_board(player_choice, possible_moves)
+
+    ### END OF PIECE CHOICE/MOVE GENERATION
+
+
     confirmed = false
     until confirmed
       flag = false 
@@ -776,48 +775,47 @@ while true
 
   chess.fix_king_movement(king_present, board, BLACK_KING, b_king_loc)
   
-
-  # GRAB PLAYER PIECE CHOICE AND GENERATE AVAILABLE MOVES WITH THAT PIECE
-  available_moves = false
-  until available_moves
-    confirmed = false
-    until confirmed
-      flag = false 
-      until flag
-        player_choice = game.get_player_location(player_black.player_color)
-        player_choice = game.convert_player_location(player_choice)
-        flag = game.verify_location_piece(player_black.player_pieces, player_choice, board.chess_board)
-        puts "Your piece isn't located there, please try again!" if flag == false && chess.b_king.checked != true
-      end
-
-      board.display_board(player_choice)
-      piece_confirm = game.get_piece_choice_confirm
-      confirmed = game.handle_confirm_choice(piece_confirm)
-
-      chess.repick_piece?(confirmed, player_choice, board)
-    end
-
-    piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
-    possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
-    possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
-
-    castle_possibilities = chess.black_castle(b_l_castle, b_r_castle, piece_to_move, possible_moves, board)
-    unless castle_possibilities.nil?
-      b_r_castle = castle_possibilities[0]
-      b_l_castle = castle_possibilities[1]
-    end
-
-    available_moves = chess.no_piece_moves?(possible_moves, board)
-  end
-
-  puts "\n"
-  board.display_board(player_choice, possible_moves)
-
-  ### END OF PIECE CHOICE/MOVE GENERATION
-
-
   self_check = true
   while self_check
+    # GRAB PLAYER PIECE CHOICE AND GENERATE AVAILABLE MOVES WITH THAT PIECE
+    available_moves = false
+    until available_moves
+      confirmed = false
+      until confirmed
+        flag = false 
+        until flag
+          player_choice = game.get_player_location(player_black.player_color)
+          player_choice = game.convert_player_location(player_choice)
+          flag = game.verify_location_piece(player_black.player_pieces, player_choice, board.chess_board)
+          puts "Your piece isn't located there, please try again!" if flag == false && chess.b_king.checked != true
+        end
+
+        board.display_board(player_choice)
+        piece_confirm = game.get_piece_choice_confirm
+        confirmed = game.handle_confirm_choice(piece_confirm)
+
+        chess.repick_piece?(confirmed, player_choice, board)
+      end
+
+      piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
+      possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
+      possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
+
+      castle_possibilities = chess.black_castle(b_l_castle, b_r_castle, piece_to_move, possible_moves, board)
+      unless castle_possibilities.nil?
+        b_r_castle = castle_possibilities[0]
+        b_l_castle = castle_possibilities[1]
+      end
+
+      available_moves = chess.no_piece_moves?(possible_moves, board)
+    end
+
+    puts "\n"
+    board.display_board(player_choice, possible_moves)
+
+    ### END OF PIECE CHOICE/MOVE GENERATION
+
+
     confirmed = false
     until confirmed
       flag = false 
