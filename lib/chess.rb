@@ -273,17 +273,36 @@ class Chess
   #   end
   # end
 
-  # handle disappearing king indicating checkmate has occured
-  def disappearing_king_checkmate(board)
+  # handle disappearing king indicating a checkmate has occured
+  def disappearing_king_checkmate(board, king_color)
     king_present = false
     board.chess_board.each do |row|
       row.each do |square|
         unless square == "   "
-         king_present = true if square.piece_symbol == WHITE_KING
+         king_present = true if square.piece_symbol == king_color
         end
       end
     end
     puts "CHECKMATE" if king_present == false
+    king_present
+  end
+
+  # handles unintentional king movement that sometimes occurs after check for checkmate
+  def fix_king_movement(king_present, board, king_color, w_king_loc)
+    if (king_present) == true && board.chess_board[w_king_loc[0]][w_king_loc[0]] == "   "
+      for i in 0..7 
+        for n in 0..7
+          unless board.chess_board[i][n] == "   "
+            if board.chess_board[i][n].piece_symbol == king_color
+              save_piece = board.chess_board[i][n]
+              board.chess_board[i][n] = "   "
+            end
+          end
+        end
+      end
+  
+      board.chess_board[w_king_loc[0]][w_king_loc[1]] = save_piece
+    end
   end
 end
 
@@ -427,31 +446,9 @@ while true
   end
 
   checking_for_mate = false
+  king_present = chess.disappearing_king_checkmate(board, WHITE_KING)
 
-  #CHECKMATE GAME END NEEDED
-  chess.disappearing_king_checkmate(board)
-
-
-
-
-  # handle any accidental king movement
-  if (w_king_present) == true && board.chess_board[w_king_loc[0]][w_king_loc[0]] == "   "
-    puts "switched"
-    for i in 0..7 
-      for n in 0..7
-        unless board.chess_board[i][n] == "   "
-          # puts board.chess_board[i][n]
-          if board.chess_board[i][n].piece_symbol == WHITE_KING
-            puts "king"
-            save_piece = board.chess_board[i][n]
-            board.chess_board[i][n] = "   "
-          end
-        end
-      end
-    end
-
-    board.chess_board[w_king_loc[0]][w_king_loc[1]] = save_piece
-  end
+  chess.fix_king_movement(king_present, board, WHITE_KING, w_king_loc)
 
   puts counter
   print checked_king_moves

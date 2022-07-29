@@ -116,8 +116,8 @@ class SquarePieces
   @@g2_piece = w_pawn7
   @@g3_piece = "   "
   @@g4_piece = "   "
-  @@g5_piece = w_king
-  @@g6_piece = "   "
+  @@g5_piece = "   "
+  @@g6_piece = w_king
   @@g7_piece = b_pawn7
   @@g8_piece = b_knight2
 
