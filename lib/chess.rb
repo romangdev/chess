@@ -460,7 +460,7 @@ while true
     checking_for_mate = true
     if checked_king_moves.empty?
       puts "CHECKMATE"
-      return 1
+      return 
     else 
       w_l_castle = false
       w_r_castle= false 
@@ -514,13 +514,13 @@ while true
     end
     if counter == checked_king_moves.length
       puts "CHECKMATE" 
-      return 1
+      return
     end
   end
 
   checking_for_mate = false
   king_present = chess.disappearing_king_checkmate(board, WHITE_KING)
-  return 1 if king_present == false 
+  return if king_present == false 
 
   #### END OF TEST FOR CHECKMATE
   
@@ -708,7 +708,7 @@ while true
     checking_for_mate = true
     if checked_king_moves.empty?
       puts "CHECKMATE"
-      return 1
+      return
     else 
       w_l_castle = false
       w_r_castle= false 
@@ -762,13 +762,13 @@ while true
     end
     if counter == checked_king_moves.length
       puts "CHECKMATE" 
-      return 1
+      return
     end
   end
 
   checking_for_mate = false
   king_present = chess.disappearing_king_checkmate(board, BLACK_KING)
-  return 1 if king_present == false 
+  return if king_present == false 
 
   #### END OF TEST FOR CHECKMATE
 
