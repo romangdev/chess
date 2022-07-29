@@ -212,6 +212,35 @@ class Chess
       end
     end
   end
+
+  # find the location of the piece that is putting king in check
+  def find_piece_checking_king(board, pieces_color, king_color_loc)
+    king_checker_loc = []
+    for i in 0..7 
+      for n in 0..7 
+        unless board.chess_board[i][n] == "   "
+          if pieces_color.include?(board.chess_board[i][n].piece_symbol)
+            piece = board.chess_board[i][n]
+            check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+  
+            if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
+              if check_moves.include? king_color_loc
+                king_checker_loc << i << n
+                return king_checker_loc
+              end
+            elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
+              check_moves.each do |move_direction|
+                if move_direction.include? king_color_loc
+                  king_checker_loc << i << n
+                  return king_checker_loc
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
 
 include ChessPieces
@@ -246,36 +275,11 @@ while true
   # player white turn
 
   # handling checkmate
-
   # FIND THE SQUARE HOLDING THE WHITE KING
   w_king_loc = chess.find_king_location(board, "white")
-  print w_king_loc
-
 
   # FIND THE BLACK PIECE CHECKING THE KING
-  king_checker_loc = []
-  for i in 0..7 
-    for n in 0..7 
-      unless board.chess_board[i][n] == "   "
-        if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
-          piece = board.chess_board[i][n]
-          check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
-
-          if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
-            if check_moves.include? w_king_loc
-              king_checker_loc << i << n
-            end
-          elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
-            check_moves.each do |move_direction|
-              if move_direction.include? w_king_loc
-                king_checker_loc << i << n
-              end
-            end
-          end
-        end
-      end
-    end
-  end
+  king_checker_loc = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc)
 
   # CHECK ALL WHITE PIECES (EXCEPT KING) TO SEE IF ANY CONTAIN THE BLACK PIECE CHECKING THE KING
   checked_king_moves = nil
