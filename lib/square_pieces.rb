@@ -86,19 +86,19 @@ class SquarePieces
   @@d2_piece = w_pawn4
   @@d3_piece = "   "
   @@d4_piece = "   "
-  @@d5_piece = "   "
+  @@d5_piece = b_pawn4
   @@d6_piece = "   "
-  @@d7_piece = b_pawn4
+  @@d7_piece = "   "
   @@d8_piece = b_queen
 
   # E column
   @@e1_piece = w_king
-  @@e2_piece = w_pawn5
+  @@e2_piece = "   "
   @@e3_piece = "   "
   @@e4_piece = "   "
-  @@e5_piece = "   "
-  @@e6_piece = "   "
-  @@e7_piece = b_pawn5
+  @@e5_piece = w_pawn5
+  @@e6_piece = b_pawn5
+  @@e7_piece = "   "
   @@e8_piece = b_king
 
   # F column

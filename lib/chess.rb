@@ -272,7 +272,7 @@ class Chess
 
   # handles unintentional king movement that sometimes occurs after check for checkmate
   def fix_king_movement(king_present, board, king_color, king_loc)
-    if (king_present) == true && board.chess_board[king_loc[0]][king_loc[0]] == "   "
+    if (king_present) == true && board.chess_board[king_loc[0]][king_loc[1]] == "   "
       for i in 0..7 
         for n in 0..7
           unless board.chess_board[i][n] == "   "
@@ -488,7 +488,6 @@ while true
                   pawn_diagonals.each do |diagonal|
                     unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
                       if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == WHITE_KING
-                        # self_check = true
                         chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
                         counter += 1
                         break
@@ -524,6 +523,7 @@ while true
   return 1 if king_present == false 
 
   #### END OF TEST FOR CHECKMATE
+  
 
   chess.fix_king_movement(king_present, board, WHITE_KING, w_king_loc)
   
@@ -624,9 +624,15 @@ while true
                 end
 
               elsif  piece.piece_symbol == BLACK_KNIGHT || piece.piece_symbol == BLACK_KING
-                break if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.pkk_error_if_check(WHITE_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                  self_check = true 
+                  break
+                end
               elsif piece.piece_symbol == BLACK_ROOK || piece.piece_symbol == BLACK_BISHOP || piece.piece_symbol == BLACK_QUEEN
-                break if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.rbq_error_if_check(check_moves, board, WHITE_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                  self_check = true 
+                  break
+                end
               end
             end
           end
@@ -731,7 +737,6 @@ while true
                   pawn_diagonals.each do |diagonal|
                     unless board.chess_board[diagonal[0]][diagonal[1]] == "   "
                       if board.chess_board[diagonal[0]][diagonal[1]].piece_symbol == BLACK_KING
-                        # self_check = true
                         chess.undo_board_movement(board.chess_board, hold_start_location, king_move, saved_end_piece)
                         counter += 1
                         break
@@ -767,6 +772,7 @@ while true
   return 1 if king_present == false 
 
   #### END OF TEST FOR CHECKMATE
+
 
   chess.fix_king_movement(king_present, board, BLACK_KING, b_king_loc)
   
@@ -866,9 +872,15 @@ while true
                 end
 
               elsif  piece.piece_symbol == WHITE_KNIGHT || piece.piece_symbol == WHITE_KING
-                break if chess.pkk_error_if_check(BLACK_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.pkk_error_if_check(BLACK_KING, check_moves, board, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                  self_check = true
+                  break
+                end
               elsif piece.piece_symbol == WHITE_ROOK || piece.piece_symbol == WHITE_BISHOP || piece.piece_symbol == WHITE_QUEEN
-                break if chess.rbq_error_if_check(check_moves, board, BLACK_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                if chess.rbq_error_if_check(check_moves, board, BLACK_KING, hold_start_location, player_end, saved_end_piece, checking_for_mate)
+                  self_check = true 
+                  break
+                end
               end
             end
           end
