@@ -240,7 +240,7 @@ class Chess
   end
 
   # find the location of the piece that is putting king in check
-  def find_piece_checking_king(board, pieces_color, king_color_loc)
+  def find_piece_checking_king(board, pieces_color, king_color_loc, king_color)
     king_checker_loc = []
     for i in 0..7 
       for n in 0..7 
@@ -252,12 +252,16 @@ class Chess
             if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
               if check_moves.include? king_color_loc
                 king_checker_loc << i << n
+                king_color.checked = true
+                puts king_checker_loc
                 return king_checker_loc
               end
             elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
               check_moves.each do |move_direction|
                 if move_direction.include? king_color_loc
                   king_checker_loc << i << n
+                  king_color.checked = true
+                  puts king_checker_loc
                   return king_checker_loc
                 end
               end

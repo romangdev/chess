@@ -41,7 +41,7 @@ while true
 
   # TEST FOR KING IN CHECK, AND FOR CHECK SAVER
   w_king_loc = chess.find_king_location(board, "white")
-  king_checker_loc = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc)
+  king_checker_loc = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc, chess.w_king)
 
   hold_answers = chess.check_for_king_saver(board, WHITE_PIECES, king_checker_loc)
   checked_king_moves = hold_answers[0]
@@ -299,7 +299,7 @@ while true
 
   # TEST FOR KING IN CHECK, AND FOR CHECK SAVER
   b_king_loc = chess.find_king_location(board, "black")
-  king_checker_loc = chess.find_piece_checking_king(board, WHITE_PIECES, b_king_loc)
+  king_checker_loc = chess.find_piece_checking_king(board, WHITE_PIECES, b_king_loc, chess.b_king)
 
   hold_answers = chess.check_for_king_saver(board, BLACK_PIECES, king_checker_loc)
   checked_king_moves = hold_answers[0]

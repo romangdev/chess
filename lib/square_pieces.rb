@@ -93,11 +93,11 @@ class SquarePieces
 
   # E column
   @@e1_piece = w_king
-  @@e2_piece = w_pawn5
+  @@e2_piece = "   "
   @@e3_piece = "   "
   @@e4_piece = "   "
-  @@e5_piece = "   "
-  @@e6_piece = "   "
+  @@e5_piece = b_knight1
+  @@e6_piece = b_rook1
   @@e7_piece = b_pawn5
   @@e8_piece = b_king
 
