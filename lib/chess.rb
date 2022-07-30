@@ -103,8 +103,6 @@ class Chess
     #grab and save end piece and starting location piece, to use in 'undo board movement'
     arr = []
     arr << hold_start_location << move_end << rook_start << rook_end
-    print rook_start
-    print rook_end
     arr
   end
 
