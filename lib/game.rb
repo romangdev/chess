@@ -27,11 +27,38 @@ class Game
     flag = false
     until flag == true
       prompt_player_location(player_color) 
-      player_choice = gets.chomp.downcase.split("")
+      player_choice = gets.chomp.downcase
+      return player_choice if player_choice == "draw" || player_choice == "d"
+
+      player_choice = player_choice.split("")
       flag = verify_player_location(player_choice)
       puts "That's location isn't on the board - please try again!" if flag == false
     end
     player_choice
+  end
+
+  # verify that a player wants to draw
+  def verify_draw(player_color)
+    puts "#{player_color.upcase}: Are you sure you want a draw?"
+    answer = gets.chomp.downcase
+  end
+
+  # end the game if both players want a draw, or continue if both or one do not want a draw
+  def handle_ask_for_draw(player_choice, player_white, player_black, done)
+    if player_choice == "draw" || player_choice == "d"
+      white_answer = verify_draw(player_white.player_color)
+      black_answer = verify_draw(player_black.player_color)
+
+      if (white_answer == "y" || white_answer == "yes") && (black_answer == "y" || black_answer == "yes")
+        puts "Game ends in a DRAW"
+        return "end"
+      else 
+        puts "So we shall CONTINUE!"
+        return false
+      end
+    else
+      return true
+    end
   end
 
   # gets the ending location a player wants to move their selected piece to
@@ -109,7 +136,7 @@ class Game
   def prompt_player_location(player_color)
     puts <<-HEREDOC 
 #{player_color.upcase}: Choose piece to move (type column then row with no space)...
-Example: a1, h3, g8, etc.
+Example: a1, h3, g8, etc. Or type "draw" to ask for a draw.
     HEREDOC
   end
 

@@ -136,7 +136,13 @@ while true
       until confirmed
         flag = false 
         until flag
-          player_choice = game.get_player_location(player_white.player_color)
+          done = false
+          until done 
+            player_choice = game.get_player_location(player_white.player_color)
+            done = game.handle_ask_for_draw(player_choice, player_white, player_black, done)
+            return if done == "end"
+          end
+
           player_choice = game.convert_player_location(player_choice)
           flag = game.verify_location_piece(player_white.player_pieces, player_choice, board.chess_board)
           puts "Your piece isn't located there, please try again!" if flag == false && chess.w_king.checked != true

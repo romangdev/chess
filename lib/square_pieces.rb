@@ -58,7 +58,7 @@ class SquarePieces
   @@a4_piece = "   "
   @@a5_piece = "   "
   @@a6_piece = "   "
-  @@a7_piece = "   "
+  @@a7_piece = b_pawn1
   @@a8_piece = b_rook1
 
   # B column
@@ -68,8 +68,8 @@ class SquarePieces
   @@b4_piece = "   "
   @@b5_piece = "   "
   @@b6_piece = "   "
-  @@b7_piece = "   "
-  @@b8_piece = "   "
+  @@b7_piece = b_pawn2
+  @@b8_piece = b_knight1
 
   # C column
   @@c1_piece = w_bishop1
@@ -78,32 +78,32 @@ class SquarePieces
   @@c4_piece = "   "
   @@c5_piece = "   "
   @@c6_piece = "   "
-  @@c7_piece = "   "
-  @@c8_piece = "   "
+  @@c7_piece = b_pawn3
+  @@c8_piece = b_bishop1
 
   # D column
   @@d1_piece = w_queen
   @@d2_piece = w_pawn4
   @@d3_piece = "   "
   @@d4_piece = "   "
-  @@d5_piece = b_pawn4
+  @@d5_piece = "   "
   @@d6_piece = "   "
-  @@d7_piece = "   "
-  @@d8_piece = "   "
+  @@d7_piece = b_pawn4
+  @@d8_piece = b_queen
 
   # E column
   @@e1_piece = w_king
-  @@e2_piece = "   "
+  @@e2_piece = w_pawn5
   @@e3_piece = "   "
   @@e4_piece = "   "
-  @@e5_piece = w_pawn5
-  @@e6_piece = b_pawn5
-  @@e7_piece = "   "
+  @@e5_piece = "   "
+  @@e6_piece = "   "
+  @@e7_piece = b_pawn5
   @@e8_piece = b_king
 
   # F column
-  @@f1_piece = "   "
-  @@f2_piece = "   "
+  @@f1_piece = w_bishop2
+  @@f2_piece = w_pawn6
   @@f3_piece = "   "
   @@f4_piece = "   "
   @@f5_piece = "   "
@@ -112,18 +112,18 @@ class SquarePieces
   @@f8_piece = b_bishop2
 
   # G column
-  @@g1_piece = "   "
-  @@g2_piece = "   "
+  @@g1_piece = w_knight2
+  @@g2_piece = w_pawn7
   @@g3_piece = "   "
   @@g4_piece = "   "
-  @@g5_piece = b_rook1
+  @@g5_piece = "   "
   @@g6_piece = "   "
   @@g7_piece = b_pawn7
   @@g8_piece = b_knight2
 
   # H column
   @@h1_piece = w_rook2
-  @@h2_piece = "   "
+  @@h2_piece = w_pawn8
   @@h3_piece = "   "
   @@h4_piece = "   "
   @@h5_piece = "   "
