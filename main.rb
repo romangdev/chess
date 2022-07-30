@@ -41,11 +41,18 @@ while true
 
   # TEST FOR KING IN CHECK, AND FOR CHECK SAVER
   w_king_loc = chess.find_king_location(board, "white")
-  king_checker_loc = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc, chess.w_king)
+  king_checkers = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc, chess.w_king)
+  king_checker_loc_1 = king_checkers[0]
+  king_checker_loc_2 = king_checkers[1]
 
-  hold_answers = chess.check_for_king_saver(board, WHITE_PIECES, king_checker_loc)
+  hold_answers = chess.check_for_king_saver(board, WHITE_PIECES, king_checker_loc_1)
   checked_king_moves = hold_answers[0]
   king_saver = hold_answers[1]
+
+  unless king_saver == false
+    hold_answers = chess.check_for_king_saver(board, WHITE_PIECES, king_checker_loc_2)
+    king_saver = hold_answers[1]
+  end
 
   white_king_check = board.chess_board[w_king_loc[0]][w_king_loc[1]]
   counter = 0
@@ -56,10 +63,10 @@ while true
   # TEST FOR CHECKMATE
   if (white_king_check.checked == true) && (king_saver == false)
     checking_for_mate = true
-    if checked_king_moves.empty?
-      puts "CHECKMATE"
-      return 
-    else 
+    # if checked_king_moves.empty?
+    #   puts "CHECKMATE"
+    #   return 
+    # else 
       w_l_castle = false
       w_r_castle= false 
       b_l_castle = false
@@ -111,7 +118,7 @@ while true
           end
         end
       end
-    end
+    # end
     if counter == checked_king_moves.length
       puts "CHECKMATE" 
       return
@@ -510,6 +517,9 @@ while true
         if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
           piece = board.chess_board[i][n]
           check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+          puts piece
+          print check_moves
+          puts "\n"
 
           if piece.piece_symbol == BLACK_PAWN
             pawn_diagonals = []

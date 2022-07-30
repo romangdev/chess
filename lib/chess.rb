@@ -172,7 +172,7 @@ class Chess
       move_dir.each do |location|
         count += 1 if board.chess_board[location[0]][location[1]] == "   "
         unless board.chess_board[location[0]][location[1]] == "   "
-          if board.chess_board[location[0]][location[1]].piece_symbol == BLACK_KING &&
+          if board.chess_board[location[0]][location[1]].piece_symbol == king_color &&
             (count + 1) == move_dir.length
 
             board.chess_board[location[0]][location[1]].checked = true
@@ -251,18 +251,12 @@ class Chess
   
             if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
               if check_moves.include? king_color_loc
-                king_checker_loc << i << n
-                king_color.checked = true
-                puts king_checker_loc
-                return king_checker_loc
+                king_checker_loc << [i, n]
               end
             elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
               check_moves.each do |move_direction|
                 if move_direction.include? king_color_loc
-                  king_checker_loc << i << n
-                  king_color.checked = true
-                  puts king_checker_loc
-                  return king_checker_loc
+                  king_checker_loc << [i, n]
                 end
               end
             end
@@ -270,6 +264,7 @@ class Chess
         end
       end
     end
+    king_checker_loc
   end
 
   # handle disappearing king indicating a checkmate has occured
