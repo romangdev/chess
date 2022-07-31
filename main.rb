@@ -36,6 +36,7 @@ game = Game.new
 # change 3, 2 back to 0, 4
 chess = Chess.new(board.chess_board[0][4], board.chess_board[7][4])
 
+move_count = 0
 while true 
   # Player White Turn
 
@@ -163,6 +164,8 @@ while true
       end
 
       piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
+      move_count += 1 unless piece_to_move.is_a? Pawn
+      move_count = 0 if piece_to_move.is_a? Pawn
       possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
       possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
 
@@ -193,6 +196,8 @@ while true
         flag = game.verify_possible_move(possible_moves, player_end)
         puts "You can't move there! Try again..." if flag == false
       end
+
+      save_player_end = board.chess_board[player_end[0]][player_end[1]]
 
       end_confirm = game.get_end_move_confirm(player_end_hold)
       confirmed = game.handle_confirm_choice(end_confirm)
@@ -300,8 +305,14 @@ while true
   chess.w_king.checked = false
   board.display_board
 
+  unless save_player_end  == "   "
+    move_count = 0 if BLACK_PIECES.include? save_player_end.piece_symbol
+  end
+  if move_count == 50
+    puts "Game tied! 50-move rule has been reached!"
+    return
+  end
   
-
   # Player Black Turn
 
   # TEST FOR KING IN CHECK, AND FOR CHECK SAVER
@@ -415,6 +426,8 @@ while true
       end
 
       piece_to_move = board.chess_board[player_choice[0]][player_choice[1]]
+      move_count += 1 unless piece_to_move.is_a? Pawn
+      move_count = 0 if piece_to_move.is_a? Pawn
       possible_moves = piece_to_move.generate_moves(player_choice, board.chess_board, piece_to_move.piece_symbol)
       possible_moves = chess.handle_qrb_move_arrays(piece_to_move, possible_moves)
 
@@ -445,6 +458,9 @@ while true
         flag = game.verify_possible_move(possible_moves, player_end)
         puts "You can't move there! Try again..." if flag == false
       end
+
+      save_player_end = board.chess_board[player_end[0]][player_end[1]]
+      puts "Player end #{save_player_end}"
 
       end_confirm = game.get_end_move_confirm(player_end_hold)
       confirmed = game.handle_confirm_choice(end_confirm)
@@ -517,9 +533,6 @@ while true
         if BLACK_PIECES.include?(board.chess_board[i][n].piece_symbol)
           piece = board.chess_board[i][n]
           check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
-          puts piece
-          print check_moves
-          puts "\n"
 
           if piece.piece_symbol == BLACK_PAWN
             pawn_diagonals = []
@@ -553,4 +566,12 @@ while true
   chess.pawn_promotion(board.chess_board, BLACK_PAWN)
   chess.b_king.checked = false
   board.display_board
+
+  unless save_player_end == "   "
+    move_count = 0 if WHITE_PIECES.include? save_player_end.piece_symbol
+  end
+  if move_count == 50
+    puts "Game tied! 50-move rule has been reached!"
+    return
+  end
 end

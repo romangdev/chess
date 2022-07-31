@@ -65,7 +65,7 @@ class SquarePieces
   @@b1_piece = w_knight1
   @@b2_piece = w_pawn2
   @@b3_piece = "   "
-  @@b4_piece = "   "
+  @@b4_piece = b_queen
   @@b5_piece = "   "
   @@b6_piece = "   "
   @@b7_piece = b_pawn2
