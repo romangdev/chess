@@ -43,7 +43,18 @@ while true
   w_king_loc = chess.find_king_location(board, "white")
   king_checkers = chess.find_piece_checking_king(board, BLACK_PIECES, w_king_loc, chess.w_king)
   king_checker_loc_1 = king_checkers[0]
-  king_checker_loc_2 = king_checkers[1]
+  king_checker_loc_2 = king_checkers[1] unless king_checkers[1] == nil
+
+  unless king_checker_loc_1 == nil
+    king_checker_1 = board.chess_board[king_checker_loc_1[0]][king_checker_loc_1[1]].piece_symbol
+  end
+  unless king_checker_loc_2 == nil
+    king_checker_2 = board.chess_board[king_checker_loc_2[0]][king_checker_loc_2[1]].piece_symbol
+  end
+
+  puts king_checker_1
+  puts king_checker_2
+
 
   hold_answers = chess.check_for_king_saver(board, WHITE_PIECES, king_checker_loc_1)
   checked_king_moves = hold_answers[0]
@@ -62,15 +73,17 @@ while true
 
   # TEST FOR CHECKMATE
   if (white_king_check.checked == true) && (king_saver == false)
+
     checking_for_mate = true
-    # if checked_king_moves.empty?
-    #   puts "CHECKMATE"
-    #   return 
-    # else 
-      w_l_castle = false
-      w_r_castle= false 
-      b_l_castle = false
-      b_r_castle = false
+    w_l_castle = false
+    w_r_castle= false 
+    b_l_castle = false
+    b_r_castle = false
+
+
+
+    # IF EITHER KING CHECKER PIECE IS A PAWN OR A KNIGHT
+    if king_checker_1 == BLACK_PAWN || king_checker_1 == BLACK_KNIGHT || king_checker_2 == BLACK_PAWN || king_checker_2 == BLACK_KNIGHT
       checked_king_moves.each do |king_move|
 
         saved_end_piece = 'nil'
@@ -79,7 +92,7 @@ while true
         saved_end_piece = hold[1]
         rook_start = hold[2]
         rook_end = hold[3]
-  
+
         for i in 0..7 
           for n in 0..7 
             unless board.chess_board[i][n] == "   "
@@ -118,10 +131,35 @@ while true
           end
         end
       end
-    # end
-    if counter == checked_king_moves.length
-      puts "CHECKMATE" 
-      return
+      if counter == checked_king_moves.length
+        puts "CHECKMATE" 
+        return
+      end
+
+    # IF NO KING CHECKER WAS A PAWN OR A KNIGHT
+    else 
+      for i in 0..7 
+        for n in 0..7
+          unless board.chess_board[i][n] == "   "
+            if WHITE_PIECES.include?(board.chess_board[i][n].piece_symbol)
+              piece = board.chess_board[i][n]
+              check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+              check_moves.each do |row| 
+                row.each do |square|
+                  hold = chess.update_board_movement(board.chess_board, [i, n], square)
+                  hold_start_location = hold[0]
+                  saved_end_piece = hold[1]
+                  rook_start = hold[2]
+                  rook_end = hold[3]
+                  
+                  
+                end
+              end
+            end
+          end
+        end
+      end
     end
   end
 
