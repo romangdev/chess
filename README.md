@@ -1,4 +1,4 @@
-# chess (work in progress)
+# chess (work in progress/practice)
 
 A command line based game of chess! (2 human players)
 
