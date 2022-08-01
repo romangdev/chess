@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require "./lib/chess_pieces"
+
+require './lib/chess_pieces'
 
 class King
   attr_accessor :checked, :first_move_made
@@ -18,54 +19,48 @@ class King
     possible_moves = []
 
     moves << [current_location[0] + 1, current_location[1]] <<
-            [current_location[0] + 1, current_location[1] + 1] <<
-            [current_location[0] + 1, current_location[1] - 1] <<
-            [current_location[0] - 1, current_location[1]] <<
-            [current_location[0] - 1, current_location[1] + 1] <<
-            [current_location[0] - 1, current_location[1] - 1] <<
-            [current_location[0], current_location[1] + 1] <<
-            [current_location[0], current_location[1] - 1] 
+      [current_location[0] + 1, current_location[1] + 1] <<
+      [current_location[0] + 1, current_location[1] - 1] <<
+      [current_location[0] - 1, current_location[1]] <<
+      [current_location[0] - 1, current_location[1] + 1] <<
+      [current_location[0] - 1, current_location[1] - 1] <<
+      [current_location[0], current_location[1] + 1] <<
+      [current_location[0], current_location[1] - 1]
 
     if king_color == WHITE_KING
       moves.each do |move|
-        next if move[0].negative? || move[0] > 7 || move[1].negative? || move[1] > 7 
+        next if move[0].negative? || move[0] > 7 || move[1].negative? || move[1] > 7
 
-        unless chess_board[move[0]][move[1]] == "   "
-          if chess_board[move[0]][move[1]].piece_symbol == WHITE_BISHOP ||
-            chess_board[move[0]][move[1]].piece_symbol == WHITE_PAWN ||
-            chess_board[move[0]][move[1]].piece_symbol == WHITE_ROOK ||
-            chess_board[move[0]][move[1]].piece_symbol == WHITE_KNIGHT||
-            chess_board[move[0]][move[1]].piece_symbol == WHITE_QUEEN
+        if chess_board[move[0]][move[1]] != '   ' && (chess_board[move[0]][move[1]].piece_symbol == WHITE_BISHOP ||
+             chess_board[move[0]][move[1]].piece_symbol == WHITE_PAWN ||
+             chess_board[move[0]][move[1]].piece_symbol == WHITE_ROOK ||
+             chess_board[move[0]][move[1]].piece_symbol == WHITE_KNIGHT ||
+             chess_board[move[0]][move[1]].piece_symbol == WHITE_QUEEN)
 
-            move = "nil"
-            possible_moves << move
-          end
+          move = 'nil'
+          possible_moves << move
         end
-       possible_moves << move
+        possible_moves << move
       end
     else
       moves.each do |move|
-        next if move[0].negative? || move[0] > 7 || move[1].negative? || move[1] > 7 
+        next if move[0].negative? || move[0] > 7 || move[1].negative? || move[1] > 7
 
-        unless chess_board[move[0]][move[1]] == "   " 
-          if chess_board[move[0]][move[1]].piece_symbol == BLACK_BISHOP ||
-            chess_board[move[0]][move[1]].piece_symbol == BLACK_PAWN ||
-            chess_board[move[0]][move[1]].piece_symbol == BLACK_ROOK ||
-            chess_board[move[0]][move[1]].piece_symbol == BLACK_KNIGHT||
-            chess_board[move[0]][move[1]].piece_symbol == BLACK_QUEEN
+        if chess_board[move[0]][move[1]] != '   ' && (chess_board[move[0]][move[1]].piece_symbol == BLACK_BISHOP ||
+             chess_board[move[0]][move[1]].piece_symbol == BLACK_PAWN ||
+             chess_board[move[0]][move[1]].piece_symbol == BLACK_ROOK ||
+             chess_board[move[0]][move[1]].piece_symbol == BLACK_KNIGHT ||
+             chess_board[move[0]][move[1]].piece_symbol == BLACK_QUEEN)
 
-            move = "nil"
-            possible_moves << move
-          end
+          move = 'nil'
+          possible_moves << move
         end
         possible_moves << move
       end
     end
 
-    possible_moves.delete("nil")
+    possible_moves.delete('nil')
 
     possible_moves
   end
-
-  private 
 end

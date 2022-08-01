@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require "./lib/board"
-require "./lib/player_white"
-require "./lib/player_black"
-require "./lib/game"
-require "./lib/square_pieces"
-require "./lib/pieces/pawn"
-require "./lib/chess_pieces" 
+require './lib/board'
+require './lib/player_white'
+require './lib/player_black'
+require './lib/game'
+require './lib/square_pieces'
+require './lib/pieces/pawn'
+require './lib/chess_pieces'
 
-class Chess 
+class Chess
   include ChessPieces
 
   attr_accessor :w_king, :b_king
@@ -20,19 +20,19 @@ class Chess
 
   # check for pawn promotion possibilities and execute on relevant pawns if so
   def pawn_promotion(board, pawn_color)
-    for i in 0..7 
-      unless board[7][i] == "   "
-        handle_promotion_by_color(board, pawn_color, i) if board[7][i].piece_symbol == pawn_color
+    (0..7).each do |i|
+      if board[7][i] != '   ' && (board[7][i].piece_symbol == pawn_color)
+        handle_promotion_by_color(board, pawn_color, i)
       end
     end
   end
 
   # prompt player to repick their piece to move
-  def repick_piece?(confirmed, player_choice, board)
+  def repick_piece?(confirmed, _player_choice, board)
     if confirmed == false
-      player_choice = nil 
+      player_choice = nil
       board.display_board
-      puts "Piece movement aborted. Pick another piece."
+      puts 'Piece movement aborted. Pick another piece.'
     end
   end
 
@@ -40,20 +40,20 @@ class Chess
   def no_piece_moves?(possible_moves, board)
     if possible_moves.empty?
       board.display_board
-      puts "Piece has no available moves! Please pick another piece."
-    else 
-      return true 
+      puts 'Piece has no available moves! Please pick another piece.'
+    else
+      return true
     end
 
     false
   end
 
   # prompts player to repick their move if they don't confirm their choice
-  def repick_move?(confirmed, player_end, board, player_choice, possible_moves)
+  def repick_move?(confirmed, _player_end, board, player_choice, possible_moves)
     if confirmed == false
-      player_end = nil 
+      player_end = nil
       board.display_board(player_choice, possible_moves)
-      puts "Move choice aborted. Pick another move."
+      puts 'Move choice aborted. Pick another move.'
     end
   end
 
@@ -63,7 +63,7 @@ class Chess
     rook_end = nil
     hold_start_location = player_choice
     tmp_start = board[player_choice[0]][player_choice[1]]
-    board[player_choice[0]][player_choice[1]] = "   "
+    board[player_choice[0]][player_choice[1]] = '   '
     move_end = board[player_end[0]][player_end[1]]
     board[player_end[0]][player_end[1]] = tmp_start
 
@@ -71,14 +71,14 @@ class Chess
     # if white castle right is available and player chooses correct castle location
     if w_r_castle && player_end == [0, 6]
       hold_rook = board[0][7]
-      board[0][7] = "   "
+      board[0][7] = '   '
       board[0][5] = hold_rook
       rook_start = [0, 7]
       rook_end = [0, 5]
     elsif w_l_castle && player_end == [0, 2]
       # if white castle left is available and player chooses correct castle location
       hold_rook = board[0][0]
-      board[0][0] = "   "
+      board[0][0] = '   '
       board[0][3] = hold_rook
       rook_start = [0, 0]
       rook_end = [0, 3]
@@ -87,20 +87,20 @@ class Chess
     # if black castle right is available and player chooses correct castle location
     if b_r_castle && player_end == [7, 6]
       hold_rook = board[7][7]
-      board[7][7] = "   "
+      board[7][7] = '   '
       board[7][5] = hold_rook
       rook_start = [7, 7]
       rook_end = [7, 5]
     # if black castle left is available and player chooses correct castle location
     elsif b_l_castle && player_end == [7, 2]
       hold_rook = board[7][0]
-      board[7][0] = "   "
+      board[7][0] = '   '
       board[7][3] = hold_rook
       rook_start = [7, 0]
       rook_end = [7, 3]
     end
-    
-    #grab and save end piece and starting location piece, to use in 'undo board movement'
+
+    # grab and save end piece and starting location piece, to use in 'undo board movement'
     arr = []
     arr << hold_start_location << move_end << rook_start << rook_end
     arr
@@ -113,10 +113,10 @@ class Chess
 
     unless rook_start.nil? && rook_end.nil?
       board[rook_start[0]][rook_start[1]] = board[rook_end[0]][rook_end[1]]
-      board[rook_end[0]][rook_end[1]] = "   "
+      board[rook_end[0]][rook_end[1]] = '   '
     end
   end
-  
+
   # promote pawn to queen with it's appropriate color
   def handle_promotion_by_color(board, pawn_color, i)
     if pawn_color == WHITE_PAWN
@@ -131,14 +131,13 @@ class Chess
   # prompt player to redo their move if it puts their king in check of opposing player's pawn, knight, or king
   def pkk_error_if_check(king_color, check_moves, board, hold_start_location, player_end, end_piece, mate, rook_start, rook_end)
     check_moves.each do |move|
-      unless board.chess_board[move[0]][move[1]] == "   "
-        if board.chess_board[move[0]][move[1]].piece_symbol == king_color
-          self_check = true
-          self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece, rook_start, rook_end)
-          puts "Your king is in check after that move. Try another move!" if mate == false
-          return true
-        end
-      end
+      next if board.chess_board[move[0]][move[1]] == '   '
+      next unless board.chess_board[move[0]][move[1]].piece_symbol == king_color
+
+      self_check = true
+      undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece, rook_start, rook_end)
+      puts 'Your king is in check after that move. Try another move!' if mate == false
+      return true
     end
     false
   end
@@ -148,17 +147,17 @@ class Chess
     check_moves.each do |move_dir|
       count = 0
       move_dir.each do |location|
-        count += 1 if board.chess_board[location[0]][location[1]] == "   "
-        unless board.chess_board[location[0]][location[1]] == "   "
-          if board.chess_board[location[0]][location[1]].piece_symbol == king_color &&
-            (count + 1) == move_dir.length
+        count += 1 if board.chess_board[location[0]][location[1]] == '   '
+        next if board.chess_board[location[0]][location[1]] == '   '
 
-            self_check = true
-            self.undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece, rook_start, rook_end)
-            puts "Your king is in check after that move. Try another move!" if mate == false
-            return true
-          end
-        end
+        next unless board.chess_board[location[0]][location[1]].piece_symbol == king_color &&
+                    (count + 1) == move_dir.length
+
+        self_check = true
+        undo_board_movement(board.chess_board, hold_start_location, player_end, end_piece, rook_start,
+                            rook_end)
+        puts 'Your king is in check after that move. Try another move!' if mate == false
+        return true
       end
     end
     false
@@ -170,15 +169,14 @@ class Chess
     check_moves.each do |move_dir|
       count = 0
       move_dir.each do |location|
-        count += 1 if board.chess_board[location[0]][location[1]] == "   "
-        unless board.chess_board[location[0]][location[1]] == "   "
-          if board.chess_board[location[0]][location[1]].piece_symbol == king_color &&
-            (count + 1) == move_dir.length
+        count += 1 if board.chess_board[location[0]][location[1]] == '   '
+        next if board.chess_board[location[0]][location[1]] == '   '
 
-            board.chess_board[location[0]][location[1]].checked = true
-            print "CHECKED: #{ board.chess_board[location[0]][location[1]].checked}\n"
-          end
-        end
+        next unless board.chess_board[location[0]][location[1]].piece_symbol == king_color &&
+                    (count + 1) == move_dir.length
+
+        board.chess_board[location[0]][location[1]].checked = true
+        print "CHECKED: #{board.chess_board[location[0]][location[1]].checked}\n"
       end
     end
   end
@@ -187,16 +185,15 @@ class Chess
   # object @checked to true
   def pk_checking_king?(check_moves, board, king_color)
     check_moves.each do |move|
-      unless board.chess_board[move[0]][move[1]] == "   "
-        if board.chess_board[move[0]][move[1]].piece_symbol == king_color
-          board.chess_board[move[0]][move[1]].checked = true 
-          print "CHECKED: #{ board.chess_board[move[0]][move[1]].checked}\n"
-        end
-      end
+      next if board.chess_board[move[0]][move[1]] == '   '
+      next unless board.chess_board[move[0]][move[1]].piece_symbol == king_color
+
+      board.chess_board[move[0]][move[1]].checked = true
+      print "CHECKED: #{board.chess_board[move[0]][move[1]].checked}\n"
     end
   end
 
-  # queen, rook, and bishop moves are calculated by individual direction arrays, rather than one 
+  # queen, rook, and bishop moves are calculated by individual direction arrays, rather than one
   # array of all moves together. This method combines all individual locations into one array rather
   # than an array of arrays if the piece is one of the aforementioned pieces
   def handle_qrb_move_arrays(piece_to_move, possible_moves)
@@ -204,12 +201,12 @@ class Chess
       tmp_possible_moves = possible_moves
 
       possible_moves = []
-      
+
       tmp_possible_moves.each do |move_direction|
-        unless move_direction.empty?
-          move_direction.each do |location|
-            possible_moves << location
-          end
+        next if move_direction.empty?
+
+        move_direction.each do |location|
+          possible_moves << location
         end
       end
     end
@@ -218,21 +215,19 @@ class Chess
 
   # Find the square that holds the king with the specified color
   def find_king_location(board, color)
-    for i in 0..7 
-      for n in 0..7 
-        unless board.chess_board[i][n] == "   "
-          if color == "white"
+    (0..7).each do |i|
+      (0..7).each do |n|
+        unless board.chess_board[i][n] == '   '
+          if color == 'white'
             if board.chess_board[i][n].piece_symbol == WHITE_KING
               w_king_loc = []
               w_king_loc << i << n
               return w_king_loc
             end
-          else
-            if board.chess_board[i][n].piece_symbol == BLACK_KING
-              b_king_loc = []
-              b_king_loc << i << n
-              return b_king_loc
-            end
+          elsif board.chess_board[i][n].piece_symbol == BLACK_KING
+            b_king_loc = []
+            b_king_loc << i << n
+            return b_king_loc
           end
         end
       end
@@ -240,26 +235,22 @@ class Chess
   end
 
   # find the location of the piece that is putting king in check
-  def find_piece_checking_king(board, pieces_color, king_color_loc, king_color)
+  def find_piece_checking_king(board, pieces_color, king_color_loc, _king_color)
     king_checker_loc = []
-    for i in 0..7 
-      for n in 0..7 
-        unless board.chess_board[i][n] == "   "
-          if pieces_color.include?(board.chess_board[i][n].piece_symbol)
-            piece = board.chess_board[i][n]
-            check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
-  
-            if piece.is_a?(Pawn) || piece.is_a?(King) || piece.is_a?(Knight)
-              if check_moves.include? king_color_loc
-                king_checker_loc << [i, n]
-              end
-            elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
-              check_moves.each do |move_direction|
-                if move_direction.include? king_color_loc
-                  king_checker_loc << [i, n]
-                end
-              end
-            end
+    (0..7).each do |i|
+      (0..7).each do |n|
+        next if board.chess_board[i][n] == '   '
+        next unless pieces_color.include?(board.chess_board[i][n].piece_symbol)
+
+        piece = board.chess_board[i][n]
+        check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+        case piece
+        when Pawn, King, Knight
+          king_checker_loc << [i, n] if check_moves.include? king_color_loc
+        when Queen, Rook, Bishop
+          check_moves.each do |move_direction|
+            king_checker_loc << [i, n] if move_direction.include? king_color_loc
           end
         end
       end
@@ -273,31 +264,26 @@ class Chess
     king_present = false
     board.chess_board.each do |row|
       row.each do |square|
-        unless square == "   "
-         king_present = true if square.piece_symbol == king_color
-        end
+        king_present = true if square != '   ' && (square.piece_symbol == king_color)
       end
     end
-    if king_present == false
-      puts "CHECKMATE"
-    end
+    puts 'CHECKMATE' if king_present == false
     king_present
   end
 
   # handles unintentional king movement that sometimes occurs after check for checkmate
   def fix_king_movement(king_present, board, king_color, king_loc)
-    if (king_present) == true && board.chess_board[king_loc[0]][king_loc[1]] == "   "
-      for i in 0..7 
-        for n in 0..7
-          unless board.chess_board[i][n] == "   "
-            if board.chess_board[i][n].piece_symbol == king_color
-              save_piece = board.chess_board[i][n]
-              board.chess_board[i][n] = "   "
-            end
-          end
+    if (king_present) == true && board.chess_board[king_loc[0]][king_loc[1]] == '   '
+      (0..7).each do |i|
+        (0..7).each do |n|
+          next if board.chess_board[i][n] == '   '
+          next unless board.chess_board[i][n].piece_symbol == king_color
+
+          save_piece = board.chess_board[i][n]
+          board.chess_board[i][n] = '   '
         end
       end
-  
+
       board.chess_board[king_loc[0]][king_loc[1]] = save_piece
     end
   end
@@ -310,24 +296,24 @@ class Chess
       right_w_rook_check = board.chess_board[0][7]
       left_w_rook_check = board.chess_board[0][0]
 
-      if right_w_rook_check.is_a?(Rook) && board.chess_board[0][5] == "   " && board.chess_board[0][6] == "   " &&
-        board.chess_board[0][4] == piece_to_move
+      if right_w_rook_check.is_a?(Rook) && board.chess_board[0][5] == '   ' && board.chess_board[0][6] == '   ' &&
+         board.chess_board[0][4] == piece_to_move
 
         possible_moves << [0, 6]
         w_r_castle = true
         castle_possibilities << w_r_castle
-        puts "can castle"
-      else 
+        puts 'can castle'
+      else
         castle_possibilities << false
       end
-      if left_w_rook_check.is_a?(Rook) && board.chess_board[0][3] == "   " && board.chess_board[0][2] == "   " &&
-        board.chess_board[0][1] == "   " && board.chess_board[0][4] == piece_to_move
+      if left_w_rook_check.is_a?(Rook) && board.chess_board[0][3] == '   ' && board.chess_board[0][2] == '   ' &&
+         board.chess_board[0][1] == '   ' && board.chess_board[0][4] == piece_to_move
 
         possible_moves << [0, 2]
         w_l_castle = true
         castle_possibilities << w_l_castle
-        puts "can castle"
-      else 
+        puts 'can castle'
+      else
         castle_possibilities << false
       end
     end
@@ -343,25 +329,25 @@ class Chess
       right_b_rook_check = board.chess_board[7][7]
       left_b_rook_check = board.chess_board[7][0]
 
-      if right_b_rook_check.is_a?(Rook) && board.chess_board[7][5] == "   " && board.chess_board[7][6] == "   " &&
-        board.chess_board[7][4] == piece_to_move
+      if right_b_rook_check.is_a?(Rook) && board.chess_board[7][5] == '   ' && board.chess_board[7][6] == '   ' &&
+         board.chess_board[7][4] == piece_to_move
 
         possible_moves << [7, 6]
         b_r_castle = true
         castle_possibilities << b_r_castle
-        puts "can castle"
-      else 
+        puts 'can castle'
+      else
         castle_possibilities << false
       end
 
-      if left_b_rook_check.is_a?(Rook) && board.chess_board[7][3] == "   " && board.chess_board[7][2] == "   " &&
-        board.chess_board[7][1] == "   " && board.chess_board[7][4] == piece_to_move
+      if left_b_rook_check.is_a?(Rook) && board.chess_board[7][3] == '   ' && board.chess_board[7][2] == '   ' &&
+         board.chess_board[7][1] == '   ' && board.chess_board[7][4] == piece_to_move
 
         possible_moves << [7, 2]
         b_l_castle = true
         castle_possibilities << b_l_castle
-        puts "can castle"
-      else 
+        puts 'can castle'
+      else
         castle_possibilities << false
       end
     end
@@ -375,46 +361,45 @@ class Chess
     check = false
     hold_answers = []
 
-    for i in 0..7 
-      for n in 0..7 
-        unless board.chess_board[i][n] == "   "
-          if pieces_color.include?(board.chess_board[i][n].piece_symbol)
-            piece = board.chess_board[i][n]
-            check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+    (0..7).each do |i|
+      (0..7).each do |n|
+        next if board.chess_board[i][n] == '   '
+        next unless pieces_color.include?(board.chess_board[i][n].piece_symbol)
 
-            if piece.is_a? King
-              checked_king_moves = check_moves 
-              hold_answers << checked_king_moves
-            end
-          end
+        piece = board.chess_board[i][n]
+        check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+        if piece.is_a? King
+          checked_king_moves = check_moves
+          hold_answers << checked_king_moves
         end
       end
     end
 
-    for i in 0..7 
-      for n in 0..7 
-        unless board.chess_board[i][n] == "   "
-          if pieces_color.include?(board.chess_board[i][n].piece_symbol)
-            piece = board.chess_board[i][n]
-            check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
-  
-            if piece.is_a?(Pawn) ||  piece.is_a?(Knight)
-              if check_moves.include? king_checker_loc
-                puts "SAVER: #{i}, #{n}"
-                king_saver = true
-                check = true
-                hold_answers << king_saver
-              end
-            elsif piece.is_a?(Queen) || piece.is_a?(Rook) || piece.is_a?(Bishop)
-              check_moves.each do |move_direction|
-                if move_direction.include? king_checker_loc
-                  puts "SAVER: #{i}, #{n}"
-                  king_saver = true
-                  check = true
-                  hold_answers << king_saver
-                end
-              end
-            end
+    (0..7).each do |i|
+      (0..7).each do |n|
+        next if board.chess_board[i][n] == '   '
+        next unless pieces_color.include?(board.chess_board[i][n].piece_symbol)
+
+        piece = board.chess_board[i][n]
+        check_moves = piece.generate_moves([i, n], board.chess_board, piece.piece_symbol)
+
+        case piece
+        when Pawn, Knight
+          if check_moves.include? king_checker_loc
+            puts "SAVER: #{i}, #{n}"
+            king_saver = true
+            check = true
+            hold_answers << king_saver
+          end
+        when Queen, Rook, Bishop
+          check_moves.each do |move_direction|
+            next unless move_direction.include? king_checker_loc
+
+            puts "SAVER: #{i}, #{n}"
+            king_saver = true
+            check = true
+            hold_answers << king_saver
           end
         end
       end
